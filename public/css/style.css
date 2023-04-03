@@ -19,3 +19,27 @@ a:hover {
 h1 a {
   font-size: 16px;
 }
+div.recipe {
+  border: 2px solid aliceblue;
+  margin: auto;
+  padding: 20px;
+  height: 200px;
+  width: 60%;
+}
+div.user {
+  margin-left: 0px;
+  text-align: left;
+}
+img.user {
+  margin-right: 10px;
+  margin-bottom: -5;
+  padding:0;
+  height: 30px;
+  width: 30px;
+}
+img.badge {
+  margin-top: 0;
+  margin-bottom: 10;
+  height: 10px;
+  width: 10px;
+}

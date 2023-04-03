@@ -1,7 +1,7 @@
 const Example = require("../../models/example");
 
 module.exports = (app, router) => {
-  router.get("/2", async (req, res) => {
+  router.get("/example/2", async (req, res) => {
     /*const example = new Example({ id: "1", username: "1", password: "1" });
     let result = await example.verify();
     console.log(result.successful);
@@ -11,7 +11,7 @@ module.exports = (app, router) => {
     const text = "Example 2";
     res.render("main/main", {
       pageTitle: text,
-      path: "/2",
+      path: "/example/2",
       text: text,
       redirect: "/",
     });

@@ -1,0 +1,11 @@
+<!--User avatar & name & badge-->
+<%if(recipe&&recipe.user){%>
+<div class="recipe">
+  <div class="user">
+    <img src="<%= recipe.user.avatar %>" class="user" />
+    <%= recipe.user.name %>
+    <!--Display badge of honor if Expert user-->
+    <%if (recipe.user.expert){%> <img src="images/badge_of_honor.png" class="badge" /><%}%>
+  </div>
+</div>
+<%}%>
