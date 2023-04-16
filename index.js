@@ -32,6 +32,13 @@ let connected = null;
   }
 })();
 
+const { exec } = require('child_process');
+exec('npm run tailwind:css', (err, stdout, stderr) => {
+  if (err) {
+    return console.log(err);
+  }
+});
+
 //[Initialize app]
 const app = express();
 app.set("view engine", "ejs"); //define engine
