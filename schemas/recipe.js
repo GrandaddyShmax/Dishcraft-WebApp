@@ -18,3 +18,4 @@ module.exports = (schemas) => {
   //[Registers in database]
   schemas.Recipe = model("Recipe", recipeSchema, "recipe");
 };
+

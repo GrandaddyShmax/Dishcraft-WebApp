@@ -13,7 +13,7 @@ const path = require("path"); //safe path creating
 const bodyParser = require("body-parser"); //better request parsing
 const { until, printAllRoutes } = require("./utils.js");
 //Info:
-const port = 8080;
+const port = 3000;
 const url = `http://localhost:${port}/`;
 
 //[Connect to database]
