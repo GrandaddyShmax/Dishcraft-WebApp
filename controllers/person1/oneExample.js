@@ -1,5 +1,5 @@
 module.exports = (app, router) => {
-  router.get("/", async (req, res) => {
+  router.get("/example", async (req, res) => {
     const text = "Example 1";
     res.render("main/main", {
       pageTitle: text,
@@ -9,7 +9,7 @@ module.exports = (app, router) => {
     });
   });
 
-  router.get("/text", async (req, res) => {
+  router.get("/example/text", async (req, res) => {
     res.render("main/main", {
       pageTitle: "TEXT",
       path: "/text",
