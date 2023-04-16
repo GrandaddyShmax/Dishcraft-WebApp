@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="/styles/style.css" >
     <link rel="icon" href="images/favicon.ico" />
   </head>
-  <body class="bg-slate-300">
-    <div class="bg-slate-200">
-      <h1 class="text-6xl text-sky-400">Hello world!</h1>
-      <p class="m-64">My starter template!</p>
+  <body>
+    <div class="bg-slate-800">
+      <div class="flex min-h-screen justify-center">
+        <div class="flex flex-col flex-1">
+          <%- include('./partials/navbar.ejs') %>
+          <%- include('./main/'+ page +'.ejs') %>
+        </div>
+      </div>
     </div>
   </body>
 </html>
