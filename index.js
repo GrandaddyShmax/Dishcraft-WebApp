@@ -1,25 +1,43 @@
 //[Import]
+//App:
 const fs = require("fs"); //accessing other folders & files
-const path = require("path");
 const express = require("express");
 var session = require("express-session");
-const bodyParser = require("body-parser");
+//Database access:
 const mongoose = require("mongoose"); //database access
 require("dotenv").config(); //enables environment variables
-
-//[Info]
+const { DB_URL } = process.env; //load db password from environment variables
+//Aid:
+const chalk = require("chalk"); //colorful console.logs
+const path = require("path"); //safe path creating
+const bodyParser = require("body-parser"); //better request parsing
+const { until, printAllRoutes } = require("./utils.js");
+//Info:
 const port = 8080;
 const url = `http://localhost:${port}/`;
 
 //[Connect to database]
+let connected = null;
 (async () => {
   mongoose.set("strictQuery", true); //force to follow schema
   try {
-    await mongoose.connect(process.env.DB_URL).then(() => console.log("Database connected"));
+    await mongoose.connect(DB_URL).then(() => {
+      connected = true;
+      console.log(chalk.green("[DB]") + " Database connected.");
+    });
   } catch (error) {
+    connected = false;
+    console.log(chalk.green("[DB]") + chalk.red(" Couldn't connect to database."));
     console.log(error);
   }
 })();
+
+const { exec } = require('child_process');
+exec('npm run tailwind:css', (err, stdout, stderr) => {
+  if (err) {
+    return console.log(err);
+  }
+});
 
 //[Initialize app]
 const app = express();
@@ -46,7 +64,19 @@ for (const controller of controllers) {
     for (const file of subFiles) require(`./controllers/${controller}/${file}`)(app, router);
   }
 }
+//[Log routes]
+console.log(chalk.blue("[App]") + " Registered routes:");
+printAllRoutes(app, url);
 
 //[Launch app]
-app.listen(port);
-console.log(url);
+(async () => {
+  await until((_) => connected != null); //wait for all async functions to finish
+  app.listen(port);
+  console.log(chalk.blue("[App]") + " App launched at: " + chalk.yellow(url));
+})();
+
+//[Process events]
+process.on("SIGINT", (signal, code) => process.exit(128 + signal));
+process.on("exit", (code) => {
+  console.log(chalk.blue("[App]") + " App closed.");
+});
