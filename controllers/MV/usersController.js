@@ -17,8 +17,8 @@ module.exports = (app, router) => {
 
     router.post("/", async (req, res) => {
         const temp = req.body.submit;
-        var user = new User(temp);
-        let { successful, message, user } = user.verify();
+        var tempUser = new User(temp);
+        let { successful, message, user } = tempUser.verify();
 
         if(successful) {
             var session = req.session;
