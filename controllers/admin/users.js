@@ -6,8 +6,9 @@ const { Junior, Expert } = require("../../models/user");
 //display page of all users with an option to upgrade Junior Cooks
 router.get("/admin/upgrade", async (req, res) => {
   const users = await Expert.fetchAllUsers();
-  res.render("admin/userList", {
+  res.render("template", {
     pageTitle: "Upgrade users",
+    page: "/A_userList",
     users: users,
   });
 });
