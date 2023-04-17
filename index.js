@@ -3,7 +3,9 @@
 const fs = require("fs"); //accessing other folders & files
 const express = require("express");
 var session = require("express-session");
+const { exec } = require("child_process"); //run terminal commands
 //Database access:
+require("./schemas/paths")
 const mongoose = require("mongoose"); //database access
 require("dotenv").config(); //enables environment variables
 const { DB_URL } = process.env; //load db password from environment variables
@@ -15,6 +17,8 @@ const { until, printAllRoutes } = require("./utils.js");
 //Info:
 const port = 3000;
 const url = `http://localhost:${port}/`;
+const appLabel = chalk.blue("[App]");
+const dbLabel = chalk.magenta("[DB]");
 
 //[Connect to database]
 let connected = null;
@@ -23,20 +27,18 @@ let connected = null;
   try {
     await mongoose.connect(DB_URL).then(() => {
       connected = true;
-      console.log(chalk.green("[DB]") + " Database connected.");
+      console.log(dbLabel + " Database connected.");
     });
   } catch (error) {
     connected = false;
-    console.log(chalk.green("[DB]") + chalk.red(" Couldn't connect to database."));
+    console.log(dbLabel + chalk.red(" Couldn't connect to database."));
     console.log(error);
   }
 })();
 
-const { exec } = require('child_process');
-exec('npm run tailwind:css', (err, stdout, stderr) => {
-  if (err) {
-    return console.log(err);
-  }
+//[Initialize Tailwind]
+exec("npm run tailwind:css", (err, stdout, stderr) => {
+  if (err) return console.log(err);
 });
 
 //[Initialize app]
@@ -65,18 +67,18 @@ for (const controller of controllers) {
   }
 }
 //[Log routes]
-console.log(chalk.blue("[App]") + " Registered routes:");
+console.log(appLabel + " Registered routes:");
 printAllRoutes(app, url);
 
 //[Launch app]
 (async () => {
   await until((_) => connected != null); //wait for all async functions to finish
   app.listen(port);
-  console.log(chalk.blue("[App]") + " App launched at: " + chalk.yellow(url));
+  console.log(appLabel + " App launched at: " + chalk.yellow(url));
 })();
 
 //[Process events]
 process.on("SIGINT", (signal, code) => process.exit(128 + signal));
 process.on("exit", (code) => {
-  console.log(chalk.blue("[App]") + " App closed.");
+  console.log(appLabel + " App closed.");
 });

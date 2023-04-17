@@ -4,6 +4,7 @@ module.exports = {
     './views/*.ejs',
     './views/partials/*.ejs',
     './views/main/*.ejs',
+    './views/admin/*.ejs',
     './views/errors/*.ejs',
   ],
   theme: {

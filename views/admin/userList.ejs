@@ -1,0 +1,11 @@
+<!--Test for how a page upgrading users could look-->
+<html lang="en">
+  <%- include('../partials/head.ejs') %>
+  <body>
+    <% for(const user of users) { %>
+    <!--List users-->
+    <div><%- include('../partials/upgrade.ejs', {user: user}); %></div>
+    <br />
+    <% } %>
+  </body>
+</html>

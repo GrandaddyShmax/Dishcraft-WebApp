@@ -8,6 +8,7 @@ module.exports = (schemas) => {
     userName: String,
     email: String,
     password: String,
+    avatar: String,
     role: String,
     banned: Boolean,
   });

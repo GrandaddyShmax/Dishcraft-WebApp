@@ -1,5 +1,5 @@
 //[Import]
-const chalk = require("chalk"); //colorful console.logs
+const AsciiTable = require("ascii-table");
 
 //Forces code to wait until condition is met
 function until(condition) {
@@ -11,15 +11,19 @@ function until(condition) {
 }
 //Prints all registered routes
 function printAllRoutes(app, url) {
-  function print(path, layer) {
-    if (layer.route) layer.route.stack.forEach(print.bind(null, path.concat(split(layer.route.path))));
+  const table = new AsciiTable().setBorder("|", "=", "0", "0").setAlign(0, AsciiTable.CENTER);
+  //add url to table
+  function add(path, layer) {
+    if (layer.route) layer.route.stack.forEach(add.bind(null, path.concat(split(layer.route.path))));
     else if (layer.name === "router" && layer.handle.stack)
-      layer.handle.stack.forEach(print.bind(null, path.concat(split(layer.regexp))));
-    else if (layer.method)
-      console.log(
-        ">" + chalk.grey(layer.method.toUpperCase()) + " " + url + path.concat(split(layer.regexp)).filter(Boolean).join("/")
-      );
+      layer.handle.stack.forEach(add.bind(null, path.concat(split(layer.regexp))));
+    else if (layer.method) {
+      const method = layer.method.toUpperCase();
+      const fullUrl = url + path.concat(split(layer.regexp)).filter(Boolean).join("/");
+      table.addRow(method, fullUrl);
+    }
   }
+  //format url
   function split(thing) {
     if (typeof thing === "string") return thing.split("/");
     else if (thing.fast_slash) return "";
@@ -32,7 +36,8 @@ function printAllRoutes(app, url) {
       return match ? match[1].replace(/\\(.)/g, "$1").split("/") : "<complex:" + thing.toString() + ">";
     }
   }
-  app._router.stack.forEach(print.bind(null, []));
+  app._router.stack.forEach(add.bind(null, []));
+  console.log(table.toString());
 }
 
 /*[ External access ]*/

@@ -6,5 +6,5 @@ API based project.<br>
 ## Students:<br>
 Maxim Simura - `ClownOfMadness/GrandaddyShmax`<br>
 Yehonatan Barmocha - `Bjaui`<br>
-Michael Vayntrub - `MichaelVayntrub`<br>
+Michael Vayntrub - `michava4/MichaelVayntrub`<br>
 Elena Chestnov - `ElenaChes/Len`<br>
