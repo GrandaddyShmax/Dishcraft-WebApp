@@ -9,6 +9,37 @@ function until(condition) {
   };
   return new Promise(check);
 }
+//Capitalizes first letter depending on type, explanation in function
+function capitalize(string) {
+  if (!string) return "";
+  if (Array.isArray(string)) return capitalizeArray(string);
+  if (string.includes("-")) return capitalizeSentence(string);
+  if (string.charAt(0) === "[" && string.charAt(string.length - 1) === "]") return `[${capitalize(string.slice(1, -1))}]`;
+  return string[0].toUpperCase() + string.slice(1).toLowerCase();
+  /*  "test string" => "Test string"
+  /*  "test-string" => "TestString"
+  /*  ["test", "string"] => ["Test", "String"]
+  */
+}
+//aid func
+function capitalizeArray(_string) {
+  string = [];
+  var index = 0;
+  _string.forEach((str) => {
+    string[index++] = aidLib.capitalize(str);
+  });
+  return string;
+}
+//aid func
+function capitalizeSentence(_string) {
+  const strings = _string.split("-");
+  var string = "";
+  strings.forEach((str) => {
+    string += aidLib.capitalize(str);
+  });
+  return string;
+}
+
 //Prints all registered routes
 function printAllRoutes(app, url) {
   const table = new AsciiTable().setBorder("|", "=", "0", "0").setAlign(0, AsciiTable.CENTER);
@@ -41,4 +72,4 @@ function printAllRoutes(app, url) {
 }
 
 /*[ External access ]*/
-module.exports = { until, printAllRoutes };
+module.exports = { until, capitalize, printAllRoutes };

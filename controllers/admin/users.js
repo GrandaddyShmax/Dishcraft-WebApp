@@ -5,29 +5,31 @@ const { Junior, Expert } = require("../../models/user");
 
 //display page of all users with an option to upgrade Junior Cooks
 router.get("/admin/upgrade", async (req, res) => {
-  const users = await Expert.fetchAllUsers();
+  const sess = req.session;
+  const users = await Expert.fetchAllUsers(true);
   res.render("template", {
     pageTitle: "Upgrade users",
     page: "/A_userList",
     users: users,
+    message: sess.message || null,
   });
 });
 //upgrade selected user
 router.post("/admin/upgrade", async (req, res) => {
+  const sess = req.session;
   const userID = req.body.submit;
-  console.log(userID);
   const user = new Junior(null, userID);
-  console.log(user)
+  //find user
   let successful = await user.fetchUser();
-  if (!successful)
-    //error fetching the user
+  if (!successful) {
+    sess.message = `Encountered an error while looking up user with ID:\n${userID}`;
     return res.redirect(req.get("referer"));
-  console.log(user);
-  successful = await user.upgradeUser();
-  if (successful)
-    //display a message to the admin
-    console.log("upgraded " + user.userName);
+  }
   //update user
+  successful = await user.upgradeUser();
+  if (!successful) sess.message = `Encountered an error while upgrading user ${user.userName}`;
+  
+  //refresh page
   return res.redirect(req.get("referer"));
 });
 

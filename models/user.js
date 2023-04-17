@@ -1,6 +1,7 @@
 /*[ Import ]*/
-const { schemas } = require("../schemas/paths");
 const mongoose = require("mongoose");
+const { schemas } = require("../schemas/paths");
+const { capitalize } = require("../utils");
 
 /*[ Handle base class database ]*/
 class User {
@@ -28,7 +29,7 @@ class User {
         userName: this.userName,
         email: this.email,
         password: this.password,
-        role: "Junior", //Very, very temporary.
+        role: "junior", //Very, very temporary.
         banned: false,
       });
       return { successful: true, message: "success" };
@@ -54,10 +55,7 @@ class User {
   /*[ Handling data ]*/
   //fetch user from db
   async fetchUser() {
-    console.log(this.id);
     let details = await schemas.User.findOne({ _id: this.id });
-    //let details = await schemas.User.findOne({ userName: this.userName });
-    console.log(details);
     if (details) {
       this.id = details.id;
       this.userName = details.userName;
@@ -119,9 +117,14 @@ class Expert extends User {
     return accounts || [];
   }
   //get all Junior&Expert Cook users from db
-  static async fetchAllUsers() {
+  static async fetchAllUsers(pretty) {
     let accounts = [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
-    return accounts.sort((a, b) => b.userName - a.userName);
+    if (pretty) accounts.forEach((user) => (user.role = capitalize(user.role)));
+    return accounts.sort((a, b) => {
+      if (a.userName < b.userName) return -1;
+      if (a.userName > b.userName) return 1;
+      return 0;
+    });
   }
 }
 

@@ -1,7 +1,7 @@
 <!--List users-->
 <form action="/admin/upgrade" method="POST">
   <div>
-    <%=user.userName %> <% if(user.role!="expert"){%>
+    <%=user.userName %> | User type:<%=user.role %> | <% if(user.role.toLowerCase()!="expert"){%>
     <button id="upgrade" type="submit" name="submit" value="<%=user.id %>">Upgrade</button>
     <%}%>
   </div>
