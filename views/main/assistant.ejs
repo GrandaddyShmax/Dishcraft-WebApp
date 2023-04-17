@@ -1,13 +1,53 @@
-<div class="flex flex-1">
-    <div class="flex flex-col flex-1 px-6 lg:px-10 xl:px-20 justify-center">
-      <div class="max-w-2xl min-w-[50%] mx-auto">
-        <form>   
-          <label for="default-search" class="mb-2 text-sm font-medium text-slate-900 sr-only dark:text-slate-300">Write</label>
-          <div class="relative">
-            <input type="send" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write Ingredients" required>
-            <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send</button>
+<div class="flex flex-1 justify-center">
+  <div class="flex flex-1 lg:max-w-4xl xl:max-w-6xl py-4">
+    <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
+      <div class="flex-none w-full h-20">
+        <div class="w-full h-full flex justify-center items-center">
+          <div class="group flex bg-espresso rounded-full drop-shadow-lg">
+            <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-l-full border border-coffee hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">
+              AI Recipe
+            </button>
+            <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-r-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
+              Custom Recipe
+            </button>
           </div>
-        </form>
+        </div>
+      </div>
+      <div class="flex flex-1 flex-col">
+        <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
+          <p class="text-black text-3xl">
+            Recipe Name
+          </p>
+          <p class="pt-8 text-2xl">
+            Ingredients:
+          </p>
+          <p class="pt-4 pl-10 text-xl">
+            something
+          </p>
+          <p class="pt-8 text-2xl">
+            Instructions:
+          </p>
+          <p class="pt-4 pl-10 text-xl">
+            something
+          </p>
+        </div>
+        <div class="flex justify-end px-2 pt-2">
+          <button class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
+          </button>
+          <button class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center w-full h-24">
+        <div class="group/main h-12 transition-all focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl justify-between drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-pistachio bg-espresso hover:bg-pistachio items-center w-full flex rounded-full p-1 py-2"> <!-- background -->
+          <input id="write" name="write" class="block transition-colors group-focus-within/main:placeholder-espresso group-focus-within/main:text-espresso group-focus-within/main:bg-pistachio focus:group-focus-within/main:placeholder-pistachio border-none focus:ring-0 w-full font-bold uppercase rounded-full py-0 pl-4 text-pistachio group-hover/main:text-espresso placeholder-latte group-hover/main:placeholder-espresso bg-espresso group-hover/main:bg-pistachio leading-tight focus:outline-none text-sm group-hover/main:focus:placeholder-opacity-0 focus:placeholder-opacity-0" type="text" placeholder="Write Ingridients">
+          <div class="group/search p-1.5 bg-pistachio hover:bg-latte cursor-pointer mx-1.5 rounded-full transition-all active:scale-110">
+            <svg class="w-5 h-5 text-espresso group-hover/search:text-espresso transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="7 7 10 10" fill="currentColor">
+              <path fill-rule="evenodd" d="M16 12L10 16.3301V7.66987L16 12Z" fclip-rule="evenodd" />
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</div>
