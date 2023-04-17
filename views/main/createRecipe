@@ -1,0 +1,148 @@
+<div class="flex flex-1 justify-center">
+  <div class="flex flex-1 lg:max-w-4xl xl:max-w-6xl py-4">
+    <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
+      <div class="flex-none w-full h-20">
+        <div class="w-full h-full flex justify-center items-center">
+          <div class="group flex bg-espresso rounded-full drop-shadow-lg">
+            <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-l-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
+              AI Recipe
+            </button>
+            <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full border border-coffee hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">
+              Custom Recipe
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-1 flex-col">
+        <div class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
+          <input type="text" placeholder="Recipe Name..." class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <div class="flex px-6 pt-4">
+            <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" hidden class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <label class="w-full h-full"> <!-- hide when there is picture -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-full h-full cursor-pointer p-28"
+                >
+                  <path
+                    d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <input type='file' class="hidden w-full" />
+              </label>
+              <span class="sr-only">View details</span>
+            </button>
+            <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" hidden class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <label class="w-full h-full"> <!-- hide when there is picture -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-full h-full cursor-pointer p-28"
+                >
+                  <path
+                    d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <input type='file' class="hidden w-full" />
+              </label>
+              <span class="sr-only">View details</span>
+            </button>
+            <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" hidden class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <label class="w-full h-full"> <!-- hide when there is picture -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-full h-full cursor-pointer p-28"
+                >
+                  <path
+                    d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                <input type='file' class="hidden w-full" />
+              </label>
+              <span class="sr-only">View details</span>
+            </button>
+          </div>
+          <p class="pt-8 text-2xl">
+            Ingredients:
+          </p>
+          <div class="flex flex-col">
+            <div class="pt-2 flex">
+              <input type="number" placeholder="0" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+              <button class="bg-espresso flex mx-2 px-4 w-36 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Liters
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="pl-1"
+                >
+                  <path
+                    d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <input type="text" placeholder="Ingredient" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+              <button class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
+              </button>
+            </div> <!-- ingredient object -->
+            <!-- duplicate the new ingredient object here -->
+            <div class="pt-2 flex">
+              <button class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
+              </button>
+            </div>
+          </div>
+          <p class="pt-8 text-2xl">
+            Instructions:
+          </p>
+          <div class="pt-2 flex">
+            <textarea placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            </textarea>
+          </div>
+          <p class="pt-8 text-2xl">
+            Extra:
+          </p>
+          <div class="flex pt-2 items-center">
+            <p>Change Color:</p>
+            <button class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Cream
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="pl-1"
+              >
+                <path
+                  d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-end px-2 pt-2 pb-12">
+          <button class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Publish Recipe
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
