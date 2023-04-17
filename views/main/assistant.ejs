@@ -21,31 +21,88 @@
           <p class="pt-8 text-2xl">
             Ingredients:
           </p>
-          <p class="pt-4 pl-10 text-xl">
-            something
+          <div class="flex flex-col">
+            <div class="pt-2 flex">
+              <input type="number" placeholder="0" step="0.01" class="px-4 py-3 w-28 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+              <div>
+                <button class="bg-espresso flex mx-2 px-4 w-36 rounded-md justify-between font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Ounces
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="pl-1"
+                  >
+                    <path
+                      d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
+                <div 
+                  class="absolute hidden z-10 ml-2 mt-1 w-36 divide-y divide-coffee rounded-md bg-espresso drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-none"
+                  id="menu-dropdown-items"
+                  role="menu" 
+                  aria-orientation="vertical" 
+                  aria-labelledby="menu-button" 
+                  tabindex="-1"
+                  data-transition-enter="transition ease-out duration-100"
+                  data-transition-enter-start="transform opacity-0 scale-95"
+                  data-transition-enter-end="transform opacity-100 scale-100"
+                  data-transition-leave="transition ease-in duration-75"
+                  data-transition-leave-start="transform opacity-100 scale-100"
+                  data-transition-leave-end="transform opacity-0 scale-95"
+                >
+                  <div class="py-1" role="none">
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Cups</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Deciliters</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Galons</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Grams</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Kilograms</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Liters</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Mililiters</a>
+                    <a class="text-latte hidden px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Ounces</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Pints</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Pounds</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Quarts</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Tablespoon</a>
+                    <a class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Teaspoon</a>
+                  </div>
+                </div>
+              </div>
+              <input type="text" placeholder="Ingredient" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+              <button class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
+              </button>
+            </div> <!-- ingredient object -->
+            <!-- duplicate the new ingredient object here -->
+            <div class="pt-2 flex">
+              <button class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
+              </button>
+            </div>
+          </div>
+          <p class="pt-8 text-2xl">
+            Extra Ingredients:
           </p>
+          <div class="pt-2 flex">
+            <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            </textarea>
+          </div>
           <p class="pt-8 text-2xl">
             Instructions:
           </p>
-          <p class="pt-4 pl-10 text-xl">
-            something
-          </p>
+          <div class="pt-2 flex">
+            <textarea readonly class="block px-4 py-3 w-full h-96 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            </textarea>
+          </div>
         </div>
-        <div class="flex justify-end px-2 pt-2">
+        <div class="flex justify-end px-2 pt-2 pb-12">
           <button class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
           </button>
-          <button class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
+          <button class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
           </button>
-        </div>
-      </div>
-      <div class="flex items-center w-full h-24">
-        <div class="group/main h-12 transition-all focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl justify-between drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-pistachio bg-espresso hover:bg-pistachio items-center w-full flex rounded-full p-1 py-2"> <!-- background -->
-          <input id="write" name="write" class="block transition-colors group-focus-within/main:placeholder-espresso group-focus-within/main:text-espresso group-focus-within/main:bg-pistachio focus:group-focus-within/main:placeholder-pistachio border-none focus:ring-0 w-full font-bold uppercase rounded-full py-0 pl-4 text-pistachio group-hover/main:text-espresso placeholder-latte group-hover/main:placeholder-espresso bg-espresso group-hover/main:bg-pistachio leading-tight focus:outline-none text-sm group-hover/main:focus:placeholder-opacity-0 focus:placeholder-opacity-0" type="text" placeholder="Write Ingridients">
-          <div class="group/search p-1.5 bg-pistachio hover:bg-latte cursor-pointer mx-1.5 rounded-full transition-all active:scale-110">
-            <svg class="w-5 h-5 text-espresso group-hover/search:text-espresso transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="7 7 10 10" fill="currentColor">
-              <path fill-rule="evenodd" d="M16 12L10 16.3301V7.66987L16 12Z" fclip-rule="evenodd" />
-            </svg>
-          </div>
+          <button class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Generate
+          </button>
         </div>
       </div>
     </div>
