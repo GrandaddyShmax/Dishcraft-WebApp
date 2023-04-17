@@ -8,13 +8,6 @@ module.exports = (app, router) => {
         });
     });
 
-    router.get("/register", async (req, res) => {
-        res.render("template", {
-        page: "register",
-        pageTitle: "Register",
-        });
-    });
-
     router.post("/", async (req, res) => {
         const temp = req.body.submit;
         var tempUser = new User(temp);
@@ -33,5 +26,18 @@ module.exports = (app, router) => {
     });
 
     
+    router.get("/register", async (req, res) => {
+        res.render("template", {
+        page: "register",
+        pageTitle: "Register",
+        });
+    });
+    
+
+    router.post("/register", async (req, res) => {
+        const temp = req.body.submit;
+        var tempUser = new User(temp);
+        let { successful, message } = tempUser.register();
+    });
 };
 
