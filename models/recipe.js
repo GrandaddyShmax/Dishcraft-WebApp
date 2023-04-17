@@ -1,8 +1,7 @@
 /*[ Import ]*/
-const schemas = require("../schemas/paths");
 const mongoose = require("mongoose");
-
-//Example class to show how classes work in NodeJS, this one checks for user login
+const { schemas } = require("../schemas/paths");
+const { Junior } = require("./user");
 
 //Recipe class
 class Recipe {
@@ -16,7 +15,7 @@ class Recipe {
     this.ingredients = tempV.ingredients;
     this.instructions = tempV.instructions;
     this.badge = tempV.badge;
-    this.color=tempV.color;
+    this.color = tempV.color;
   }
 
   //adds a recipe to the recipes schema
@@ -32,7 +31,7 @@ class Recipe {
         ingredients: this.ingredients,
         instructions: this.instructions,
         badges: this.badge,
-        color:this.color,
+        color: this.color,
       });
       return true;
     } catch (error) {
@@ -51,7 +50,40 @@ class Recipe {
       return false;
     }
   }
+
+  /*[ Handling data ]*/
+  //get all/filtered recipes from db
+  static async fetchRecipes(filter, sort) {
+    let recipes = [];
+    let recipesArr;
+    if (filter) {
+      //address filter
+    } else recipesArr = await schemas.Recipe.find({});
+    for await (const recipe of recipesArr) {
+      const user = new Junior(null, recipe.userID);
+      await user.fetchUser();
+      const tempRecipe = {
+        user: user,
+        recipeName: recipe.recipeName,
+        recipeImages: recipe.recipeImages,
+        rating: recipe.rating,
+        aiMade: recipe.aiMade,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
+        badges: recipe.badge,
+        color: recipe.color,
+      };
+      if (filter) {
+        //address additonal filter?
+      }
+      recipes.push(tempRecipe);
+    }
+    if (sort) {
+      //address sort
+    }
+    return recipes || [];
+  }
 }
 
 /*[ External access ]*/
-module.exports = Recipe;
+module.exports = { Recipe };

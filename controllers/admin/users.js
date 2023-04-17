@@ -8,7 +8,7 @@ router.get("/admin/upgrade", async (req, res) => {
   const sess = req.session;
   const users = await Expert.fetchAllUsers(true);
   res.render("template", {
-    pageTitle: "Upgrade users",
+    pageTitle: "Dishcraft - Upgrade users",
     page: "/A_userList",
     users: users,
     message: sess.message || null,
@@ -28,7 +28,7 @@ router.post("/admin/upgrade", async (req, res) => {
   //update user
   successful = await user.upgradeUser();
   if (!successful) sess.message = `Encountered an error while upgrading user ${user.userName}`;
-  
+
   //refresh page
   return res.redirect(req.get("referer"));
 });

@@ -11,6 +11,7 @@ class User {
     this.email = details ? details.email : null;
     this.password = details ? details.password : null;
     this.avatar = details ? details.avatar : null;
+    this.role = details ? details.role : null;
   }
 
   /*[ Creating data ]*/
@@ -62,6 +63,7 @@ class User {
       this.email = details.email;
       this.password = details.password;
       this.avatar = details.avatar;
+      this.role = details.role;
       return true;
     }
     return false;
