@@ -13,6 +13,7 @@ module.exports = (schemas) => {
     ingredients: String,
     instructions: String,
     badges: [String],
+    color: String,
   });
 
   //[Registers in database]
