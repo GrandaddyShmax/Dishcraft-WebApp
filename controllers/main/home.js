@@ -1,15 +1,14 @@
 /*[ Import ]*/
+const express = require("express");
+const router = express.Router();
 const schemas = require("../../schemas/paths");
 
-module.exports = (app, router) => 
-{
-    router.get("/home", async (req, res) => 
-    {
-        
-        res.render("template", 
-        {
-            pageTitle: "Dishcraft - Homepage",
-            page: "home",
-        });
-    });
-};
+router.get("/home", async (req, res) => {
+  res.render("template", {
+    pageTitle: "Dishcraft - Homepage",
+    page: "home",
+  });
+});
+
+/*[ External access ]*/
+module.exports = router;

@@ -4,7 +4,7 @@
   <body>
     <% for(const user of users) { %>
     <!--List users-->
-    <div><%- include('../partials/upgrade.ejs', {user: user}); %></div>
+    <%- include('../partials/upgrade.ejs', {user: user}); %>
     <br />
     <% } %>
   </body>

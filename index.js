@@ -5,7 +5,7 @@ const express = require("express");
 var session = require("express-session");
 const { exec } = require("child_process"); //run terminal commands
 //Database access:
-require("./schemas/paths")
+require("./schemas/paths");
 const mongoose = require("mongoose"); //database access
 require("dotenv").config(); //enables environment variables
 const { DB_URL } = process.env; //load db password from environment variables
@@ -45,11 +45,12 @@ exec("npm run tailwind:css", (err, stdout, stderr) => {
 const app = express();
 app.set("view engine", "ejs"); //define engine
 app.set("views", "views"); //define views location
-const router = express.Router();
-app.use(router);
+//const router = express.Router();
+//app.use(router);
 app.use(session({ resave: false, saveUninitialized: false, secret: "for some reason" }));
 
 //[Define aid tools]
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); //define public folder
 app.use("/images", express.static(path.join(__dirname, "public/images")));
@@ -57,15 +58,23 @@ app.use("/images", express.static(path.join(__dirname, "public/images")));
 //[Prepare routes]
 const controllers = fs.readdirSync(`./controllers`);
 for (const controller of controllers) {
-  if (controller.endsWith(".js"))
+  if (controller == "errors.js") continue;
+  if (controller.endsWith(".js")) {
     //File: prep file
-    require(`./controllers/${controller}`)(app, router);
-  else {
+    const routes = require(`./controllers/${controller}`);
+    app.use(routes);
+  } else {
     //Folder: prep files in folder
     const subFiles = fs.readdirSync(`./controllers/${controller}`).filter((file) => file.endsWith(".js"));
-    for (const file of subFiles) require(`./controllers/${controller}/${file}`)(app, router);
+    for (const file of subFiles) {
+      const routes = require(`./controllers/${controller}/${file}`);
+      app.use(routes);
+    }
   }
 }
+const errorController = require("./controllers/errors.js"); //handle errors
+app.use(errorController.get404Page); //error page
+
 //[Log routes]
 console.log(appLabel + " Registered routes:");
 printAllRoutes(app, url);

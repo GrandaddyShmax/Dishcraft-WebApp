@@ -1,7 +1,8 @@
 <!--List users-->
-<form action="/upgrade" method="POST">
-  <%=user.userName  %><% if(user.role!="expert"){%>
-  <button id="upgrade" type="submit" name="submit" value="upgrade <%=user.id %>">Upgrade</button>
-  <button id="book" type="submit" name="submit" value="book <%=user.id %>">Book now!</button>
-  <%}%>
+<form action="/admin/upgrade" method="POST">
+  <div>
+    <%=user.userName %> <% if(user.role!="expert"){%>
+    <button id="upgrade" type="submit" name="submit" value="<%=user.id %>">Upgrade</button>
+    <%}%>
+  </div>
 </form>

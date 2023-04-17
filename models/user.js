@@ -2,7 +2,7 @@
 const { schemas } = require("../schemas/paths");
 const mongoose = require("mongoose");
 
-/*[ Handle accounts database ]*/
+/*[ Handle base class database ]*/
 class User {
   constructor(details, id) {
     this.id = details ? details.id : id;
@@ -43,7 +43,8 @@ class User {
   /*[ Modifying data ]*/
   async upgradeUser() {
     try {
-      await schemas.User.updateOne({ id: this.id }, { role: "expert" });
+      //await schemas.User.updateOne({ userName: this.userName }, { role: "expert" });
+      await schemas.User.updateOne({ _id: this.id }, { role: "expert" });
       return true;
     } catch {
       return false;
@@ -52,8 +53,11 @@ class User {
 
   /*[ Handling data ]*/
   //fetch user from db
-  static async fetchUser() {
-    let details = await schemas.User.findOne({ id: this.id });
+  async fetchUser() {
+    console.log(this.id);
+    let details = await schemas.User.findOne({ _id: this.id });
+    //let details = await schemas.User.findOne({ userName: this.userName });
+    console.log(details);
     if (details) {
       this.id = details.id;
       this.userName = details.userName;
@@ -85,12 +89,14 @@ class User {
   }
 }
 
+/*[ Handle Admin class database ]*/
 class Admin extends User {
   constructor(details, id) {
     super(details, id);
   }
 }
 
+/*[ Handle Junior class database ]*/
 class Junior extends User {
   constructor(details, id) {
     super(details, id);
@@ -102,6 +108,7 @@ class Junior extends User {
   }
 }
 
+/*[ Handle Expert class database ]*/
 class Expert extends User {
   constructor(details, id) {
     super(details, id);
@@ -113,7 +120,8 @@ class Expert extends User {
   }
   //get all Junior&Expert Cook users from db
   static async fetchAllUsers() {
-    return [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
+    let accounts = [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
+    return accounts.sort((a, b) => b.userName - a.userName);
   }
 }
 

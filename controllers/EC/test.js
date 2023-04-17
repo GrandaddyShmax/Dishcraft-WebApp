@@ -1,3 +1,6 @@
+/*[ Import ]*/
+const express = require("express");
+const router = express.Router();
 //fake users for testing
 var users = [
   {
@@ -24,15 +27,16 @@ var users = [
   },
 ];
 
-module.exports = (app, router) => {
-  //basic page for testing user badges
-  router.get("/userTest", async (req, res) => {
-    const text = "User Test";
-    //fake recipes array to test dynamic user badges
-    const recipes = [{ user: users[0] }, { user: users[1] }, { user: users[2] }, { user: users[3] }, { user: users[4] }];
-    res.render("test/main", {
-      pageTitle: text,
-      recipes: recipes,
-    });
+//basic page for testing user badges
+router.get("/userTest", async (req, res) => {
+  const text = "User Test";
+  //fake recipes array to test dynamic user badges
+  const recipes = [{ user: users[0] }, { user: users[1] }, { user: users[2] }, { user: users[3] }, { user: users[4] }];
+  res.render("test/main", {
+    pageTitle: text,
+    recipes: recipes,
   });
-};
+});
+
+/*[ External access ]*/
+module.exports = router;
