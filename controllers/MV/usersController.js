@@ -3,6 +3,9 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../../models/user");
 
+//temp//
+//const ingred = require("../../IngredAPI/ingredients");
+
 router.get("/", async (req, res) => {
   var session = req.session;
   res.render("template", {
@@ -11,11 +14,12 @@ router.get("/", async (req, res) => {
     message: session.message || null,
     user: session.user || null,
   });
+  //console.log(ingred.getJson('apple'));
 });
 
 router.post("/", async (req, res) => {
   var session = req.session;
-  const buttonPress = req.body.submit;
+  const buttonPress = await req.body.submit;
   if (buttonPress != "login") return res.redirect(req.get("referer"));
   var tempUser = new User(req.body);
   let { successful, message, user } = await tempUser.verify();
@@ -27,7 +31,7 @@ router.post("/", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-router.get("/register", async (req, res) => {
+router.get("/register", (req, res) => {
   res.render("template", {
     page: "register",
     pageTitle: "Register",
@@ -35,9 +39,14 @@ router.get("/register", async (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const temp = req.body.submit;
-  var tempUser = new User(temp);
-  let { successful, message } = tempUser.register();
+  var session = req.session;
+  var tempUser = new User(req.body);
+  let { successful, message } = await tempUser.register();
+  if (successful) {
+    return res.redirect("/");
+  }
+  session.message = message;
+  return res.redirect(req.get("referer"));
 });
 
 /*[ External access ]*/

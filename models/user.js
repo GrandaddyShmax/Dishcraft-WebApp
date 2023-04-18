@@ -6,12 +6,12 @@ const { capitalize, offloadFields } = require("../utils");
 /*[ Handle base class database ]*/
 class User {
   constructor(details, id) {
-    /*this.id = details ? details.id : id;
+    this.id = details ? details.id : id;
     this.userName = details ? details.userName : null;
     this.email = details ? details.email : null;
     this.password = details ? details.password : null;
     this.avatar = details ? details.avatar : null;
-    this.role = details ? details.role : null;*/
+    this.role = details ? details.role : null;
     if (details)
       offloadFields(["id", "userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
     else this.id = id;
@@ -27,18 +27,21 @@ class User {
       //check valid email
       account = await schemas.User.findOne({ email: this.email });
       if (account) return { successful: false, message: "This mail is already in use" };
-      //Verify dvarim etc...
-      if (!this.email.replaceAll(/.*@.*\..*/, "")) return { successful: false, message: "Invalid mail" };
+      //if (!this.email.replaceAll(/.*@.*\..*/, "")) return { successful: false, message: "Invalid mail" };
 
       //check valid password
       if (this.password.length < 6) return { successful: false, message: "Password too short" };
+
+      let role = "junior";
+      let isAdmin = await schemas.AdminList.findOne({ email: this.email });
+      if(isAdmin) role = "admin";
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
         userName: this.userName,
         email: this.email,
         password: this.password,
-        role: "junior", //Very, very temporary.
+        role: role,
         banned: false,
       });
       return { successful: true, message: "success" };
