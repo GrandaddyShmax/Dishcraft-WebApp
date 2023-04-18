@@ -96,7 +96,7 @@ class Recipe {
         uploadDate: recipe.uploadDate,
       };*/
       var tempRecipe = offloadFields(
-        ["recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
+        ["id", "recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
         null,
         recipe
       );
