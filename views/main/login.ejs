@@ -1,17 +1,62 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet" />
 
-<form action="/login" method="post">
-    <div>
-        <label for="userName">User Name:</label>
-        <input name="userName" id="userName" type="text" required>
-    </div>
-    <div>
-        <label for="email">Email:</label>
-        <input name="email" id="email" type="email" required>
-    </div>
-    <div>
-        <label for="pasword">Password:</label>
-        <input name="password" id="password" type="password" required>
-    </div>
-    <button type="submit">Enter</button>
-</form>
-<a href="/register">Register</a>
+<body class="h-full">
+  <div class="background-animate relative flex flex-1 items-center justify-center bg-gradient-to-tl from-espresso via-latte to-espresso py-12 px-4 sm:px-6 lg:px-8">
+    <form action="/" method="post" class="w-full items-center justify-center rounded-lg bg-espresso mb-20 p-8 shadow-xl backdrop-blur sm:max-w-3xl">
+      <div>
+        <svg class="mx-auto block h-12 w-auto text-pistachio transition-all hover:text-latte" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+          <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+            <path d="M2350 5109 c-324 -40 -592 -137 -820 -297 -84 -59 -225 -201 -276 -277 l-39 -59 -107 -18 c-368 -60 -631 -188 -841 -408 -120 -125 -198 -261 -237 -415 -80 -310 19 -905 235 -1409 117 -274 315 -628 465 -832 l40 -53 0 -671 0 -670 1795 0 1795 0 0 670 0 669 84 123 c270 397 486 871 591 1295 57 231 92 535 82 703 -14 227 -100 419 -264 590 -210 220 -473 348 -841 408 l-107 18 -39 59 c-51 76 -192 218 -276 277 -200 141 -427 231 -700 279 -132 24 -420 33 -540 18z m387 -400 c296 -33 547 -141 714 -308 97 -97 142 -175 161 -279 22 -117 -11 -450 -77 -777 -19 -93 -31 -172 -27 -176 8 -8 342 -89 366 -89 9 0 16 2 16 5 0 3 11 57 25 120 54 249 86 484 101 733 4 61 8 112 11 112 24 0 157 -41 231 -71 275 -112 443 -308 459 -539 6 -84 -10 -280 -33 -410 -76 -421 -272 -886 -557 -1323 l-71 -107 -920 0 -921 0 -34 78 c-19 42 -67 149 -106 237 -40 88 -105 241 -145 340 -40 99 -73 181 -75 183 -2 2 -86 -29 -188 -69 l-186 -72 15 -36 c9 -20 42 -101 74 -181 32 -80 87 -211 123 -292 36 -80 68 -156 72 -167 6 -21 6 -21 -343 -21 l-350 0 -89 137 c-371 572 -574 1144 -577 1628 -1 122 2 149 22 207 59 171 217 319 434 407 74 30 207 71 231 71 3 0 8 -55 12 -122 13 -235 48 -490 100 -730 13 -60 26 -112 29 -116 5 -4 371 75 384 83 1 1 -11 65 -27 141 -65 308 -105 698 -83 816 19 104 65 182 161 279 132 132 286 214 509 270 185 47 369 59 559 38z m1223 -3909 l0 -400 -1395 0 -1395 0 0 400 0 400 1395 0 1395 0 0 -400z"/>
+          </g>
+        </svg>
+        <h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-latte">Log in to your account</h2>
+        <p class="mt-2 text-center text-sm text-latte">
+          Or
+          <a href="/register" class="font-medium text-pistachio hover:text-latte transition-all drop-shadow-lg">sign up to create account</a>
+        </p>
+      </div>
+      <div class="mt-6 gap-1 grid">
+        <div class="transition-all group border scale-95 border-latte hover:border-pistachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md px-4 py-2 drop-shadow-lg hover:drop-shadow-xl focus-within:ring-0">
+          <input name="userName" id="userName" type="text" required autocomplete="userName" class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 sm:text-lg" placeholder="Username"></input>
+        </div>
+        <!-- input type="hidden" name="remember" value="true" / -->
+        <div class="mt-3 transition-all group border scale-95 border-latte hover:border-pistachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md px-4 py-2 drop-shadow-lg hover:drop-shadow-xl focus-within:ring-0">
+          <input name="password" id="password" type="password" required autocomplete="password" class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 sm:text-lg" placeholder="Password"></input>
+        </div>
+        <div class="flex gap-1 mt-1.5 ml-4"> <!-- error -->
+          <svg class="block transition-all w-7 h-7 text-red-500 group-hover:text-latte" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 22 18" fill="currentColor">
+            <path opacity="1.000000" stroke="none" d="M8.46457 14.1213C8.07404 14.5118 8.07404 15.145 8.46457 15.5355C8.85509 15.926 9.48825 15.926 9.87878 15.5355L15.5356 9.87862C15.9262 9.4881 15.9262 8.85493 15.5356 8.46441C15.1451 8.07388 14.5119 8.07388 14.1214 8.46441L8.46457 14.1213Z" style="fill-rule: evenodd;"></path>
+            <path opacity="1.000000" stroke="none" d="M6.34315 17.6569C9.46734 20.781 14.5327 20.781 17.6569 17.6569C20.781 14.5327 20.781 9.46734 17.6569 6.34315C14.5327 3.21895 9.46734 3.21895 6.34315 6.34315C3.21895 9.46734 3.21895 14.5327 6.34315 17.6569ZM16.2426 16.2426C13.8995 18.5858 10.1005 18.5858 7.75736 16.2426C5.41421 13.8995 5.41421 10.1005 7.75736 7.75736C10.1005 5.41421 13.8995 5.41421 16.2426 7.75736C18.5858 10.1005 18.5858 13.8995 16.2426 16.2426Z" style="fill-rule: evenodd;"></path>
+          </svg>
+          <h1 class="text-red-500 text-lg">Email or password is incorrect
+          </h1>
+        </div>
+        <button type="submit" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Log In
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+
+<style>
+  .background-animate
+  {
+    background-size: 500%;
+
+    -webkit-animation: AnimationName 20s ease infinite;
+    -moz-animation: AnimationName 20s ease infinite;
+    animation: AnimationName 20s ease infinite;
+  }
+
+  @keyframes AnimationName {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+</style>
