@@ -17,6 +17,14 @@ router.get("/home", async (req, res) => {
 router.post("/home", async (req, res) => {
   const session = req.session;
   const smt = req.body.submit;
+  const recipe = new Recipe(null, smt);
+  //find recipe
+  let successful = await recipe.fetchRecipe();
+  if (successful) {
+    session.recipe = recipe;
+    return res.redirect("/recipe");
+  }
+  return res.redirect(req.get("referer"));
 });
 
 /*[ External access ]*/

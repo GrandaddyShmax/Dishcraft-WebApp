@@ -6,35 +6,26 @@ const { offloadFields } = require("../utils");
 
 //Recipe class
 class Recipe {
-  constructor(tempV) {
-    /*this.id = tempV.id;
-    this.userID = tempV.userID;
-    this.recipeName = tempV.recipeName;
-    this.recipeImages = tempV.recipeImages;
-    this.rating = tempV.rating;
-    this.aiMade = tempV.aiMade;
-    this.ingredients = tempV.ingredients;
-    this.instructions = tempV.instructions;
-    this.badges = tempV.badges;
-    this.color = tempV.color;
-    this.uploadDate = tempV.uploadDate;*/
-    offloadFields(
-      [
-        "id",
-        "userID",
-        "recipeName",
-        "recipeImages",
-        "rating",
-        "aiMade",
-        "ingredients",
-        "instructions",
-        "badges",
-        "color",
-        "uploadDate",
-      ],
-      this,
-      tempV
-    );
+  constructor(tempV, id) {
+    if (tempV)
+      offloadFields(
+        [
+          "id",
+          "userID",
+          "recipeName",
+          "recipeImages",
+          "rating",
+          "aiMade",
+          "ingredients",
+          "instructions",
+          "badges",
+          "color",
+          "uploadDate",
+        ],
+        this,
+        tempV
+      );
+    else this.id = id;
   }
 
   //adds a recipe to the recipes schema
@@ -73,6 +64,20 @@ class Recipe {
   }
 
   /*[ Handling data ]*/
+  //fetch recipe from db
+  async fetchRecipe() {
+    let details = await schemas.Recipe.findOne({ _id: this.id });
+    if (details) {
+      offloadFields(
+        ["recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
+        this,
+        details
+      );
+      return true;
+    }
+    return false;
+  }
+
   //get all/filtered recipes from db
   static async fetchRecipes(filter, sort) {
     let recipes = [];

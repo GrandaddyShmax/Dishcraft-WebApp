@@ -8,6 +8,7 @@ router.get("/recipe", async (req, res) => {
     pageTitle: "Dishcraft - Recipe View",
     page: "recipe",
     user: session.user || null,
+    recipe: session.recipe || null,
   });
 });
 
