@@ -14,6 +14,7 @@ module.exports = (schemas) => {
     instructions: String,
     badges: [String],
     color: String,
+    uploadDate: Date,
   });
 
   //[Registers in database]

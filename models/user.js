@@ -1,29 +1,37 @@
 /*[ Import ]*/
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
-const { capitalize } = require("../utils");
+const { capitalize, offloadFields } = require("../utils");
 
 /*[ Handle base class database ]*/
 class User {
   constructor(details, id) {
-    this.id = details ? details.id : id;
+    /*this.id = details ? details.id : id;
     this.userName = details ? details.userName : null;
     this.email = details ? details.email : null;
     this.password = details ? details.password : null;
     this.avatar = details ? details.avatar : null;
-    this.role = details ? details.role : null;
+    this.role = details ? details.role : null;*/
+    if (details)
+      offloadFields(["id", "userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
+    else this.id = id;
   }
 
   /*[ Creating data ]*/
   async register() {
     try {
+      //check valid username
       let account = await schemas.User.findOne({ userName: this.userName });
-      if (account) return { successful: false, message: "user exist" };
+      if (account) return { successful: false, message: "This user name is already in use" };
 
+      //check valid email
       account = await schemas.User.findOne({ email: this.email });
-      if (account) return { successful: false, message: "mail exist" };
-
+      if (account) return { successful: false, message: "This mail is already in use" };
       //Verify dvarim etc...
+      if (!this.email.replaceAll(/.*@.*\..*/, "")) return { successful: false, message: "Invalid mail" };
+
+      //check valid password
+      if (this.password.length < 6) return { successful: false, message: "Password too short" };
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
@@ -58,12 +66,13 @@ class User {
   async fetchUser() {
     let details = await schemas.User.findOne({ _id: this.id });
     if (details) {
-      this.id = details.id;
+      if (details) offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
+      /*this.id = details.id;
       this.userName = details.userName;
       this.email = details.email;
       this.password = details.password;
       this.avatar = details.avatar;
-      this.role = details.role;
+      this.role = details.role;*/
       return true;
     }
     return false;
@@ -72,9 +81,7 @@ class User {
   async verify() {
     let account = await schemas.User.findOne({ userName: this.userName, password: this.password });
     if (account) {
-      if (account.banned) {
-        return { successful: false, message: "banned" };
-      }
+      if (account.banned) return { successful: false, message: "banned" };
       return {
         successful: true,
         user: {

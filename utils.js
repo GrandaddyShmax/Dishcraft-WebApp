@@ -40,6 +40,31 @@ function capitalizeSentence(_string) {
   return string;
 }
 
+//Update fields in object
+function offloadFields(fields, object1, object2) {
+  if (!object1) object1 = new Object();
+  if (object2) {
+    //Fill fields from array
+    if (Array.isArray(object2)) {
+      var index = 0;
+      fields.forEach((field) => {
+        object1[field] = object2[index++];
+      });
+    }
+    //Fill fields from object
+    else
+      fields.forEach((field) => {
+        object1[field] = object2[field];
+      });
+    return object1;
+  }
+  //Empty fields:
+  fields.forEach((field) => {
+    object1[field] = null;
+  });
+  return object1;
+}
+
 //Prints all registered routes
 function printAllRoutes(app, url) {
   const table = new AsciiTable().setBorder("|", "=", "0", "0").setAlign(0, AsciiTable.CENTER);
@@ -72,4 +97,4 @@ function printAllRoutes(app, url) {
 }
 
 /*[ External access ]*/
-module.exports = { until, capitalize, printAllRoutes };
+module.exports = { until, capitalize, offloadFields, printAllRoutes };
