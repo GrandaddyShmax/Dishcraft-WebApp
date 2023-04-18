@@ -2,11 +2,11 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/recipeupload", async (req, res) => {
+router.get("/suggest", async (req, res) => {
   var session = req.session;
   res.render("template", {
-    pageTitle: "Dishcraft - Recipe Craft",
-    page: "createRecipe",
+    pageTitle: "Dishcraft - Suggest Ingredient",
+    page: "suggest",
     user: session.user || null,
   });
 });

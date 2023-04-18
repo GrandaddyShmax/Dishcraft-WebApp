@@ -4,12 +4,14 @@ const router = express.Router();
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
+  var session = req.session;
   const sess = req.session;
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
     ingredients: sess.ingredients && sess.ingredients.length > 0 ? sess.ingredients : [],
     recipe: sess.recipe || null,
+    user: session.user || null,
   });
 });
 

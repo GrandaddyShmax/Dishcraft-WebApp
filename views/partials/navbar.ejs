@@ -93,12 +93,15 @@
             data-transition-leave-end="transform opacity-0 scale-95"
           >
             <div class="py-1" role="none">
-              <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Sign Up</a>
-              <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Log In</a>
+              <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Bookmarks</a>
+              <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">AI Recipe Book</a>
+              <a href="/suggest" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Suggest Ingredient</a>
             </div>
-            <div class="py-1" role="none">
-              <a href="#" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">About Us</a>
-            </div>
+            <% if (user) { %>
+              <div class="py-1" role="none">
+                <a href=".." class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">Log Out</a>
+              </div>
+            <% } %>
           </div>
         </div>
       </div>
