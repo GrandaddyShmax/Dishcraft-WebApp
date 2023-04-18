@@ -4,9 +4,11 @@
       <div class="flex-none w-full h-20">
         <div class="w-full h-full flex justify-center items-center">
           <div class="group flex bg-espresso rounded-full drop-shadow-lg">
-            <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-l-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
-              AI Recipe
-            </button>
+            <a href="./assistant">
+              <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-l-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
+                AI Recipe
+              </button>
+            </a>
             <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full border border-coffee hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">
               Custom Recipe
             </button>
@@ -14,7 +16,7 @@
         </div>
       </div>
       <div class="flex flex-1 flex-col">
-        <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
+        <div id="background" class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <input type="text" placeholder="Recipe Name..." class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           <div class="flex px-6 pt-4">
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
@@ -122,10 +124,10 @@
           <div class="flex pt-2 items-center">
             <p>Change Color:</p>
             <select id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Original</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Tasty</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Cold</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Sweet</option>
+              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original"">Original</option>
+              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
+              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
+              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="sweet">Sweet</option>
             </select>
           </div>
         </div>
@@ -137,3 +139,27 @@
     </div>
   </div>
 </div>
+
+<script>
+  const select = document.querySelector('#colorPicker');
+  const bg = document.querySelector('#background');
+  select.addEventListener('change', () => {
+    const color = select.value;
+    if (color === 'original') {
+      bg.classList.remove(`bg-orange-300`, 'bg-cyan-300', 'bg-fuchsia-300');
+      bg.classList.add('bg-coffee');
+    } else if (color === 'tasty') 
+    {
+      bg.classList.remove('bg-coffee', 'bg-cyan-300', 'bg-fuchsia-300');
+      bg.classList.add('bg-orange-300');
+    } else if (color === 'cold') 
+    {
+      bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-fuchsia-300');
+      bg.classList.add(`bg-cyan-300`);
+    } else if (color === 'sweet') 
+    {
+      bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-cyan-300');
+      bg.classList.add(`bg-fuchsia-300`);
+    }
+  });
+</script>
