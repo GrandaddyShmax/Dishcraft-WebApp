@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
     page: "login",
     pageTitle: "Login",
     message: session.message || null,
-    user: session.user || null,
+    user: null,
   });
 });
 
@@ -33,6 +33,7 @@ router.post("/", async (req, res) => {
     return res.redirect("/home");
   }
   session.message = message;
+  console.log(message);
   return res.redirect(req.get("referer"));
 });
 
@@ -40,6 +41,7 @@ router.get("/register", (req, res) => {
   res.render("template", {
     page: "register",
     pageTitle: "Register",
+    user: null
   });
 });
 
@@ -51,7 +53,13 @@ router.post("/register", async (req, res) => {
     return res.redirect("/");
   }
   session.message = message;
+  console.log(message);
   return res.redirect(req.get("referer"));
+});
+
+router.get("/logOut", async (req, res) => {
+  delete req.session.user;
+  return res.redirect("/");
 });
 
 /*[ External access ]*/
