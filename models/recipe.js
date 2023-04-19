@@ -21,6 +21,8 @@ class Recipe {
           "badges",
           "color",
           "uploadDate",
+          "allergies",
+          "nutritions",
         ],
         this,
         tempV
@@ -44,6 +46,8 @@ class Recipe {
         badges: this.badge,
         color: this.color,
         uploadDate: date,
+        allergies: this.allergies,
+        nutritions: this.nutritions,
       });
       return true;
     } catch (error) {

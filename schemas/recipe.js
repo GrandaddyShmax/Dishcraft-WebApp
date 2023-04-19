@@ -15,6 +15,8 @@ module.exports = (schemas) => {
     badges: [String],
     color: String,
     uploadDate: Date,
+    allergies: [String],
+    nutritions: [Number],
   });
 
   //[Registers in database]
