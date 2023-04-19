@@ -73,10 +73,13 @@ class Recipe {
     let details = await schemas.Recipe.findOne({ _id: this.id });
     if (details) {
       offloadFields(
-        ["recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
+        ["recipeName", "recipeImages", "rating", "aiMade", "instructions", "badges", "color", "uploadDate"],
         this,
         details
       );
+      var ings = [];
+      for (const ing of details.ingredients) ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
+      this.ingredients = ings.join("\n");
       return true;
     }
     return false;

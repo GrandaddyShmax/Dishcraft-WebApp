@@ -16,7 +16,7 @@ module.exports = (schemas) => {
     color: String,
     uploadDate: Date,
     allergies: [String],
-    nutritions: [Number],
+    nutritions: {energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number},
   });
 
   //[Registers in database]

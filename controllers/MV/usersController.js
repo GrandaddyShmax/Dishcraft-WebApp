@@ -10,9 +10,9 @@ const ingred = require("../../IngredAPI/connection");
 router.get("/", async (req, res) => {
   var session = req.session;
 
-  //let data = await ingred.getData('apple');
-  //var temp = new Ingredient('apple', data);
-  //temp.printIngridient();
+  let data = await ingred.getData('apple');
+  var temp = new Ingredient('apple', data);
+  temp.printIngridient();
 
   res.render("template", {
     page: "login",

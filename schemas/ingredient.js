@@ -2,12 +2,12 @@
 const { Schema, model } = require("mongoose"); //db 
 
 module.exports = (schemas) => {
-    const ingredients = new Schema({
+    const category = new Schema({
       _id: Schema.Types.ObjectId,
       categoryName: String,
-      ingredients: [String],
+      ingredient: [String],
     });
 
 //[Registers in database]
-schemas.ingredients = model("Ingredients", ingredients, "ingredient");
+schemas.ingredients = model("Category", category, "category");
 };
