@@ -3,20 +3,18 @@
     <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
       <div class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
-          <p class="text-black text-3xl text-bold">
-            Recipe Name
-          </p>
+          <p class="text-black text-3xl text-bold"><%= recipe.recipeName %></p>
           <div class="flex px-6 pt-4">
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte rounded-xl border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
-              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <img src="<%= recipe.recipeImages[0] %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
               <span class="sr-only">View details</span>
             </button>
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte rounded-xl border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
-              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <img src="<%= recipe.recipeImages[1] %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
               <span class="sr-only">View details</span>
             </button>
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte rounded-xl border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
-              <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+              <img src="<%= recipe.recipeImages[2] %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
               <span class="sr-only">View details</span>
             </button>
           </div>
@@ -24,20 +22,18 @@
             Ingredients:
           </p>
           <div class="pt-2 flex">
-            <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            </textarea>
+            <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.ingredients %></textarea>
           </div>
           <p class="pt-8 text-2xl">
             Instructions:
           </p>
           <div class="pt-2 flex">
-            <textarea readonly class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            </textarea>
+            <textarea readonly class="block px-4 py-3 w-full h-56 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
           </div>
           <p class="pt-8 text-2xl pb-2">
             Allergies:
           </p>
-          <input readonly placeholder="None" class="block px-4 py-3 w-full h-16 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <input readonly placeholder="None" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </input>
           <p class="pt-8 text-2xl">
             Nutritions (g):
