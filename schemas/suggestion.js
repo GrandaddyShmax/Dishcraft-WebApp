@@ -5,8 +5,8 @@ const { Schema, model } = require("mongoose"); //database access
 module.exports = (schemas) => {
     const suggestionSchema = new Schema({
       _id: Schema.Types.ObjectId,
-      ingredientName: String,
-      description: [String],
+      suggestionName: String,
+      suggestionDescription: String,
     });
   
     //[Registers in database]

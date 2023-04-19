@@ -1,6 +1,7 @@
 /*[ Import ]*/
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
+const { offloadFields } = require("../utils");
 
 //Suggestion obj
 class Suggestion {
@@ -22,12 +23,15 @@ class Suggestion {
           suggestionName: this.suggestionName,
           suggestionDescription: this.suggestionDescription,
         });
-        return true;
+        return {success: true, msg: null};
       } catch (error) {
         console.log(error);
-        return false;
+        return {success: false, msg: "error in adding suggestion"};
       }
     }
   
 
 }
+
+/*[ External access ]*/
+module.exports = {Suggestion};
