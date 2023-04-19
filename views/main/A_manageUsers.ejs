@@ -1,0 +1,64 @@
+<div class="flex flex-1">
+  <div class="flex flex-col flex-1 px-2 sm:px-6 lg:px-10 xl:px-20 pb-10">
+    <div class="flex-none w-full h-28">
+      <div class="w-full h-full flex justify-center items-center">
+        <div class="group flex bg-espresso rounded-full drop-shadow-lg">
+          <button class="text-espresso text-lg font-bold pr-8 pl-10 py-2 bg-coffee transition-all rounded-l-full hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">Manage Users
+          </button>
+          <a href="./managerecipes">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">Manage Recipes
+            </button>
+          </a>
+          <button class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">Manage Categories
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 w-full">
+      <div class="flex h-full w-full">
+        <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
+          <ul class="w-full h-full flex flex-col p-4 gap-4">
+            <!-- Insert Flights here -->
+            <% for (const user of users) { %>
+              <li class="h-20 flex border w-full items-center justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
+                <div class="flex items-center">
+                  <div class="group mr-2 block w-16 aspect-square text-latte rounded-full border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl">
+                    <img src="<%= user.avatar %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+                  </div>
+                  <div class="flex items-center">
+                    <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-pistachio"><%= user.userName %></p>
+                    <%if (user.role.toLowerCase()=="expert"){%>
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 text-latte items-center pl-1"
+                      >
+                        <path
+                          d="M10.2426 16.3137L6 12.071L7.41421 10.6568L10.2426 13.4853L15.8995 7.8284L17.3137 9.24262L10.2426 16.3137Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    <%}%>
+                  </div>
+                </div>
+                <%if (user.role.toLowerCase()!="expert"){%>
+                  <button class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Upgrade
+                  </button>
+                <%}%>
+              </li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
