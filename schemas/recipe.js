@@ -10,7 +10,7 @@ module.exports = (schemas) => {
     recipeImages: [String],
     rating: Number,
     aiMade: Boolean,
-    ingredients: String,
+    ingredients: [String],
     instructions: String,
     badges: [String],
     color: String,
