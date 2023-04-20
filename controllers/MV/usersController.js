@@ -24,6 +24,7 @@ router.post("/", async (req, res) => {
   let { successful, message, user } = await tempUser.verify();
   if (successful) {
     session.user = user;
+    session.message = null;
     return res.redirect("/home");
   }
   session.message = message;

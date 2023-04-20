@@ -3,14 +3,16 @@
     <div class="flex-none w-full h-28">
       <div class="w-full h-full flex justify-center items-center">
         <div class="group flex bg-espresso rounded-full drop-shadow-lg">
-          <a href="/manageusers">
+          <a href="/admin/manageusers">
             <button class="text-latte text-lg font-bold pr-8 pl-10 py-2 bg-espresso transition-all rounded-l-full border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">Manage Users
             </button>
           </a>
           <button class="text-espresso text-lg font-bold px-8 py-2 bg-coffee transition-all hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">Manage Recipes
           </button>
-          <button class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">Manage Categories
-          </button>
+          <a href="/admin/managecategories">
+            <button class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">Manage Categories
+            </button>
+          </a>
         </div>
       </div>
     </div>
@@ -20,7 +22,7 @@
           <ul class="w-full h-full flex flex-col p-4 gap-4">
             <!-- Insert Flights here -->
             <% for (const recipe of recipes) { %>
-              <li class="h-32 flex border w-full items-center justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
+              <form action="/admin/managerecipes" method="POST" class="h-32 flex border w-full items-center justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
                 <div class="flex items-center">
                   <div class="group mr-2 block w-28 aspect-square text-latte rounded-xl border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl">
                     <img src="<%= recipe.recipeImages[0] %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
@@ -55,9 +57,9 @@
                     <p class="pointer-events-none mt-1 block text-sm font-bold text-latte">Rating: <%= recipe.rating %></p>
                   </div>
                 </div>
-                <button class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove Recipe
+                <button name="<%= recipe.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove Recipe
                 </button>
-              </li>
+              </form>
             <% } %>
           </ul>
         </div>
