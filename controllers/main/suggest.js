@@ -32,7 +32,5 @@ router.post("/suggest", async (req, res) => {
   }
   });
 
-
-
 /*[ External access ]*/
 module.exports = router;
