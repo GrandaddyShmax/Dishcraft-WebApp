@@ -59,7 +59,7 @@ class Recipe {
   //deletes a recipe by its id
   async delRecipe() {
     try {
-      await schemas.Recipe.deleteOne({ id: this.id });
+      await schemas.Recipe.deleteOne({ _id: this.id });
       return true;
     } catch (error) {
       console.log(error);
