@@ -21,7 +21,6 @@ class Recipe {
           "badges",
           "color",
           "uploadDate",
-          "allergies",
           "nutritions",
         ],
         this,
@@ -36,7 +35,7 @@ class Recipe {
       const date = new Date();
       await schemas.Recipe.create({
         _id: mongoose.Types.ObjectId(),
-        userID: this.userID||"6441a06e827a79b1666eb356",
+        userID: this.userID || "6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
         rating: this.rating,
@@ -49,10 +48,10 @@ class Recipe {
         allergies: this.allergies,
         nutritions: this.nutritions,
       });
-      return {success: true, msg: null};
+      return { success: true, msg: null };
     } catch (error) {
       console.log(error);
-      return {success: false, msg: "Invalid recipe"};
+      return { success: false, msg: "Invalid recipe" };
     }
   }
 
@@ -78,8 +77,14 @@ class Recipe {
         details
       );
       var ings = [];
-      for (const ing of details.ingredients) ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
+      var alg = [];
+      for (const ing of details.ingredients) {
+        ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
+        let categories = await schemas.Category.find({ ingredient: ing.name });
+        if (categories && categories.length > 0) for (const category of categories) alg.push(category.categoryName);
+      }
       this.ingredients = ings.join("\n");
+      this.alergies = alg.join("\n");
       return true;
     }
     return false;

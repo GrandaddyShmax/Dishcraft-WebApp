@@ -10,7 +10,7 @@ const mongoose = require("mongoose"); //database access
 require("dotenv").config(); //enables environment variables
 const { DB_URL } = process.env; //load db password from environment variables
 //API access:
-const { connectAI } = require("./AssAPI/connection");
+const { connectAI } = require("./API/ai");
 //Aid:
 const chalk = require("chalk"); //colorful console.logs
 const path = require("path"); //safe path creating

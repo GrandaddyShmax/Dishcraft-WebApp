@@ -7,7 +7,7 @@
             <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-l-full border border-coffee hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">
               AI Recipe
             </button>
-            <a href="/recipeupload">
+            <a href="/createRecipe">
               <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-r-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
                 Custom Recipe
               </button>
@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-1 flex-col">
+      <form action="/assistant" method="POST" class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <p class="text-black text-3xl text-bold">
             Recipe Name
@@ -23,11 +23,11 @@
           <p class="pt-8 text-2xl">
             Ingredients:
           </p>
-          <form action="/assistant" method="POST" class="flex flex-col">
+          <div class="flex flex-col">
             <% var index =0; %>
             <% for (const ing of ingredients) { %>
               <div class="pt-2 flex">
-                <input type="number" name="<%=`amount`+index%>" value="<%=ing.amount%>" step="0.01" class="px-4 py-3 w-28 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input min="0.01" type="number" name="<%=`amount`+index%>" value="<%=ing.amount%>" step="0.01" class="px-4 py-3 w-28 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
                 <select name="<%=`unit`+index%>" class="bg-espresso flex mx-2 px-4 w-36 rounded-md justify-between font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Ounces
                   <%for (const unit of units) {%>
                     <%if (ing.unit==unit) { %>
@@ -37,7 +37,7 @@
                     <% } %>
                   <% } %>
                 </select>
-                <input type="text" name="<%=`name`+index%>" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input required placeholder="Ingredient" type="text" name="<%=`name`+index%>" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
                 <button value="<%=`remove&`+index%>" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
                 </button>
               </div> <!-- ingredient object -->
@@ -48,7 +48,7 @@
               <button value="addmore" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
               </button>
             </div>
-          </form>
+          </div>
           <p class="pt-8 text-2xl">
             Extra Ingredients:
           </p>
@@ -65,14 +65,14 @@
           </div>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
-          <button class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
+          <button value="tryagain" type="submit" name="submit" class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
           </button>
-          <button class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
+          <button value="sharerecipe" type="submit" name="submit" class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
           </button>
-          <button class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Generate
+          <button value="generate" type="submit" name="submit" class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Generate
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

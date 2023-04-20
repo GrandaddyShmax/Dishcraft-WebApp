@@ -1,7 +1,8 @@
 /*[ Import ]*/
 const express = require("express");
 const router = express.Router();
-const defIngs = { amount: 0, unit: "Cups", name: "Ingredient" };
+const { getAssistant } = require("../../API/ai");
+const defIngs = { amount: 0, unit: "Cups", name: "" };
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
@@ -33,11 +34,13 @@ router.post("/assistant", async (req, res) => {
   } else if (buttonPress == "remove") {
     sess.ingredients.splice(index, 1);
   } else if (buttonPress == "generate") {
-    const { assistant } = require("../../AssAPI/connection")
-    if (!assistant) {
-      console.log("AI isnt ready!")
-    }
+    console.log(sess.ingredients);
+    return res.redirect(req.get("referer"));
     //code to talk with ai
+    const assistant = getAssistant();
+    const testMsg = ""; //[parse sess.recipe + requst into proper request]
+    const response = await assistant.sendMessage(testMsg);
+    console.log(response);
     //sess.recipe = whataver ai said
   }
   return res.redirect(req.get("referer"));
