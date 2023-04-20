@@ -21,8 +21,8 @@ const unitsTable = {
 
 //Ingredient class
 class Ingredient {
-    constructor(name, data) {
-        this.name = name;
+    constructor(data) {
+        this.name = data.name;
         this.healthLabels = data.healthLabels;
         this.calories = data.calories;
         this.totalWeight = data.totalWeight;
@@ -38,8 +38,25 @@ class Ingredient {
         //console.log();
     }
 
-    static calcPerGrams(unit, amount) {
-        return unitsTable[unit] * amount;
+    static async calcRecipeNutVal(ingredArr) {
+        var {energy = 0, fattyAcids = 0, sodium = 0, sugar = 0, protein = 0} = {};
+        let calcPerGrams = (unit, amount) => unitsTable[unit] * amount;
+        
+        for (let ingred of ingredArr) {
+            const ingredient = new Ingredient(await connection.getData(ingred.name));
+            const valueByUnit = calcPerGrams(ingred.unit, ingred.amount);
+            energy += (valueByUnit * ingredient.energy) / 1000;
+            fattyAcids += (valueByUnit * ingredient.fattyAcids);
+            sodium += (valueByUnit * ingredient.sodium);
+            sugar += (valueByUnit * ingredient.sugar);
+            protein += (valueByUnit * ingredient.protein);
+        }
+        return {energy: energy.toFixed(2), 
+            fattyAcids: fattyAcids.toFixed(2),  
+            sudium: sodium.toFixed(2), 
+            sugar: sugar.toFixed(2), 
+            protein: protein.toFixed(2)
+        };
     }
 }
 

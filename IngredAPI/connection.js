@@ -3,7 +3,6 @@ import("node-fetch");
 async function getJsonNutritionDB(ingredient){
     const { APP_ID, APP_KEYS } = process.env;
     const url = `https://api.edamam.com/api/nutrition-data?app_id=${APP_ID}&app_key=${APP_KEYS}&nutrition-type=logging&ingr=${ingredient}`
-    //const url = `https://api.edamam.com/api/nutrition-data?app_id=${APP_ID}&app_key=${APP_KEYS}&nutrition-type=cooking&ingr=${ingredient}`
     let result = await fetch(url);
     return await result.json();
 }
@@ -15,25 +14,22 @@ async function getJsonFoodDB(ingredient){
     return await result.json();
 }
 
-async function getHealthLabels(ingredient){
-    const temp = await getJsonNutritionDB(ingredient)
-    return temp.healthLabels;
-}
-
 async function getData(ingredient){
     const nutJson = await getJsonNutritionDB(ingredient); 
     const nutrients = nutJson.totalNutrients;
     return {  
-            //[Health Labels(Array)]
-            healthLabels: nutJson.healthLabels,
-            calories: nutJson.calories,
-            totalWeight: nutJson.totalWeight,
-            //[Nutrients]//
-            energy: nutrients.ENERC_KCAL.quantity,  //(unit: kcal)
-            fattyAcids: nutrients.FASAT.quantity,   //(unit: g)
-            sodium: nutrients.NA.quantity,          //(unit: g)
-            sugar: nutrients.SUGAR.quantity,        //(unit: g)
-            protein: nutrients.PROCNT.quantity      //(unit: g)
+        //[Health Labels(Array)]
+        healthLabels: nutJson.healthLabels,
+        //[Details]//
+        name: ingredient,
+        calories: nutJson.calories,
+        totalWeight: nutJson.totalWeight,
+        //[Nutrients]//
+        energy: nutrients.ENERC_KCAL.quantity,  //(unit: kcal)
+        fattyAcids: nutrients.FASAT.quantity,   //(unit: g)
+        sodium: nutrients.NA.quantity,          //(unit: g)
+        sugar: nutrients.SUGAR.quantity,        //(unit: g)
+        protein: nutrients.PROCNT.quantity      //(unit: g)
     };
 }
 

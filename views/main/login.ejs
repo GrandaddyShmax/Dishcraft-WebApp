@@ -25,14 +25,17 @@
         <div class="mt-3 transition-all group border scale-95 border-latte hover:border-pistachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md px-4 py-2 drop-shadow-lg hover:drop-shadow-xl focus-within:ring-0">
           <input name="password" id="password" type="password" required autocomplete="password" class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 sm:text-lg" placeholder="Password"></input>
         </div>
-        <div class="flex gap-1 mt-1.5 ml-4"> <!-- error -->
-          <svg class="block transition-all w-7 h-7 text-red-500 group-hover:text-latte" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 22 18" fill="currentColor">
-            <path opacity="1.000000" stroke="none" d="M8.46457 14.1213C8.07404 14.5118 8.07404 15.145 8.46457 15.5355C8.85509 15.926 9.48825 15.926 9.87878 15.5355L15.5356 9.87862C15.9262 9.4881 15.9262 8.85493 15.5356 8.46441C15.1451 8.07388 14.5119 8.07388 14.1214 8.46441L8.46457 14.1213Z" style="fill-rule: evenodd;"></path>
-            <path opacity="1.000000" stroke="none" d="M6.34315 17.6569C9.46734 20.781 14.5327 20.781 17.6569 17.6569C20.781 14.5327 20.781 9.46734 17.6569 6.34315C14.5327 3.21895 9.46734 3.21895 6.34315 6.34315C3.21895 9.46734 3.21895 14.5327 6.34315 17.6569ZM16.2426 16.2426C13.8995 18.5858 10.1005 18.5858 7.75736 16.2426C5.41421 13.8995 5.41421 10.1005 7.75736 7.75736C10.1005 5.41421 13.8995 5.41421 16.2426 7.75736C18.5858 10.1005 18.5858 13.8995 16.2426 16.2426Z" style="fill-rule: evenodd;"></path>
-          </svg>
-          <h1 class="text-red-500 text-lg">Email or password is incorrect
-          </h1>
-        </div>
+
+        <%if(message != null){%>
+          <div class="flex gap-1 mt-1.5 ml-4"> <!-- error -->
+            <svg class="block transition-all w-7 h-7 text-red-500 group-hover:text-latte" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 22 18" fill="currentColor">
+              <path opacity="1.000000" stroke="none" d="M8.46457 14.1213C8.07404 14.5118 8.07404 15.145 8.46457 15.5355C8.85509 15.926 9.48825 15.926 9.87878 15.5355L15.5356 9.87862C15.9262 9.4881 15.9262 8.85493 15.5356 8.46441C15.1451 8.07388 14.5119 8.07388 14.1214 8.46441L8.46457 14.1213Z" style="fill-rule: evenodd;"></path>
+              <path opacity="1.000000" stroke="none" d="M6.34315 17.6569C9.46734 20.781 14.5327 20.781 17.6569 17.6569C20.781 14.5327 20.781 9.46734 17.6569 6.34315C14.5327 3.21895 9.46734 3.21895 6.34315 6.34315C3.21895 9.46734 3.21895 14.5327 6.34315 17.6569ZM16.2426 16.2426C13.8995 18.5858 10.1005 18.5858 7.75736 16.2426C5.41421 13.8995 5.41421 10.1005 7.75736 7.75736C10.1005 5.41421 13.8995 5.41421 16.2426 7.75736C18.5858 10.1005 18.5858 13.8995 16.2426 16.2426Z" style="fill-rule: evenodd;"></path>
+            </svg>
+            <h1 class="text-red-500 text-lg"><%= message %>
+            </h1>
+          </div>
+        <%}%>
         <button type="submit" name="submit" value="login" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Log In
         </button>
       </div>

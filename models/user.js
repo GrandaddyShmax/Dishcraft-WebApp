@@ -10,6 +10,7 @@ class User {
     this.userName = details ? details.userName : null;
     this.email = details ? details.email : null;
     this.password = details ? details.password : null;
+    this.passwordRep = details ? details.passwordRep : null;
     this.avatar = details ? details.avatar : null;
     this.role = details ? details.role : null;
     if (details)
@@ -22,15 +23,16 @@ class User {
     try {
       //check valid username
       let account = await schemas.User.findOne({ userName: this.userName });
-      if (account) return { successful: false, message: "This user name is already in use" };
+      if (account) return { successful: false, error: "username", message: "This username is already in use" };
+      if (this.userName.length < 3) return { successful: false, error: "username", message: "Username too short" };
 
       //check valid email
       account = await schemas.User.findOne({ email: this.email });
-      if (account) return { successful: false, message: "This mail is already in use" };
-      //if (!this.email.replaceAll(/.*@.*\..*/, "")) return { successful: false, message: "Invalid mail" };
-
-      //check valid password
-      if (this.password.length < 6) return { successful: false, message: "Password too short" };
+      if (account) return { successful: false, error: "email", message: "This mail is already in use" };
+      
+      //check password validity
+      if (this.password.length < 6) return { successful: false, error: "password", message: "Password too short" };
+      if (this.password !== this.passwordRep) return { successful: false, error: "password", message: "Passwords don't match" };
 
       let role = "junior";
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
@@ -84,7 +86,7 @@ class User {
   async verify() {
     let account = await schemas.User.findOne({ userName: this.userName, password: this.password });
     if (account) {
-      if (account.banned) return { successful: false, message: "banned" };
+      if (account.banned) return { successful: false, message: "User is banned" };
       return {
         successful: true,
         user: {
@@ -95,7 +97,7 @@ class User {
         },
       }; //succeseful login
     }
-    return { successful: false, message: "not found" }; //couldn't login
+    return { successful: false, message: "User not found" }; //couldn't login
   }
 }
 

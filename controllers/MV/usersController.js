@@ -2,18 +2,12 @@
 const express = require("express");
 const router = express.Router();
 const { User } = require("../../models/user");
-const { Ingredient } = require("../../models/ingredient");
 
-//temp//
+const { Ingredient } = require("../../models/ingredient");
 const ingred = require("../../IngredAPI/connection");
 
 router.get("/", async (req, res) => {
   var session = req.session;
-
-  let data = await ingred.getData('apple');
-  var temp = new Ingredient('apple', data);
-  temp.printIngridient();
-
   res.render("template", {
     page: "login",
     pageTitle: "Login",
@@ -33,14 +27,17 @@ router.post("/", async (req, res) => {
     return res.redirect("/home");
   }
   session.message = message;
-  console.log(message);
   return res.redirect(req.get("referer"));
 });
 
 router.get("/register", (req, res) => {
+  var session = req.session;
   res.render("template", {
     page: "register",
     pageTitle: "Register",
+    message: session.message || null,
+    error: session.error || null,
+    temp: session.temp || {username: "", email: ""},
     user: null
   });
 });
@@ -48,12 +45,13 @@ router.get("/register", (req, res) => {
 router.post("/register", async (req, res) => {
   var session = req.session;
   var tempUser = new User(req.body);
-  let { successful, message } = await tempUser.register();
+  let { successful, error, message } = await tempUser.register();
   if (successful) {
     return res.redirect("/");
   }
   session.message = message;
-  console.log(message);
+  session.error = error;
+  session.temp = {username: tempUser.userName, email: tempUser.email};
   return res.redirect(req.get("referer"));
 });
 
