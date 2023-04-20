@@ -33,6 +33,10 @@ router.post("/assistant", async (req, res) => {
   } else if (buttonPress == "remove") {
     sess.ingredients.splice(index, 1);
   } else if (buttonPress == "generate") {
+    const { assistant } = require("../../AssAPI/connection")
+    if (!assistant) {
+      console.log("AI isnt ready!")
+    }
     //code to talk with ai
     //sess.recipe = whataver ai said
   }

@@ -9,5 +9,5 @@ module.exports = (schemas) => {
     });
 
 //[Registers in database]
-schemas.ingredients = model("Category", category, "category");
+schemas.Category = model("Category", category, "category");
 };
