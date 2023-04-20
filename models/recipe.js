@@ -36,7 +36,7 @@ class Recipe {
       const date = new Date();
       await schemas.Recipe.create({
         _id: mongoose.Types.ObjectId(),
-        userID: this.userID,
+        userID: this.userID||"6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
         rating: this.rating,
@@ -49,10 +49,10 @@ class Recipe {
         allergies: this.allergies,
         nutritions: this.nutritions,
       });
-      return true;
+      return {success: true, msg: null};
     } catch (error) {
       console.log(error);
-      return false;
+      return {success: false, msg: "Invalid recipe"};
     }
   }
 

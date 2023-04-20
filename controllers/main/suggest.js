@@ -15,20 +15,17 @@ router.get("/suggest", async (req, res) => {
 
 //post
 router.post("/suggest", async (req, res) => {
-  //console.log("testmsg");
   var session = req.session;
   const suggestionData= req.body;
   var suggestion = new Suggestion(suggestionData);
   let {success,msg} = await suggestion.addSuggestion();
   console.log(req.body);
   if(success){
-    //console.log(msg);
     return res.redirect("/home");
   }
   else{
     console.log(msg);
     return res.redirect(req.get("referer"));
-    //return res.redirect("/home");
   }
   });
 
