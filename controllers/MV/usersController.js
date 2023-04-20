@@ -25,6 +25,7 @@ router.post("/", async (req, res) => {
   if (successful) {
     session.user = user;
     session.message = null;
+    session.error = null;
     return res.redirect("/home");
   }
   session.message = message;
@@ -48,6 +49,8 @@ router.post("/register", async (req, res) => {
   var tempUser = new User(req.body);
   let { successful, error, message } = await tempUser.register();
   if (successful) {
+    session.message = null;
+    session.error = null;
     return res.redirect("/");
   }
   session.message = message;

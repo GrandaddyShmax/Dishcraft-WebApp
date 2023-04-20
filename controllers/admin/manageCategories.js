@@ -15,8 +15,13 @@ router.get("/admin/managecategories", async (req, res) => {
     page: "A_manageCategories",
     user: session.user || null,
     categories: temp,
-    categoryIndex: session.categoryIndex || null,
+    categoryIndex: session.categoryIndex || 0,
   });
+});
+
+router.post("/admin/managecategories", async (req, res) => {
+  const session = req.session;
+  
 });
 
 /*[ External access ]*/

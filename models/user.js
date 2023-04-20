@@ -1,7 +1,9 @@
 /*[ Import ]*/
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
+const saltRounds = 10;
 
 /*[ Handle base class database ]*/
 class User {
@@ -14,19 +16,19 @@ class User {
     this.avatar = details ? details.avatar : null;
     this.role = details ? details.role : null;
     if (details)
-      offloadFields(["id", "userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
+      offloadFields(["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned"], this, details);
     else this.id = id;
   }
 
   /*[ Creating data ]*/
   async register() {
     try {
-      //check valid username
+      //check username validity
       let account = await schemas.User.findOne({ userName: this.userName });
       if (account) return { successful: false, error: "username", message: "This username is already in use" };
       if (this.userName.length < 3) return { successful: false, error: "username", message: "Username too short" };
 
-      //check valid email
+      //check email validity
       account = await schemas.User.findOne({ email: this.email });
       if (account) return { successful: false, error: "email", message: "This mail is already in use" };
       
@@ -42,7 +44,7 @@ class User {
         _id: mongoose.Types.ObjectId(),
         userName: this.userName,
         email: this.email,
-        password: this.password,
+        password: await bcrypt.hash(this.password, saltRounds),
         role: role,
         banned: false,
       });
@@ -84,8 +86,10 @@ class User {
   }
   //verify account (userName&password) exists in database:
   async verify() {
-    let account = await schemas.User.findOne({ userName: this.userName, password: this.password });
-    if (account) {
+    let account = await schemas.User.findOne({ userName: this.userName });
+    let result = await bcrypt.compare(this.password, account.password);
+      
+    if (result) {
       if (account.banned) return { successful: false, message: "User is banned" };
       return {
         successful: true,
