@@ -10,16 +10,15 @@ module.exports = (schemas) => {
     recipeImages: [String],
     rating: Number,
     aiMade: Boolean,
-    ingredients: [String],
+    ingredients: [{ amount: Number, unit: String, name: String }],
     instructions: String,
     badges: [String],
     color: String,
     uploadDate: Date,
     allergies: [String],
-    nutritions: {energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number},
+    nutritions: { energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number },
   });
 
   //[Registers in database]
   schemas.Recipe = model("Recipe", recipeSchema, "recipe");
 };
-
