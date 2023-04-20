@@ -10,9 +10,6 @@ async function connectAI() {
   try {
     let access = await schemas.AIAccess.findOne({});
     const ChatGPTUnofficialProxyAPI = (await import("chatgpt")).ChatGPTUnofficialProxyAPI;
-    const Authenticator = (await import("openai-authenticator")).default;
-
-    const authenticator = new Authenticator();
     var OPENAI_ACCESS_TOKEN;
     let result;
     //[Load key from database]
@@ -22,13 +19,12 @@ async function connectAI() {
     }
     //[Get new key and save in database]
     if (!access || !access.accessToken || !result) {
-      console.log(USERMAIL)
-      OPENAI_ACCESS_TOKEN = await authenticator.login(USERMAIL, USERPASS);
-      console.log(OPENAI_ACCESS_TOKEN)
+      //refresh access token
+
       result = getApi(ChatGPTUnofficialProxyAPI, OPENAI_ACCESS_TOKEN);
       if (result) await schemas.access.updateOne({}, { accessToken: OPENAI_ACCESS_TOKEN.accessToken });
     }
-    await until((_) => api);
+    await until((_) => assistant);
     const msg = result ? "A.I. Api loaded" : "Couldn't load A.I. Api";
     console.log(chalk.magenta(msg));
   } catch (error) {
@@ -39,9 +35,10 @@ async function connectAI() {
 //[Try to get API access]
 function getApi(ChatGPTUnofficialProxyAPI, OPENAI_ACCESS_TOKEN) {
   try {
-    assistant = new ChatGPTUnofficialProxyAPI({ accessToken: OPENAI_ACCESS_TOKEN.accessToken });
+    assistant = new ChatGPTUnofficialProxyAPI({ accessToken: OPENAI_ACCESS_TOKEN });
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 }

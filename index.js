@@ -39,7 +39,7 @@ let connected = null;
 })();
 
 //[Connect to A.I. API]
-//connectAI();  //will load in background
+connectAI();  //will load in background
 
 //[Initialize Tailwind]
 exec("npm run tailwind:css", (err, stdout, stderr) => {
