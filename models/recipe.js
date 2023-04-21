@@ -70,6 +70,9 @@ class Recipe {
   //fetch recipe from db
   async fetchRecipe() {
     let details = await schemas.Recipe.findOne({ _id: this.id });
+    const user = new Junior(null, details.userID);
+    await user.fetchUser();
+    this.user = user;
     if (details) {
       offloadFields(
         ["recipeName", "recipeImages", "rating", "aiMade", "instructions", "badges", "color", "uploadDate"],

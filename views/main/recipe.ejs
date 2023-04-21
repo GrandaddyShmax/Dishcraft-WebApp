@@ -1,8 +1,32 @@
-<div class="flex flex-1 justify-center">
+<div onload="changeColor()" class="flex flex-1 justify-center">
   <div class="flex flex-1 lg:max-w-4xl xl:max-w-6xl py-4">
     <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
       <div class="flex flex-1 flex-col">
-        <div class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
+        <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
+          <div class="flex items-center">
+            <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-espresso"><%= recipe.user.userName %></p>
+            <%if (recipe.user.role.toLowerCase()=="expert"){%>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-espresso items-center pl-1"
+              >
+                <path
+                  d="M10.2426 16.3137L6 12.071L7.41421 10.6568L10.2426 13.4853L15.8995 7.8284L17.3137 9.24262L10.2426 16.3137Z"
+                  fill="currentColor"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z"
+                  fill="currentColor"
+                />
+              </svg>
+            <%}%>
+          </div>
           <p class="text-black text-3xl text-bold"><%= recipe.recipeName %></p>
           <div class="flex px-6 pt-4">
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte rounded-xl border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
@@ -59,3 +83,24 @@
     </div>
   </div>
 </div>
+
+<script>
+  const bg = document.querySelector('#background');
+  const color = "<%= recipe.color %>";
+  if (color === 'original') {
+    bg.classList.remove(`bg-orange-300`, 'bg-cyan-300', 'bg-fuchsia-300');
+    bg.classList.add('bg-coffee');
+  } else if (color === 'tasty') 
+  {
+    bg.classList.remove('bg-coffee', 'bg-cyan-300', 'bg-fuchsia-300');
+    bg.classList.add('bg-orange-300');
+  } else if (color === 'cold') 
+  {
+    bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-fuchsia-300');
+    bg.classList.add(`bg-cyan-300`);
+  } else if (color === 'sweet') 
+  {
+    bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-cyan-300');
+    bg.classList.add(`bg-fuchsia-300`);
+  }
+</script>

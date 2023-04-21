@@ -16,7 +16,11 @@ router.get("/createRecipe", async (req, res) => {
     page: "createRecipe",
     ingredients: sess.ingredients,
     units: units,
-    user: session.user || null,
+    user: sess.user || null,
+    recipeName: sess.recipeName || "",
+    recipeImages: sess.recipeImages || null,
+    instructions: sess.instructions || "",
+    color: sess.color || "original",
   });
 });
 
@@ -30,13 +34,26 @@ router.post("/createRecipe", async (req, res) => {
   sess.ingredients = list;
   if (buttonPress == "addmore") {
     sess.ingredients.push(defIngs);
+    sess.recipeName = req.body.recipeName;
+    sess.recipeImages = req.body.recipeImages;
+    sess.instructions = req.body.instructions;
+    sess.color = req.body.color;
+    console.log(sess);
     return res.redirect(req.get("referer"));
   } else if (buttonPress == "remove") {
     sess.ingredients.splice(index, 1);
+    sess.recipeName = req.body.recipeName;
+    sess.recipeImages = req.body.recipeImages;
+    sess.instructions = req.body.instructions;
+    sess.color = req.body.color;
     return res.redirect(req.get("referer"));
   } else if (buttonPress == "publish") {
     var recipeData = offloadFields(["recipeName", "recipeImages", "instructions", "color"], this, req.body);
     recipeData.ingredients = sess.ingredients;
+    sess.recipeName = "";
+    sess.recipeImages = null;
+    sess.instructions = "";
+    sess.color = "original";
     var recipe = new Recipe(recipeData);
     let { success, msg } = await recipe.addRecipe();
     if (success) return res.redirect("/home");

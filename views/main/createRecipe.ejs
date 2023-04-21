@@ -17,7 +17,7 @@
       </div>
       <form action="/createRecipe" method="POST" class="flex flex-1 flex-col">
         <div id="background" class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
-          <input required name="recipeName" type="text" placeholder="Recipe Name..." class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <input required name="recipeName" value="<%= recipeName %>" type="text" placeholder="Recipe Name..." class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           <div class="flex px-6 pt-4">
             <button class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
               <img src="https://www.modernhoney.com/wp-content/uploads/2019/08/Classic-Lasagna-14-scaled.jpg" hidden class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
@@ -113,20 +113,22 @@
             Instructions:
           </p>
           <div class="pt-2 flex">
-            <textarea name="instructions" placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"></textarea>
+            <textarea required name="instructions" placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= instructions %></textarea>
           </div>
-          <p class="pt-8 text-2xl">
-            Extra:
-          </p>
-          <div class="flex pt-2 items-center">
-            <p>Change Color:</p>
-            <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
-              <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="sweet">Sweet</option>
-            </select>
-          </div>
+          <%if (user.role.toLowerCase()==="expert"){%>
+            <p class="pt-8 text-2xl">
+              Extra:
+            </p>
+            <div class="flex pt-2 items-center">
+              <p>Change Color:</p>
+              <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
+                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
+                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
+                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
+                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="sweet">Sweet</option>
+              </select>
+            </div>
+          <%}%>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
           <button value="publish" type="submit" name="submit" class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Publish Recipe
@@ -139,8 +141,12 @@
 
 <script>
   const select = document.querySelector('#colorPicker');
+  select.value = '<%= color %>';
   const bg = document.querySelector('#background');
-  select.addEventListener('change', () => {
+  select.addEventListener('change', loadColor);
+  loadColor();
+  function loadColor()
+  {
     const color = select.value;
     if (color === 'original') {
       bg.classList.remove(`bg-orange-300`, 'bg-cyan-300', 'bg-fuchsia-300');
@@ -158,5 +164,5 @@
       bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-cyan-300');
       bg.classList.add(`bg-fuchsia-300`);
     }
-  });
+  }
 </script>
