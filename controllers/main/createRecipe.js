@@ -5,10 +5,12 @@ const { offloadFields } = require("../../utils");
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
 const { defIngs, units } = require("../../jsons/ingredients.json");
+const { checkIgredient } = require("../../API/ingred");
 
 //get
 router.get("/createRecipe", async (req, res) => {
   const sess = req.session;
+  console.log(sess.error);
   if (!sess.recipe || !sess.recipe.create) {
     sess.recipe = {
       create: true,
@@ -17,8 +19,10 @@ router.get("/createRecipe", async (req, res) => {
       ingredients: [defIngs],
       instructions: "",
       color: "original",
+      error: sess.errorIngred || null
     };
   }
+  if (sess.errorIngred != null) sess.errorIngred = null;
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Recipe Craft",
@@ -40,6 +44,8 @@ router.post("/createRecipe", async (req, res) => {
   if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
   else list.push({ amount: amount, unit: unit, name: name });
   recipe.ingredients = list;
+
+  console.log(sess.error);
   //add ingredient
   if (buttonPress == "addmore") {
     recipe.ingredients.push(defIngs);
@@ -48,6 +54,15 @@ router.post("/createRecipe", async (req, res) => {
     recipe.ingredients.splice(index, 1);
   } //Create and save recipe
   else if (buttonPress == "publish") {
+    let status;
+    for (let ingred of recipe.ingredients) {
+      status = await checkIgredient(ingred.name);
+      if (!status) {
+        sess.errorIngred = "Ingredient " + ingred.name + " not found.";
+        return res.redirect(req.get("referer"));
+      }
+    }
+
     var recipeData = offloadFields(["recipeName", "recipeImages", "instructions", "color"], this, req.body);
     recipeData.userID = sess.user.id;
     recipeData.ingredients = recipe.ingredients;

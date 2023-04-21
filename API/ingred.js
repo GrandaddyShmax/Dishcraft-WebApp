@@ -16,6 +16,8 @@ async function getJsonFoodDB(ingredient){
 
 async function getData(ingredient){
     const nutJson = await getJsonNutritionDB(ingredient); 
+    if (!nutJson) return false;
+
     const nutrients = nutJson.totalNutrients;
     return {  
         //[Health Labels(Array)]
@@ -33,5 +35,12 @@ async function getData(ingredient){
     };
 }
 
+async function checkIgredient(ingredient) {
+    if ((await getJsonFoodDB(ingredient)).parsed.length === 0) {
+        return false;
+    }
+    return true;
+}
+
 /*[ External access ]*/
-module.exports = { getData };
+module.exports = { getData, checkIgredient };

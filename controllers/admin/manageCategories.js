@@ -12,7 +12,9 @@ router.get("/admin/managecategories", async (req, res) => {
     user: session.user || null,
     categories: categories,
     categoryIndex: session.categoryIndex || 0,
+    errorIngred: session.errorIngred || null
   });
+  if (session.errorIngred != null) session.errorIngred = null;
 });
 
 router.post("/admin/managecategories", async (req, res) => {
@@ -23,11 +25,20 @@ router.post("/admin/managecategories", async (req, res) => {
   }
   else if (buttonPress === 'add') {
     let category = new Category(null, id);
+    //let status;
+    //for (let ingred of recipe.ingredients) {
+    //  status = await checkIgredient(ingred.name);
+    //  if (!status) {
+    //    session.errorIngred = "Ingredient " + ingred.name + " not found.";
+    //    return res.redirect(req.get("referer"));
+    //  }
+    //}
     let success = await category.addIngredToCategory(req.body.addInput);
     if(!success)
     {
-      console.log("adding ingedient failed miserably!")
+      console.log("adding ingedient failed miserably!");
     }
+    console.log(session.errorIngred);
   }
   else if (buttonPress === 'remove') {
     let category = new Category(null, id);

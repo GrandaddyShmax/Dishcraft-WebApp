@@ -17,8 +17,10 @@ router.get("/assistant", async (req, res) => {
       ingredients: [defIngs],
       extra: "",
       instructions: "",
+      errorIngred: sess.errorIngred || null
     };
   }
+  if (sess.errorIngred != null) sess.errorIngred = null;
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
@@ -49,6 +51,14 @@ router.post("/assistant", async (req, res) => {
     recipe.ingredients.splice(index, 1);
   } else if (buttonPress == "generate") {
     //check ingredients exist in foodAPI:
+    let status;
+    for (let ingred of recipe.ingredients) {
+      status = await checkIgredient(ingred.name);
+      if (!status) {
+        sess.errorIngred = "Ingredient " + ingred.name + " not found.";
+        return res.redirect(req.get("referer"));
+      }
+    }
 
     //parse prompt:
     const text = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
