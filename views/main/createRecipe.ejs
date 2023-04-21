@@ -143,8 +143,8 @@
   const select = document.querySelector('#colorPicker');
   select.value = '<%= color %>';
   const bg = document.querySelector('#background');
+  document.addEventListener('DOMContentLoaded', loadColor);
   select.addEventListener('change', loadColor);
-  loadColor();
   function loadColor()
   {
     const color = select.value;

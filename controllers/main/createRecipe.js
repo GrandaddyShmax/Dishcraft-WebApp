@@ -38,7 +38,6 @@ router.post("/createRecipe", async (req, res) => {
     sess.recipeImages = req.body.recipeImages;
     sess.instructions = req.body.instructions;
     sess.color = req.body.color;
-    console.log(sess);
     return res.redirect(req.get("referer"));
   } else if (buttonPress == "remove") {
     sess.ingredients.splice(index, 1);
