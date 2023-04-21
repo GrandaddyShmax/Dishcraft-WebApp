@@ -17,10 +17,9 @@ router.get("/assistant", async (req, res) => {
       ingredients: [defIngs],
       extra: "",
       instructions: "",
-      errorIngred: sess.errorIngred || null
     };
   }
-  if (sess.errorIngred != null) sess.errorIngred = null;
+  if (sess.errorIngred != "") sess.errorIngred = "";
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
@@ -28,7 +27,9 @@ router.get("/assistant", async (req, res) => {
     units: units,
     recipe: sess.recipe || null,
     user: sess.user || null,
+    errorIngred: sess.errorIngred || ""
   });
+  if (sess.errorIngred != "") sess.errorIngred = "";
 });
 
 //get ingredients from assistant page
