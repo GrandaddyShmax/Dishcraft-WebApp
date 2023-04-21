@@ -21,7 +21,8 @@ router.get("/admin/managecategories", async (req, res) => {
 
 router.post("/admin/managecategories", async (req, res) => {
   const session = req.session;
-  
+  session.categoryIndex = req.body.category;
+  return res.redirect("/admin/managecategories");
 });
 
 /*[ External access ]*/

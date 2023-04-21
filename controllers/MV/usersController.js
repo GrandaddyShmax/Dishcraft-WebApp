@@ -3,9 +3,6 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../../models/user");
 
-const { Ingredient } = require("../../models/ingredient");
-const ingred = require("../../IngredAPI/connection");
-
 router.get("/", async (req, res) => {
   var session = req.session;
   res.render("template", {

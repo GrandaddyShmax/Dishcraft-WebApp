@@ -87,6 +87,7 @@ class User {
   //verify account (userName&password) exists in database:
   async verify() {
     let account = await schemas.User.findOne({ userName: this.userName });
+    if (!account) return { successful: false, message: "User not found" };
     let result = await bcrypt.compare(this.password, account.password);
       
     if (result) {

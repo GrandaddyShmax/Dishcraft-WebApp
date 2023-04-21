@@ -5,6 +5,7 @@ module.exports = (schemas) => {
     const category = new Schema({
       _id: Schema.Types.ObjectId,
       categoryName: String,
+      categoryType: String,
       ingredient: [String],
     });
 

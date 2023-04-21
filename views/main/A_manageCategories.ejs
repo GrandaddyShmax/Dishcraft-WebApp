@@ -27,7 +27,7 @@
               for (const category of categories) 
               {
               %>
-              <button id="categoryButton" name="<%= 'category'+index %>" class="h-16 pl-6 border w-full text-left text-latte px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+              <button type="submit" value="<%= index %>" id="categoryButton" name="category" class="h-16 pl-6 border w-full text-left text-latte px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                 <p><%= category.categoryName %></p>
               </button>
               <% 

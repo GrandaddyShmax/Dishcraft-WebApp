@@ -1,0 +1,24 @@
+/*[ Import ]*/
+const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
+const { schemas } = require("../schemas/paths");
+const { capitalize, offloadFields } = require("../utils");
+const saltRounds = 10;
+
+class Category {
+    constructor(details, id) {
+      this.id = details ? details.id : id;
+      this.userName = details ? details.userName : null;
+      this.email = details ? details.email : null;
+      this.password = details ? details.password : null;
+      this.passwordRep = details ? details.passwordRep : null;
+      this.avatar = details ? details.avatar : null;
+      this.role = details ? details.role : null;
+      if (details)
+        offloadFields(["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned"], this, details);
+      else this.id = id;
+    }
+}
+
+/*[ External access ]*/
+module.exports = { Category };
