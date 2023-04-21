@@ -1,6 +1,7 @@
 /*[ Import ]*/
 const express = require("express");
 const router = express.Router();
+const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
 const { offloadFields } = require("../../utils");
 const defIngs = { amount: 0, unit: "Cups", name: "" };
@@ -49,10 +50,12 @@ router.post("/createRecipe", async (req, res) => {
   } else if (buttonPress == "publish") {
     var recipeData = offloadFields(["recipeName", "recipeImages", "instructions", "color"], this, req.body);
     recipeData.ingredients = sess.ingredients;
+    recipeData.userID = sess.user.id;
     sess.recipeName = "";
     sess.recipeImages = null;
     sess.instructions = "";
     sess.color = "original";
+    recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients);
     var recipe = new Recipe(recipeData);
     let { success, msg } = await recipe.addRecipe();
     if (success) return res.redirect("/home");

@@ -17,7 +17,7 @@ router.get("/recipe", async (req, res) => {
 //post
 router.post("/recipe", async (req, res) => {
   var session = req.session;
-  const recipeData =req.body;
+  const recipeData = req.body;
   var recipe = new recipe(recipeData);
   let {success,msg} = await recipe.addRecipe();
 

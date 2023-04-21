@@ -75,7 +75,7 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "recipeImages", "rating", "aiMade", "instructions", "badges", "color", "uploadDate"],
+        ["recipeName", "recipeImages", "rating", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions"],
         this,
         details
       );
