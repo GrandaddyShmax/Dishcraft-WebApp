@@ -40,6 +40,17 @@ function capitalizeSentence(_string) {
   return string;
 }
 
+//Add s to word if needed
+function endPlural(number, string) {
+  const last = string.charAt(string.length - 1);
+  if (number == 1) {
+    if (last == "s") return string.slice(0, -1);
+    return string;
+  }
+  if (last == "s") return string;
+  return string + "s";
+}
+
 //Update fields in object
 function offloadFields(fields, object1, object2) {
   if (!object1) object1 = new Object();
@@ -97,4 +108,4 @@ function printAllRoutes(app, url) {
 }
 
 /*[ External access ]*/
-module.exports = { until, capitalize, offloadFields, printAllRoutes };
+module.exports = { until, capitalize, endPlural, offloadFields, printAllRoutes };

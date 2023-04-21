@@ -4,7 +4,7 @@ const router = express.Router();
 const { Recipe } = require("../../models/recipe");
 const { offloadFields } = require("../../utils");
 const { defIngs, units } = require("../../jsons/ingredients.json");
-const { getAssistant } = require("../../API/ai");
+const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 const prompt = require("../../jsons/prompt.json");
 
 //display assistant page
@@ -38,7 +38,7 @@ router.post("/assistant", async (req, res) => {
   const [buttonPress, index] = req.body.submit.split("&");
   var list = [];
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
-  sess.recipe = sess.recipe || "Recipe Name";
+  recipe.recipeName = recipe.recipeName || "Recipe Name";
   const { amount, unit, name } = req.body;
   if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
   else list.push({ amount: amount, unit: unit, name: name });
@@ -59,20 +59,19 @@ router.post("/assistant", async (req, res) => {
         return res.redirect(req.get("referer"));
       }
     }
-
     //parse prompt:
-    const text = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
-    console.log(text);
-    recipe.extra = "No extra ingredients!";
-    recipe.instructions = "temporary A.I. response";
+    const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
+    console.log(testMsg);
+    //recipe.extra = "No extra ingredients!";
+    //recipe.instructions = "temporary A.I. response";
+    req.session.recipe = parseAssToRecipeTest();
     return res.redirect(req.get("referer"));
-    //code to talk with ai:
+
+    //code to talk with ai (not accessible atm to avoid exceeding request limits)
     const assistant = getAssistant();
-    const testMsg = ""; //[parse sess.recipe + requst into proper request]
     const response = await assistant.sendMessage(testMsg);
     console.log(response);
-    //parse response
-    //recipe.instructions = parsedResponse
+    req.session.recipe = parseAssToRecipe(response, recipe);
   }
   return res.redirect(req.get("referer"));
 });
