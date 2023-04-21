@@ -83,11 +83,11 @@ class Recipe {
       var alg = [];
       for (const ing of details.ingredients) {
         ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
-        let categories = await schemas.Category.find({ ingredient: ing.name });
+        let categories = await schemas.Category.find({ ingredient: ing.name.toLowerCase() });
         if (categories && categories.length > 0) for (const category of categories) alg.push(category.categoryName);
       }
       this.ingredients = ings.join("\n");
-      this.alergies = alg.join("\n");
+      this.alergies = alg.length > 0 ? alg.join(", ") + "." : "None.";
       return true;
     }
     return false;
