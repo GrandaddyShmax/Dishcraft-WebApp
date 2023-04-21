@@ -39,14 +39,13 @@ class Recipe {
         userID: this.userID || "6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
-        rating: this.rating,
-        aiMade: this.aiMade,
+        rating: this.rating || 0,
+        aiMade: this.aiMade || false,
         ingredients: this.ingredients,
         instructions: this.instructions,
-        badges: this.badge,
+        badges: this.badge || [],
         color: this.color,
         uploadDate: date,
-        allergies: this.allergies,
         nutritions: this.nutritions,
       });
       return { success: true, msg: null };

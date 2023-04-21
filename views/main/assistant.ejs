@@ -18,17 +18,17 @@
       <form action="/assistant" method="POST" class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <p class="text-black text-3xl text-bold">
-            Recipe Name
+            <%=recipe.recipeName%>
           </p>
           <p class="pt-8 text-2xl">
             Ingredients:
           </p>
           <div class="flex flex-col">
             <% var index =0; %>
-            <% for (const ing of ingredients) { %>
+            <% for (const ing of recipe.ingredients) { %>
               <div class="pt-2 flex">
-                <input min="0.01" type="number" name="<%=`amount`+index%>" value="<%=ing.amount%>" step="0.01" class="px-4 py-3 w-28 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <select name="<%=`unit`+index%>" class="bg-espresso flex mx-2 px-4 w-36 rounded-md justify-between font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Ounces
+                <input min="0.01" type="number" name="amount" value="<%=ing.amount%>" step="0.01" class="px-4 py-3 w-28 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <select name="unit" class="bg-espresso flex mx-2 px-4 w-36 rounded-md justify-between font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Ounces
                   <%for (const unit of units) {%>
                     <%if (ing.unit==unit) { %>
                       <option selected value="<%=unit%>" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold"><%= unit %></option>
@@ -37,7 +37,7 @@
                     <% } %>
                   <% } %>
                 </select>
-                <input required placeholder="Ingredient" type="text" name="<%=`name`+index%>" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input required placeholder="Ingredient" type="text" name="name" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
                 <button value="<%=`remove&`+index%>" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
                 </button>
               </div> <!-- ingredient object -->
@@ -53,15 +53,13 @@
             Extra Ingredients:
           </p>
           <div class="pt-2 flex">
-            <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            </textarea>
+            <textarea readonly name="extra" class="block px-4 py-3 w-full h-48 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%=recipe.extra%></textarea>
           </div>
           <p class="pt-8 text-2xl">
             Instructions:
           </p>
           <div class="pt-2 flex">
-            <textarea readonly class="block px-4 py-3 w-full h-96 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            </textarea>
+            <textarea readonly name="instructions" class="block px-4 py-3 w-full h-96 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%=recipe.instructions%></textarea>
           </div>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">

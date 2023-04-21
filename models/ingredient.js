@@ -39,7 +39,7 @@ class Ingredient {
         
         for (let ingred of ingredArr) {
             const ingredient = new Ingredient(await connection.getData(ingred.name));
-            const valueByUnit = calcPerGrams(ingred.unit.toLowerCase() , parseFloat(ingred.amount));
+            const valueByUnit = calcPerGrams(ingred.unit.toLowerCase(), parseFloat(ingred.amount));
             energy += (ingredient.energy / valueByUnit);
             fattyAcids += (valueByUnit * ingredient.fattyAcids / 1000);
             sodium += (valueByUnit * ingredient.sodium / 1000);

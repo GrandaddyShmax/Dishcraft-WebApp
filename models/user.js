@@ -1,6 +1,6 @@
 /*[ Import ]*/
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 const saltRounds = 10;
@@ -8,15 +8,12 @@ const saltRounds = 10;
 /*[ Handle base class database ]*/
 class User {
   constructor(details, id) {
-    this.id = details ? details.id : id;
-    this.userName = details ? details.userName : null;
-    this.email = details ? details.email : null;
-    this.password = details ? details.password : null;
-    this.passwordRep = details ? details.passwordRep : null;
-    this.avatar = details ? details.avatar : null;
-    this.role = details ? details.role : null;
     if (details)
-      offloadFields(["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned"], this, details);
+      offloadFields(
+        ["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned"],
+        this,
+        details
+      );
     else this.id = id;
   }
 
@@ -31,14 +28,13 @@ class User {
       //check email validity
       account = await schemas.User.findOne({ email: this.email });
       if (account) return { successful: false, error: "email", message: "This mail is already in use" };
-      
+
       //check password validity
       if (this.password.length < 6) return { successful: false, error: "password", message: "Password too short" };
       if (this.password !== this.passwordRep) return { successful: false, error: "password", message: "Passwords don't match" };
 
-      let role = "junior";
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
-      if(isAdmin) role = "admin";
+      let role = isAdmin ? "admin" : "junior";
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
@@ -73,13 +69,7 @@ class User {
   async fetchUser() {
     let details = await schemas.User.findOne({ _id: this.id });
     if (details) {
-      if (details) offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
-      /*this.id = details.id;
-      this.userName = details.userName;
-      this.email = details.email;
-      this.password = details.password;
-      this.avatar = details.avatar;
-      this.role = details.role;*/
+      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
       return true;
     }
     return false;
@@ -89,7 +79,7 @@ class User {
     let account = await schemas.User.findOne({ userName: this.userName });
     if (!account) return { successful: false, message: "User not found" };
     let result = await bcrypt.compare(this.password, account.password);
-      
+
     if (result) {
       if (account.banned) return { successful: false, message: "User is banned" };
       return {

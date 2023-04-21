@@ -2,53 +2,65 @@
 const express = require("express");
 const router = express.Router();
 const { Recipe } = require("../../models/recipe");
+const { offloadFields } = require("../../utils");
+const { defIngs, units } = require("../../API/constants.json");
 const { getAssistant } = require("../../API/ai");
-const defIngs = { amount: 0, unit: "Cups", name: "" };
 const prompt = require("../../API/prompt.json");
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
-  var session = req.session;
   const sess = req.session;
-  if (!sess.ingredients || sess.ingredients.length == 0) sess.ingredients = [defIngs];
-  //prettier-ignore
-  const units = [ "Cups", "Deciliters", "Galons", "Grams", "Kilograms", "Liters", "Ounces", "Pieces", "Pints", "Pounds", "Quarts", "Tablespoon", "Teaspoon",];
+  if (!sess.recipe || !sess.recipe.ai) {
+    sess.recipe = {
+      ai: true,
+      recipeName: "Recipe name",
+      ingredients: [defIngs],
+      extra: "",
+      instructions: "",
+    };
+  }
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
-    ingredients: sess.ingredients,
     units: units,
     recipe: sess.recipe || null,
-    user: session.user || null,
+    user: sess.user || null,
   });
 });
 
 //get ingredients from assistant page
 router.post("/assistant", async (req, res) => {
   const sess = req.session;
+  var recipe = sess.recipe;
   const [buttonPress, index] = req.body.submit.split("&");
   var list = [];
-  for (var i = 0; i < sess.ingredients.length; i++)
-    list.push({ amount: req.body["amount" + i], unit: req.body["unit" + i], name: req.body["name" + i] });
-  sess.ingredients = list;
+  offloadFields(["recipeName", "extra", "instructions"], sess.recipe, req.body);
+  const { amount, unit, name } = req.body;
+  if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
+  else list.push({ amount: amount, unit: unit, name: name });
+  recipe.ingredients = list;
+  //add ingredient
   if (buttonPress == "addmore") {
-    sess.ingredients.push(defIngs);
-  } else if (buttonPress == "remove") {
-    sess.ingredients.splice(index, 1);
+    recipe.ingredients.push(defIngs);
+  } //remove ingredient
+  else if (buttonPress == "remove") {
+    recipe.ingredients.splice(index, 1);
   } else if (buttonPress == "generate") {
-    console.log(sess.ingredients);
     //check ingredients exist in foodAPI:
 
     //parse prompt:
-    const text = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(sess.ingredients, true);
+    const text = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
     console.log(text);
+    recipe.extra = "No extra ingredients!";
+    recipe.instructions = "temporary A.I. response";
     return res.redirect(req.get("referer"));
     //code to talk with ai:
     const assistant = getAssistant();
     const testMsg = ""; //[parse sess.recipe + requst into proper request]
     const response = await assistant.sendMessage(testMsg);
     console.log(response);
-    //sess.recipe = whataver ai said
+    //parse response
+    //recipe.instructions = parsedResponse
   }
   return res.redirect(req.get("referer"));
 });
