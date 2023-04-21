@@ -57,22 +57,22 @@
           <p class="pt-8 text-2xl pb-2">
             Allergies:
           </p>
-          <input readonly placeholder="None" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <input readonly value="<%= recipe.allergies %>" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </input>
           <p class="pt-8 text-2xl">
-            Nutritions (g):
+            Nutritions:
           </p>
-          <div class="grid grid-cols-10 pt-4 gap-4 items-center">
-            <p>Energy:</p>
-            <input readonly type="text" value="<%= recipe.nutritions.energy %>" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Fatty acids:</p>
-            <input readonly type="text" value="<%= recipe.nutritions.fattyAcids %>" placeholder="0" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Sodium:</p>
-            <input readonly type="text" value="<%= recipe.nutritions.sodium %>" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Sugar:</p>
-            <input readonly type="text" value="<%= recipe.nutritions.sugar %>" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Protein:</p>
-            <input readonly type="text" value="<%= recipe.nutritions.protein %>" class="px-4 py-3 w-20 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <div class="grid grid-cols-6 pt-4 gap-4 items-center">
+            <p>Energy (kcal):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.energy %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Fatty acids (kg):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.fattyAcids %>" placeholder="0" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Sodium (kg):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.sodium %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Sugar (kg):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.sugar %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Protein (kg):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.protein %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </div>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
