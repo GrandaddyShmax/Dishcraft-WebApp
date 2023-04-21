@@ -19,10 +19,10 @@ router.get("/createRecipe", async (req, res) => {
       ingredients: [defIngs],
       instructions: "",
       color: "original",
-      error: sess.errorIngred || null
+      errorIngred: sess.errorIngred || ""
     };
   }
-  if (sess.errorIngred != null) sess.errorIngred = null;
+  if (sess.errorIngred != "") sess.errorIngred = "";
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Recipe Craft",
