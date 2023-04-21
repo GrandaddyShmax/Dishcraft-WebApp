@@ -6,6 +6,7 @@ const { Recipe } = require("../../models/recipe");
 router.get("/home", async (req, res) => {
   const session = req.session;
   const recipes = await Recipe.fetchRecipes(session.filter || null, session.sort || null);
+  session.recipe = null;
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
     page: "home",

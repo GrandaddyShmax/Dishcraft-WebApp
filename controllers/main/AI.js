@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 const { Recipe } = require("../../models/recipe");
 const { offloadFields } = require("../../utils");
-const { defIngs, units } = require("../../API/constants.json");
+const { defIngs, units } = require("../../jsons/ingredients.json");
 const { getAssistant } = require("../../API/ai");
-const prompt = require("../../API/prompt.json");
+const prompt = require("../../jsons/prompt.json");
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
@@ -19,6 +19,7 @@ router.get("/assistant", async (req, res) => {
       instructions: "",
     };
   }
+  if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
@@ -34,7 +35,8 @@ router.post("/assistant", async (req, res) => {
   var recipe = sess.recipe;
   const [buttonPress, index] = req.body.submit.split("&");
   var list = [];
-  offloadFields(["recipeName", "extra", "instructions"], sess.recipe, req.body);
+  offloadFields(["extra", "instructions"], sess.recipe, req.body);
+  sess.recipe = sess.recipe || "Recipe Name";
   const { amount, unit, name } = req.body;
   if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
   else list.push({ amount: amount, unit: unit, name: name });

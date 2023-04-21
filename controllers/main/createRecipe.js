@@ -4,7 +4,7 @@ const router = express.Router();
 const { offloadFields } = require("../../utils");
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
-const { defIngs, units } = require("../../API/constants.json");
+const { defIngs, units } = require("../../jsons/ingredients.json");
 
 //get
 router.get("/createRecipe", async (req, res) => {
@@ -19,6 +19,7 @@ router.get("/createRecipe", async (req, res) => {
       color: "original",
     };
   }
+  if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Recipe Craft",
     page: "createRecipe",
