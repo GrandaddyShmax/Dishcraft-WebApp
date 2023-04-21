@@ -1,5 +1,5 @@
 /*[ Import ]*/
-const connection = require("../IngredAPI/connection");
+const connection = require("../API/ingred");
 
 //[units convertion to grams]//
 const unitsTable = {
@@ -33,11 +33,6 @@ class Ingredient {
         this.protein = data.protein;
     }
 
-    async printIngridient() {
-        //console.log(this);
-        //console.log();
-    }
-
     static async calcRecipeNutVal(ingredArr) {
         var {energy = 0, fattyAcids = 0, sodium = 0, sugar = 0, protein = 0} = {};
         let calcPerGrams = (unit, amount) => unitsTable[unit] * amount;
@@ -45,11 +40,11 @@ class Ingredient {
         for (let ingred of ingredArr) {
             const ingredient = new Ingredient(await connection.getData(ingred.name));
             const valueByUnit = calcPerGrams(ingred.unit.toLowerCase() , parseFloat(ingred.amount));
-            energy += (valueByUnit * ingredient.energy) / 1000;
-            fattyAcids += (valueByUnit * ingredient.fattyAcids);
-            sodium += (valueByUnit * ingredient.sodium);
-            sugar += (valueByUnit * ingredient.sugar);
-            protein += (valueByUnit * ingredient.protein);
+            energy += (ingredient.energy / valueByUnit);
+            fattyAcids += (valueByUnit * ingredient.fattyAcids / 1000);
+            sodium += (valueByUnit * ingredient.sodium / 1000);
+            sugar += (valueByUnit * ingredient.sugar / 1000);
+            protein += (valueByUnit * ingredient.protein / 1000);
         }
         return {energy: energy.toFixed(2), 
             fattyAcids: fattyAcids.toFixed(2),  

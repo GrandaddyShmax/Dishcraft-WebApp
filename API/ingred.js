@@ -34,4 +34,4 @@ async function getData(ingredient){
 }
 
 /*[ External access ]*/
-module.exports = { getJsonNutritionDB, getJsonFoodDB, getData };
+module.exports = { getData };

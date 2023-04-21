@@ -6,7 +6,7 @@ module.exports = (schemas) => {
       _id: Schema.Types.ObjectId,
       categoryName: String,
       categoryType: String,
-      ingredient: [String],
+      ingredients: [String],
     });
 
 //[Registers in database]
