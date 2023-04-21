@@ -3,14 +3,13 @@ pipeline {
   agent any
   environment {
     NODE_ENV_PATH = './venv'
-    NODE_VERSION = '6.11.1'
+    NODE_VERSION = '16.17.0'
   }
   stages {
     stage('Pre-cleanup') {
       steps {
         sh 'rm -rf ./venv'
         sh 'rm -rf ./node_modules'
-        sh 'rm -rf ./bower_components'
       }
     }
     stage('Make venv') {
@@ -21,8 +20,6 @@ pipeline {
     stage('Install dependencies') {
       steps {
         sh '. ./venv/bin/activate && npm install'
-        sh '. ./venv/bin/activate && npm install -g bower'
-        sh '. ./venv/bin/activate && bower install'
       }
     }
     stage('Run tests') {
