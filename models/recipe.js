@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { Junior } = require("./user");
+const { Category } = require("./category");
 const { offloadFields } = require("../utils");
 
 //Recipe class
@@ -79,15 +80,8 @@ class Recipe {
         this,
         details
       );
-      var ings = [];
-      var alg = [];
-      for (const ing of details.ingredients) {
-        ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
-        let categories = await schemas.Category.find({ ingredient: ing.name.toLowerCase() });
-        if (categories && categories.length > 0) for (const category of categories) alg.push(category.categoryName);
-      }
-      this.ingredients = ings.join("\n");
-      this.alergies = alg.length > 0 ? alg.join(", ") + "." : "None.";
+      this.ingredients = Recipe.parseIngredients(details.ingredients);
+      this.allergies = await Category.findCategory(details.ingredients, "allergy", true);
       return true;
     }
     return false;
@@ -103,18 +97,6 @@ class Recipe {
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
-      /*const tempRecipe = {
-        user: user,
-        recipeName: recipe.recipeName,
-        recipeImages: recipe.recipeImages,
-        rating: recipe.rating,
-        aiMade: recipe.aiMade,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-        badges: recipe.badge,
-        color: recipe.color,
-        uploadDate: recipe.uploadDate,
-      };*/
       var tempRecipe = offloadFields(
         ["id", "recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
         null,
@@ -130,6 +112,14 @@ class Recipe {
       //address sort
     }
     return recipes || [];
+  }
+  //parse ingredients into text
+  static parseIngredients(ingredients) {
+    var ings = [];
+    for (const ing of ingredients) {
+      ings.push(`${ing.amount} ${ing.unit} ${ing.name}`);
+    }
+    return ings.join("\n");
   }
 }
 
