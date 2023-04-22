@@ -15,7 +15,7 @@ describe(testLabel + " Checking secrets...", function () {
   it(apiFoodLabel + "app ID 2", () => assert.notEqual(process.env.APP_ID2, undefined));
   it(apiFoodLabel + "app key 2", () => assert.notEqual(process.env.APP_KEYS2, undefined));
   //ai api
-  it(apiAILabel + "username", () => assert.notEqual(process.env.USERNAME, undefined));
+  it(apiAILabel + "usermail", () => assert.notEqual(process.env.USERMAIL, undefined));
   it(apiAILabel + "password", () => assert.notEqual(process.env.USERPASS, undefined));
   it(apiAILabel + "ai key", () => assert.notEqual(process.env.OPENAI_API_KEY, undefined));
 
