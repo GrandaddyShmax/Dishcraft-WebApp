@@ -33,11 +33,12 @@ class Ingredient {
         this.protein = data.protein;
     }
 
-    static async calcRecipeNutVal(ingredArr) {
+    static async calcRecipeNutVal(ingredArr, check) {
         var {energy = 0, fattyAcids = 0, sodium = 0, sugar = 0, protein = 0} = {};
         let calcPerGrams = (unit, amount) => unitsTable[unit] * amount;
         
         for (let ingred of ingredArr) {
+            if(check && !(await connection.checkIgredient(ingred.name))) continue;
             const ingredient = new Ingredient(await connection.getData(ingred.name));
             const unit = ingred.unit.toLowerCase();
             const amount = parseFloat(ingred.amount);

@@ -81,7 +81,7 @@ router.post("/assistant", async (req, res) => {
     //recipe.instructions = "temporary A.I. response";
     req.session.recipe = parseAssToRecipeTest();
     req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true)
-    req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients);
+    req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
     sess.flag = true;
     return res.redirect(req.get("referer"));
 
