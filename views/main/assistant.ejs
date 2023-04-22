@@ -62,6 +62,26 @@
           <div class="pt-2 flex">
             <textarea readonly name="instructions" class="block px-4 py-3 w-full h-96 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%=recipe.instructions%></textarea>
           </div>
+          <p class="pt-8 text-2xl pb-2">
+            Allergies:
+          </p>
+          <input readonly value="" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          </input>
+          <p class="pt-8 text-2xl">
+            Nutritions:
+          </p>
+          <div class="grid grid-cols-6 pt-4 gap-4 items-center">
+            <p>Energy (kcal):</p>
+            <input readonly type="text" value="" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Fatty acids (kg):</p>
+            <input readonly type="text" value="" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Sodium (kg):</p>
+            <input readonly type="text" value="" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Sugar (kg):</p>
+            <input readonly type="text" value="" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p>Protein (kg):</p>
+            <input readonly type="text" value="" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          </div>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
           <button value="tryagain" type="submit" name="submit" class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
