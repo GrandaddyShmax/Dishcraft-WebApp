@@ -15,7 +15,7 @@ router.get("/admin/managecategories", async (req, res) => {
     user: session.user || null,
     categories: categories,
     categoryIndex: session.categoryIndex || 0,
-    errorIngred: error,
+    errorIngred: error
   });
 });
 

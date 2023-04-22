@@ -10,6 +10,8 @@ const { checkIgredient } = require("../../API/ingred");
 //get
 router.get("/createRecipe", async (req, res) => {
   const sess = req.session;
+  let error = "";
+  if (sess.errorIngred != "" ) { error = sess.errorIngred; sess.errorIngred = ""}
   if (!sess.recipe || !sess.recipe.create) {
     sess.recipe = {
       create: true,
@@ -27,9 +29,8 @@ router.get("/createRecipe", async (req, res) => {
     units: units,
     user: sess.user || null,
     recipe: sess.recipe,
-    errorIngred: sess.errorIngred || ""
+    errorIngred: error
   });
-  if (sess.errorIngred != "") sess.errorIngred = "";
 });
 
 //post
@@ -43,7 +44,6 @@ router.post("/createRecipe", async (req, res) => {
   if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
   else list.push({ amount: amount, unit: unit, name: name });
   recipe.ingredients = list;
-  sess.errorIngred = "";
 
   //add ingredient
   if (buttonPress == "addmore") {
