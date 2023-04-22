@@ -52,8 +52,6 @@ exec("npm run tailwind:css", (err, stdout, stderr) => {
 const app = express();
 app.set("view engine", "ejs"); //define engine
 app.set("views", "views"); //define views location
-//const router = express.Router();
-//app.use(router);
 app.use(session({ resave: false, saveUninitialized: false, secret: "for some reason" }));
 
 //[Define aid tools]

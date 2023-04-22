@@ -1,8 +1,12 @@
 #!/usr/bin/env groovy
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node:bullseye-slim' 
+      args '-p 3000:3000' 
+    }
+  }
   environment {
-    NODE_ENV_PATH = './venv'
     NODE_VERSION = '16.17.0'
     
     DB_URL=credentials('db_url')
