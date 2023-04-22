@@ -29,15 +29,17 @@ router.post("/admin/managecategories", async (req, res) => {
   }
   else if (buttonPress === 'add') {
     let category = new Category(null, id);
-    let status = await checkIgredient(req.body.addInput);
-    if (!status) {
+    await category.fetchCategory();
+    if (!(await checkIgredient(req.body.addInput))) {
       session.errorIngred = "Ingredient " + req.body.addInput + " not found.";
       return res.redirect(req.get("referer"));
     }
-    let success = await category.addIngredToCategory(req.body.addInput);
-    if(!success)
-    {
-      console.log("adding ingedient failed miserably!");
+    if (category.checkIngredInCategory(req.body.addInput)) {
+      session.errorIngred = "Ingredient " + req.body.addInput + " already in this category.";
+      return res.redirect(req.get("referer"));
+    }
+    if(!(await category.addIngredToCategory(req.body.addInput))) {
+      console.log("adding ingredient failed miserably!");
     }
   }
   else if (buttonPress === 'remove') {
@@ -45,7 +47,7 @@ router.post("/admin/managecategories", async (req, res) => {
     let success = await category.deleteIngredFromCategory(index);
     if(!success)
     {
-      console.log("deleting ingedient failed miserably!")
+      console.log("deleting ingredient failed miserably!")
     }
   }
   return res.redirect("/admin/managecategories");

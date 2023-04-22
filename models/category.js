@@ -52,9 +52,16 @@ class Category {
   //fetch category from db
   async fetchCategory() {
     let details = await schemas.Category.findOne({ _id: this.id });
-    console.log(details);
     if (details) {
       offloadFields([ "id", "categoryName", "categoryType", "ingredients" ], this, details);
+      return true;
+    }
+    return false;
+  }
+
+  //check if the ingredient exist in this category
+  checkIngredInCategory(ingredient) {
+    if ((this.ingredients).includes(ingredient.toLowerCase())) {
       return true;
     }
     return false;
