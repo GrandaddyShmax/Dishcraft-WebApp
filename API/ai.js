@@ -4,7 +4,7 @@ const { until, endPlural } = require("../utils");
 var assistant;
 
 //connect to A.I. API
-async function connectAI() {
+async function connectAI(testing) {
   var aiLabel = chalk.green("[AI]");
   var msg;
   try {
@@ -17,7 +17,7 @@ async function connectAI() {
     console.log(error);
     msg = " Couldn't load Api.";
   }
-  console.log(aiLabel + msg);
+  if (!testing) console.log(aiLabel + msg);
 }
 
 //get API endpoint

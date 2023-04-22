@@ -21,6 +21,8 @@ const port = 3000;
 const url = `http://localhost:${port}/`;
 const appLabel = chalk.blue("[App]");
 const dbLabel = chalk.magenta("[DB]");
+//Unit tests:
+const testing = typeof global.it === "function";
 
 //[Connect to database]
 let connected = null;
@@ -29,17 +31,17 @@ let connected = null;
   try {
     await mongoose.connect(DB_URL).then(() => {
       connected = true;
-      console.log(dbLabel + " Database connected.");
+      if (!testing) console.log(dbLabel + " Database connected.");
     });
   } catch (error) {
     connected = false;
-    console.log(dbLabel + chalk.red(" Couldn't connect to database."));
+    if (!testing) console.log(dbLabel + chalk.red(" Couldn't connect to database."));
     console.log(error);
   }
 })();
 
 //[Connect to A.I. API]
-connectAI();  //will load in background
+connectAI(testing); //will load in background
 
 //[Initialize Tailwind]
 exec("npm run tailwind:css", (err, stdout, stderr) => {
@@ -81,18 +83,22 @@ const errorController = require("./controllers/errors.js"); //handle errors
 app.use(errorController.get404Page); //error page
 
 //[Log routes]
-console.log(appLabel + " Registered routes:");
-printAllRoutes(app, url);
+if (!testing) {
+  console.log(appLabel + " Registered routes:");
+  printAllRoutes(app, url);
+}
 
 //[Launch app]
 (async () => {
   await until((_) => connected != null); //wait for all async functions to finish
   app.listen(port);
-  console.log(appLabel + " App launched at: " + chalk.yellow(url));
+  if (!testing) console.log(appLabel + " App launched at: " + chalk.yellow(url));
 })();
+
+module.exports = { app };
 
 //[Process events]
 process.on("SIGINT", (signal, code) => process.exit(128 + signal));
 process.on("exit", (code) => {
-  console.log(appLabel + " App closed.");
+  if (!testing) console.log(appLabel + " App closed.");
 });

@@ -4,27 +4,34 @@ pipeline {
   environment {
     NODE_ENV_PATH = './venv'
     NODE_VERSION = '16.17.0'
+    
+    DB_URL=credentials('db_url')
+    
+    APP_ID=credentials('app_id')
+    APP_KEYS=credentials('app_keys')
+
+    APP_ID2=credentials('app_id2')
+    APP_KEYS2=credentials('app_keys2')
+
+    USERMAIL=credentials('usermail')
+    USERPASS=credentials('userpass')
+
+    OPENAI_API_KEY=credentials('openai_api_key')
   }
   stages {
     stage('Pre-cleanup') {
       steps {
-        sh 'rm -rf ./venv'
         sh 'rm -rf ./node_modules'
-      }
-    }
-    stage('Make venv') {
-      steps {
-        sh 'nodeenv --prebuilt -n $NODE_VERSION $NODE_ENV_PATH'
       }
     }
     stage('Install dependencies') {
       steps {
-        sh '. ./venv/bin/activate && npm install'
+        sh 'npm install'
       }
     }
     stage('Run tests') {
       steps {
-        sh '. ./node_env/bin/activate && npm test'
+        sh 'npm test'
       }
     }
   }
