@@ -31,7 +31,7 @@
                     <p class="pointer-events-none mt-2 font-bold leading-tight sm:text-lg block truncate text-pistachio"><%= recipe.recipeName %></p>
                     <div class="flex items-center">
                       <p class="pointer-events-none block text-sm font-medium text-latte"><%= recipe.user.userName %></p>
-                      <%if (recipe.user.role.toLowerCase()=="expert"){%>
+                      <%if (recipe.user.role > 1){%>
                         <svg
                           width="24"
                           height="24"

@@ -87,15 +87,20 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(filter, sort) {
+  static async fetchRecipes(search, filter, sort) {
     let recipes = [];
-    let recipesArr;
-    if (filter) {
-      //address filter
-    } else recipesArr = await schemas.Recipe.find({});
+    let recipesArr = await schemas.Recipe.find({});
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
+      if (search) {
+        if (
+          !recipe.recipeName.toLowerCase().includes(search) &&
+          !user.userName.toLowerCase().includes(search) &&
+          !recipe.ingredients.some((ing) => ing.name.toLowerCase() === search)
+        )
+          continue;
+      }
       var tempRecipe = offloadFields(
         ["id", "recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
         null,

@@ -9,7 +9,7 @@ module.exports = (schemas) => {
     email: String,
     password: String,
     avatar: String,
-    role: String,
+    role: Number,
     banned: Boolean,
   });
 

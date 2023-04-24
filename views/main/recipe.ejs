@@ -5,7 +5,7 @@
         <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
           <div class="flex items-center">
             <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-espresso"><%= recipe.user.userName %></p>
-            <%if (recipe.user.role.toLowerCase()=="expert"){%>
+            <%if (recipe.user.role > 1){%>
               <svg
                 width="24"
                 height="24"

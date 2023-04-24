@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 const saltRounds = 10;
+const role = { junior: 1, expert: 2, admin: 3 };
 
 /*[ Handle base class database ]*/
 class User {
@@ -34,7 +35,7 @@ class User {
       if (this.password !== this.passwordRep) return { successful: false, error: "password", message: "Passwords don't match" };
 
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
-      let role = isAdmin ? "admin" : "junior";
+      let role = isAdmin ? role["admin"] : role["junior"];
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
@@ -56,8 +57,7 @@ class User {
   /*[ Modifying data ]*/
   async upgradeUser() {
     try {
-      //await schemas.User.updateOne({ userName: this.userName }, { role: "expert" });
-      await schemas.User.updateOne({ _id: this.id }, { role: "expert" });
+      await schemas.User.updateOne({ _id: this.id }, { role: role["expert"] });
       return true;
     } catch {
       return false;
@@ -110,7 +110,7 @@ class Junior extends User {
   }
   //get all Junior Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: "junior" });
+    let accounts = await schemas.User.find({ role: role["junior"] });
     return accounts || [];
   }
 }
@@ -122,17 +122,16 @@ class Expert extends User {
   }
   //get all Expert Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: "expert" });
+    let accounts = await schemas.User.find({ role: role["expert"] });
     return accounts || [];
   }
   //get all Junior&Expert Cook users from db
-  static async fetchAllUsers(pretty) {
+  static async fetchAllUsers() {
     let accounts = [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
-    for await (const account of accounts){
-      const recipes = await schemas.Recipe.find({ userID: account.id })
+    for await (const account of accounts) {
+      const recipes = await schemas.Recipe.find({ userID: account.id });
       account.recipeCount = recipes.length;
     }
-    if (pretty) accounts.forEach((user) => (user.role = capitalize(user.role)));
     return accounts.sort((a, b) => {
       if (a.userName < b.userName) return -1;
       if (a.userName > b.userName) return 1;

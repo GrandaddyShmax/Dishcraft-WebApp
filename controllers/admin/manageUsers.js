@@ -5,7 +5,7 @@ const { Junior, Expert } = require("../../models/user");
 
 router.get("/admin/manageusers", async (req, res) => {
   const sess = req.session;
-  const users = await Expert.fetchAllUsers(true);
+  const users = await Expert.fetchAllUsers();
   res.render("template", {
     pageTitle: "Dishcraft - Manage Users",
     page: "A_manageUsers",

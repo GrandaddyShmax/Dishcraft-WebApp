@@ -5,7 +5,7 @@
     <img src="<%= recipe.user.avatar %>" class="user" />
     <%= recipe.user.userName %>
     <!--Display badge of honor if Expert user-->
-    <%if (recipe.user.role.toLowerCase()=="expert"){%> <img src="images/badge_of_honor.png" class="badge" /><%}%>
+    <%if (recipe.user.role > 1){%> <img src="images/badge_of_honor.png" class="badge" /><%}%>
   </div>
 </div>
 <%}%>
