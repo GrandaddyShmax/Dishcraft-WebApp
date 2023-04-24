@@ -128,6 +128,10 @@ class Expert extends User {
   //get all Junior&Expert Cook users from db
   static async fetchAllUsers(pretty) {
     let accounts = [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
+    for await (const account of accounts){
+      const recipes = await schemas.Recipe.find({ userID: account.id })
+      account.recipeCount = recipes.length;
+    }
     if (pretty) accounts.forEach((user) => (user.role = capitalize(user.role)));
     return accounts.sort((a, b) => {
       if (a.userName < b.userName) return -1;
