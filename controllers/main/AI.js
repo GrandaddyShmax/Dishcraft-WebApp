@@ -100,6 +100,8 @@ router.post("/assistant", async (req, res) => {
       }
       catch (error) {
         console.log(error)
+        sess.recipe.extra = "Failed to generate recipe, please try again later.";
+        sess.recipe.instructions = "Failed to generate recipe, please try again later.";
         success = false;
       }
     }

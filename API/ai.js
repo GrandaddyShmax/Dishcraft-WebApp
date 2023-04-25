@@ -1,23 +1,46 @@
 //[Import stuff]
 const chalk = require("chalk"); //needed for colorful console messages
 const { until, endPlural } = require("../utils");
+const { units } = require("../jsons/views.json");
+const { schemas } = require("../schemas/paths");
 var assistant;
 
 //connect to A.I. API
 async function connectAI(testing) {
   var aiLabel = chalk.green("[AI]");
-  var msg;
+  var msg = await loadLib1();
+  if (!testing) console.log(aiLabel + msg);
+}
+
+//Main module
+async function loadLib1() {
   try {
-    const ChatGPTAPI = (await import("chatgpt")).ChatGPTAPI;
-    assistant = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
+    const rProxy1 = "https://ai.fakeopen.com/api/conversation"; //0.5 r/s
+    const rProxy2 = "https://api.pawan.krd/backend-api/conversation"; //~3  r/s
+    const ChatGPTUnofficialProxyAPI = (await import("chatgpt")).ChatGPTUnofficialProxyAPI;
+    const access = await schemas.AIAccess.findOne({});
+    assistant = new ChatGPTUnofficialProxyAPI({ accessToken: access.accessToken, apiReverseProxyUrl: rProxy1 });
 
     await until((_) => assistant);
-    msg = " Api loaded.";
+    return " Api loaded using main module.";
   } catch (error) {
     console.log(error);
-    msg = " Couldn't load Api.";
+    return " Couldn't load Api.";
   }
-  if (!testing) console.log(aiLabel + msg);
+}
+//Backup module
+async function loadLib2() {
+  try {
+    return " Backup module disabled.";
+    const ChatGPTAPI = (await import("chatgpt")).ChatGPTAPI;
+    //assistant = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
+
+    await until((_) => assistant);
+    return " Api loaded using backup module.";
+  } catch (error) {
+    console.log(error);
+    return " Couldn't load Api.";
+  }
 }
 
 //get API endpoint
@@ -25,12 +48,13 @@ const getAssistant = () => assistant;
 
 //parse A.I. response
 function parseAssToRecipe(response, recipe) {
+  console.log(response)
+  if (response.text) response = response.text;
   recipe.extra = "";
   recipe.ingredients2 = [];
   recipe.instructions = "";
   const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
   console.log(ings);
-  const { units } = require("../jsons/ingredients.json");
   const fields = ["$recipe name", "$ingredients", "$instructions"];
   var index;
   for (const line of response.split("\n")) {
@@ -57,7 +81,6 @@ function parseAssToRecipe(response, recipe) {
             recipe.extra += `${amount} ${endPlural(amount, unit)} of ${name}\n`;
             recipe.ingredients2.push({ amount: amount, unit: unit, name: name });
           }
-
           break;
         case 2: //instructions
           recipe.instructions += line + "\n";
@@ -69,64 +92,42 @@ function parseAssToRecipe(response, recipe) {
   }
   return recipe;
 }
-
+//test parsing on existing text
 function parseAssToRecipeTest() {
   recipe = {
     ai: true,
     ingredients: [
-      {
-        amount: 2,
-        unit: "Cups",
-        name: "milk",
-      },
-      {
-        amount: 50,
-        unit: "Grams",
-        name: "flour",
-      },
-      {
-        amount: 2,
-        unit: "Tablespoon",
-        name: "cocoa powder",
-      },
-      {
-        amount: 1,
-        unit: "Teaspoon",
-        name: "vanilla extract",
-      },
-      {
-        amount: 200,
-        unit: "Grams",
-        name: "butter",
-      },
+      { amount: 5, unit: "Pieces", name: "bread" },
+      { amount: 2, unit: "Tablespoon", name: "chocolate" },
+      { amount: 10, unit: "Grams", name: "butter" },
+      { amount: 1, unit: "Pieces", name: "egg" },
     ],
   };
   response =
-    "$Recipe name\n" +
-    "Decadent Chocolate Milkshake\n" +
-    "$Ingredients\n" +
-    "2@Cups@milk\n" +
-    "50@Grams@flour\n" +
-    "200@Grams@butter\n" +
-    "2@Tablespoon@cocoa powder\n" +
-    "1@Teaspoon@vanilla extract\n" +
-    "4@Tablespoon@sugar\n" +
-    "2@Cups@vanilla ice cream\n" +
-    "$Instructions\n" +
-    "In a small bowl, mix together the flour, cocoa powder, and sugar until well combined.\n" +
-    "Melt the butter in a saucepan over low heat.\n" +
-    "Add the flour mixture to the melted butter and stir until smooth. Cook for 2-3 minutes, stirring constantly, until the mixture is thick and bubbly.\n" +
-    "Remove from heat and let cool.\n" +
-    "In a blender, combine the milk, vanilla extract, and vanilla ice cream. Blend until smooth.\n" +
-    "Add the cooled chocolate mixture to the blender and blend until fully incorporated.\n" +
-    "Pour the milkshake into two glasses and serve immediately.\n" +
-    "Enjoy!";
+  "$Recipe name\n" +
+  "Chocolate French Toast\n" +
+  "$Ingredients\n" +
+  "5@Pieces@bread\n" +
+  "2@Tablespoons@chocolate chips\n" +
+  "10@Grams@butter\n" +
+  "1@Piece@egg\n" +
+  "0.5@Teaspoon@vanilla extract\n" +
+  "0.25@Cups@milk\n" +
+  "1@Teaspoon@cinnamon\n" +
+  "1@Pinch@salt\n" +
+  "$Instructions\n" +
+  "In a shallow bowl, whisk together the egg, milk, vanilla extract, cinnamon, and salt until well combined.\n" +
+  "Melt the butter in a large non-stick skillet over medium heat.\n" +
+  "Dip each slice of bread into the egg mixture, making sure to coat both sides.\n" +
+  "Place the coated bread in the skillet and cook until golden brown, about 2-3 minutes per side.\n" +
+  "Sprinkle the chocolate chips over the top of each slice of bread and let them melt for a minute or two.\n" +
+  "Using a spatula, fold the bread in half, pressing gently to melt the chocolate chips and seal the toast together.\n" +
+  "Serve immediately and enjoy your delicious Chocolate French Toast!";
   recipe.extra = "";
   recipe.ingredients2 = [];
   recipe.instructions = "";
   const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
   console.log(ings);
-  const { units } = require("../jsons/ingredients.json");
   const fields = ["$recipe name", "$ingredients", "$instructions"];
   var index;
   for (const line of response.split("\n")) {
@@ -153,7 +154,6 @@ function parseAssToRecipeTest() {
             recipe.extra += `${amount} ${endPlural(amount, unit)} of ${name}\n`;
             recipe.ingredients2.push({ amount: amount, unit: unit, name: name });
           }
-
           break;
         case 2: //instructions
           recipe.instructions += line + "\n";
@@ -165,5 +165,5 @@ function parseAssToRecipeTest() {
   }
   return recipe;
 }
-
+//[External access]
 module.exports = { connectAI, getAssistant, parseAssToRecipe, parseAssToRecipeTest };

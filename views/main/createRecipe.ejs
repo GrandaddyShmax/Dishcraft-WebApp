@@ -99,14 +99,14 @@
                   <% } %>
                 </select>
                 <input required placeholder="Ingredient" type="text" name="name" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <button value="<%=`remove&`+index%>" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
+                <button value="<%=`remove&`+index%>" onclick="rememberScroll()" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
                 </button>
               </div> <!-- ingredient object -->
               <% var index=index+1; %>
             <% } %>
             <!-- duplicate the new ingredient object here -->
             <div class="pt-2 flex">
-              <button value="addmore" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
+              <button value="addmore" onclick="rememberScroll()" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
               </button>
             </div>
           </div>
@@ -116,7 +116,7 @@
           <div class="pt-2 flex">
             <textarea name="instructions" placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
           </div>
-          <%if (user.role > 1){%>
+          <%if (locals.user && user.role > 1){%>
             <p class="pt-8 text-2xl">
               Extra:
             </p>
@@ -141,29 +141,40 @@
 </div>
 
 <script>
-  const select = document.querySelector('#colorPicker');
-  select.value = '<%= recipe.color %>';
-  const bg = document.querySelector('#background');
-  document.addEventListener('DOMContentLoaded', loadColor);
-  select.addEventListener('change', loadColor);
-  function loadColor()
-  {
+  document.addEventListener("DOMContentLoaded", loadScroll);
+  const select = document.querySelector("#colorPicker");
+  select.value = "<%= recipe.color %>";
+  const bg = document.querySelector("#background");
+  document.addEventListener("DOMContentLoaded", loadColor);
+  select.addEventListener("change", loadColor);
+  function loadColor() {
     const color = select.value;
-    if (color === 'original') {
-      bg.classList.remove(`bg-orange-300`, 'bg-cyan-300', 'bg-fuchsia-300');
-      bg.classList.add('bg-coffee');
-    } else if (color === 'tasty') 
-    {
-      bg.classList.remove('bg-coffee', 'bg-cyan-300', 'bg-fuchsia-300');
-      bg.classList.add('bg-orange-300');
-    } else if (color === 'cold') 
-    {
-      bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-fuchsia-300');
+    if (color === "original") {
+      bg.classList.remove(`bg-orange-300`, "bg-cyan-300", "bg-fuchsia-300");
+      bg.classList.add("bg-coffee");
+    } else if (color === "tasty") {
+      bg.classList.remove("bg-coffee", "bg-cyan-300", "bg-fuchsia-300");
+      bg.classList.add("bg-orange-300");
+    } else if (color === "cold") {
+      bg.classList.remove("bg-coffee", `bg-orange-300`, "bg-fuchsia-300");
       bg.classList.add(`bg-cyan-300`);
-    } else if (color === 'sweet') 
-    {
-      bg.classList.remove('bg-coffee', `bg-orange-300`, 'bg-cyan-300');
+    } else if (color === "sweet") {
+      bg.classList.remove("bg-coffee", `bg-orange-300`, "bg-cyan-300");
       bg.classList.add(`bg-fuchsia-300`);
     }
   }
+
+  function loadScroll(event) {
+    var scrollpos = localStorage.getItem("scrollpos");
+    if (scrollpos) window.scrollTo(0, scrollpos);
+  }
+  //save scroll position on click
+  function rememberScroll(){ 
+    window.onbeforeunload = function (e) {
+    localStorage.setItem("scrollpos", window.scrollY);}
+  }
+  //default - no scroll memory
+  window.onbeforeunload = function (e) {
+    localStorage.removeItem("scrollpos");
+  };
 </script>
