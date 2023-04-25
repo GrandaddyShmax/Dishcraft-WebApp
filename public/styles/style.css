@@ -662,6 +662,9 @@ video {
 .h-56 {
   height: 14rem;
 }
+.h-6 {
+  height: 1.5rem;
+}
 .h-7 {
   height: 1.75rem;
 }
@@ -706,6 +709,9 @@ video {
 }
 .w-56 {
   width: 14rem;
+}
+.w-6 {
+  width: 1.5rem;
 }
 .w-7 {
   width: 1.75rem;
@@ -752,6 +758,15 @@ video {
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 .cursor-default {
   cursor: default;

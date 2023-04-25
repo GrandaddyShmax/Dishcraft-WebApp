@@ -67,9 +67,8 @@ router.post("/createRecipe", async (req, res) => {
         return res.redirect(req.get("referer"));
       }
     }
-
     var recipeData = offloadFields(["recipeName", "recipeImages", "instructions", "color"], this, req.body);
-    recipeData.userID = sess.user.id;
+    recipeData.userID = sess.user ? sess.user.id : null;
     recipeData.ingredients = recipe.ingredients;
     recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
     sess.recipe = null;

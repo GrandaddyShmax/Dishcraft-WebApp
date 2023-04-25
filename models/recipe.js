@@ -39,7 +39,7 @@ class Recipe {
         userID: this.userID || "6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
-        rating: this.rating || 0,
+        rating: this.rating,
         aiMade: this.aiMade || false,
         ingredients: this.ingredients,
         instructions: this.instructions,
@@ -88,9 +88,10 @@ class Recipe {
 
   //get all/filtered recipes from db
   static async fetchRecipes(search) {
+    var term, filter, sort;
+    if (search) ({ term, filter, sort } = search);
     let recipes = [];
     let recipesArr = await schemas.Recipe.find({});
-    const { term, filter, sort } = search;
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();

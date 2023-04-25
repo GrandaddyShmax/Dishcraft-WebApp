@@ -21,7 +21,7 @@
           <div class="relative">
             <div class="group/main transition-all focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl justify-between drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-pistachio bg-espresso hover:bg-pistachio items-center w-full flex rounded-full p-2"> <!-- background -->
               <input id="search" name="search" value="<%=locals.search ? search.term : ``%>" class="block transition-colors group-focus-within/main:placeholder-espresso group-focus-within/main:text-espresso group-focus-within/main:bg-pistachio focus:group-focus-within/main:placeholder-pistachio border-none focus:ring-0 w-full font-bold uppercase rounded-full py-0 pl-4 text-pistachio group-hover/main:text-espresso placeholder-latte group-hover/main:placeholder-espresso bg-espresso group-hover/main:bg-pistachio leading-tight focus:outline-none text-sm group-hover/main:focus:placeholder-opacity-0 focus:placeholder-opacity-0" type="text" placeholder="Search"> <!-- input1 -->
-              <button name="submit" value="search" sype="submit" class="group/search p-1.5 bg-pistachio hover:bg-latte cursor-pointer mx-1.5 rounded-full transition-all active:scale-110">
+              <button name="submit" value="search" id="search" type="submit" class="group/search p-1.5 bg-pistachio hover:bg-latte cursor-pointer mx-1.5 rounded-full transition-all active:scale-110">
                 <svg class="w-5 h-5 text-slate-800 group-hover/search:text-slate-800 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                 </svg>
@@ -157,4 +157,15 @@
       box.classList.add('hidden');
     }
   });
+
+  //search on enter
+  var input = document.getElementById("myInput");
+  input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); //Cancel the default action, if needed
+    var button = document.getElementById("search");
+    if(button.value)
+      button.click();
+  }
+}); 
 </script>

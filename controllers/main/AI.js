@@ -84,6 +84,12 @@ router.post("/assistant", async (req, res) => {
         return res.redirect(req.get("referer"));
       }
     }
+    recipe.ingredients=[
+      { amount: '2', unit: 'Cups', name: 'rice' },
+      { amount: '20', unit: 'Grams', name: 'green onion' },
+      { amount: '0.5', unit: 'Kilograms', name: 'bell pepper' },
+      { amount: '50', unit: 'Pounds', name: 'chicken' }
+    ]
     //parse prompt:
     const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
     console.log(recipe.ingredients);
