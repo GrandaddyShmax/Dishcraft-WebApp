@@ -20,7 +20,7 @@
           <label for="search" class="sr-only">Search</label>
           <div class="relative">
             <div class="group/main transition-all focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl justify-between drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-pistachio bg-espresso hover:bg-pistachio items-center w-full flex rounded-full p-2"> <!-- background -->
-              <input id="search" name="search" class="block transition-colors group-focus-within/main:placeholder-espresso group-focus-within/main:text-espresso group-focus-within/main:bg-pistachio focus:group-focus-within/main:placeholder-pistachio border-none focus:ring-0 w-full font-bold uppercase rounded-full py-0 pl-4 text-pistachio group-hover/main:text-espresso placeholder-latte group-hover/main:placeholder-espresso bg-espresso group-hover/main:bg-pistachio leading-tight focus:outline-none text-sm group-hover/main:focus:placeholder-opacity-0 focus:placeholder-opacity-0" type="text" placeholder="Search"> <!-- input1 -->
+              <input id="search" name="search" value="<%=locals.search ? search.term : ``%>" class="block transition-colors group-focus-within/main:placeholder-espresso group-focus-within/main:text-espresso group-focus-within/main:bg-pistachio focus:group-focus-within/main:placeholder-pistachio border-none focus:ring-0 w-full font-bold uppercase rounded-full py-0 pl-4 text-pistachio group-hover/main:text-espresso placeholder-latte group-hover/main:placeholder-espresso bg-espresso group-hover/main:bg-pistachio leading-tight focus:outline-none text-sm group-hover/main:focus:placeholder-opacity-0 focus:placeholder-opacity-0" type="text" placeholder="Search"> <!-- input1 -->
               <button name="submit" value="search" sype="submit" class="group/search p-1.5 bg-pistachio hover:bg-latte cursor-pointer mx-1.5 rounded-full transition-all active:scale-110">
                 <svg class="w-5 h-5 text-slate-800 group-hover/search:text-slate-800 transition-all" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
@@ -63,11 +63,10 @@
                   </g>
               </svg>
             </div>
-            <p class="pl-2 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all"><%= user.userName %></p>
-            <%if (user.role==3){%>
+            <p class="pl-2 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all"><%= locals.user ? user.userName : `` %></p>
+            <%if (locals.user && user.role==3){%>
             <p class="pl-2 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all">(Admin)</p>
-            <%}%>
-            <%if (user.role > 1){%>
+            <%} if (locals.user && user.role > 1){%>
               <svg
                 width="24"
                 height="24"
@@ -117,23 +116,20 @@
             data-transition-leave-start="transform opacity-100 scale-100"
             data-transition-leave-end="transform opacity-0 scale-95"
           >
-          <% if (user && user.role > 1) { %>
+          <% if (locals.user && user.role > 1) { %>
             <div class="py-1" role="none">
               <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Bookmarks</a>
               <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">AI Recipe Book</a>
               <a href="../suggest" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Suggest Ingredient</a>
             </div>
-            <% } %>
-            <% if (user && user.role == 3) { %>
+            <% } if (locals.user && user.role == 3) { %>
               <div class="py-1" role="none">
                 <a href="../admin/manageusers" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">Admin Panel</a>
               </div>
             <% } %>
-            <% if (user) { %>
-              <div class="py-1" role="none">
-                <a href="/logOut" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">Log Out</a>
-              </div>
-            <% } %>
+            <div class="py-1" role="none">
+              <a href="/logOut" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">Log Out</a>
+            </div>
           </div>
         </div>
       </div>

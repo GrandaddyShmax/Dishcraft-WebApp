@@ -1,17 +1,23 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
-const { offloadFields } = require("../../utils");
+//[Clases]
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
-const { defIngs, units } = require("../../jsons/ingredients.json");
+//[API]
 const { checkIgredient } = require("../../API/ingred");
+//[Aid]
+const { offloadFields } = require("../../utils");
+const { defIngs, units } = require("../../jsons/views.json");
 
 //get
 router.get("/createRecipe", async (req, res) => {
   const sess = req.session;
   let error = "";
-  if (sess.errorIngred != "" ) { error = sess.errorIngred; sess.errorIngred = ""}
+  if (sess.errorIngred != "") {
+    error = sess.errorIngred;
+    sess.errorIngred = "";
+  }
   if (!sess.recipe || !sess.recipe.create) {
     sess.recipe = {
       create: true,
@@ -29,7 +35,7 @@ router.get("/createRecipe", async (req, res) => {
     units: units,
     user: sess.user || null,
     recipe: sess.recipe,
-    errorIngred: error
+    errorIngred: error,
   });
 });
 

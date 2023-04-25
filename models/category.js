@@ -1,12 +1,11 @@
-/*[ Import ]*/
+//[Import]
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 
 class Category {
   constructor(details, id) {
-    if (details)
-      offloadFields([ "id", "categoryName", "categoryType", "ingredients" ], this, details);
+    if (details) offloadFields(["id", "categoryName", "categoryType", "ingredients"], this, details);
     else this.id = id;
   }
 
@@ -45,7 +44,7 @@ class Category {
 
   //get all the categories from db
   static async fetchAllCategories() {
-    let categories = await schemas.Category.find({ });
+    let categories = await schemas.Category.find({});
     return categories || [];
   }
 
@@ -53,7 +52,7 @@ class Category {
   async fetchCategory() {
     let details = await schemas.Category.findOne({ _id: this.id });
     if (details) {
-      offloadFields([ "id", "categoryName", "categoryType", "ingredients" ], this, details);
+      offloadFields(["id", "categoryName", "categoryType", "ingredients"], this, details);
       return true;
     }
     return false;
@@ -61,7 +60,7 @@ class Category {
 
   //check if the ingredient exist in this category
   checkIngredInCategory(ingredient) {
-    if ((this.ingredients).includes(ingredient.toLowerCase())) {
+    if (this.ingredients.includes(ingredient.toLowerCase())) {
       return true;
     }
     return false;

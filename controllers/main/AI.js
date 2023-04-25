@@ -1,13 +1,19 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
+//[Clases]
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
-const { offloadFields } = require("../../utils");
-const { defIngs, units } = require("../../jsons/ingredients.json");
-const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
+//[API]
 const { checkIgredient } = require("../../API/ingred");
+const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
+//disable AI to avoid accidental exceeding request limits during testing
+const disabled = false;
+const msg = "A.I. is currently disabled!";
+//[Aid]
+const { offloadFields } = require("../../utils");
+const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
 
 //display assistant page
@@ -15,22 +21,27 @@ router.get("/assistant", async (req, res) => {
   const sess = req.session;
 
   //premium cleanup service
-  let nutritions= { energy:"", fattyAcids:"", sodium:"", sugar:"", protein:"" }, allergies = "", error = "";
+  let nutritions = defNutritions, //default values in jsons/views.json
+    allergies = "",
+    error = "";
   if (sess.flag) {
     sess.flag = false;
-    nutritions = sess.nutritions; sess.nutritions = { energy:"", fattyAcids:"", sodium:"", sugar:"", protein:"" };
-    allergies = sess.allergies; sess.allergies = "";
+    nutritions = sess.nutritions;
+    sess.nutritions = defNutritions;
+    allergies = sess.allergies;
+    sess.allergies = "";
   }
-  if (sess.errorIngred != "" ) { error = sess.errorIngred; sess.errorIngred = ""}
+  if (sess.errorIngred != "") {
+    error = sess.errorIngred;
+    sess.errorIngred = "";
+  }
 
   if (!sess.recipe || !sess.recipe.ai) {
-    sess.recipe = {
-      ai: true,
-      recipeName: "Recipe name",
-      ingredients: [defIngs],
-      extra: "",
-      instructions: "",
-    };
+    sess.recipe = { ai: true, recipeName: "Recipe name", ingredients: [defIngs], extra: "", instructions: "" };
+    if (disabled) {
+      sess.recipe.extra = msg;
+      sess.recipe.instructions = msg;
+    }
   }
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
@@ -41,7 +52,7 @@ router.get("/assistant", async (req, res) => {
     user: sess.user || null,
     errorIngred: error,
     nutritions: nutritions,
-    allergies: allergies 
+    allergies: allergies,
   });
 });
 
@@ -52,7 +63,6 @@ router.post("/assistant", async (req, res) => {
   const [buttonPress, index] = req.body.submit.split("&");
   var list = [];
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
-  recipe.recipeName = recipe.recipeName || "Recipe Name";
   const { amount, unit, name } = req.body;
   if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
   else list.push({ amount: amount, unit: unit, name: name });
@@ -76,23 +86,29 @@ router.post("/assistant", async (req, res) => {
     }
     //parse prompt:
     const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
-    console.log(testMsg);
-    //recipe.extra = "No extra ingredients!";
-    //recipe.instructions = "temporary A.I. response";
-    req.session.recipe = parseAssToRecipeTest();
-    req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true)
-    req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
-    sess.flag = true;
-    return res.redirect(req.get("referer"));
-
-    //code to talk with ai (not accessible atm to avoid exceeding request limits)
-    const assistant = getAssistant();
-    const response = await assistant.sendMessage(testMsg);
-    console.log(response);
-    req.session.recipe = parseAssToRecipe(response, recipe);
-    req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true)
-    req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients);
-    sess.flag = true;
+    console.log(recipe.ingredients);
+    var success = true;
+    //code to talk with ai (can be disabled to avoid exceeding request limits)
+    if (disabled) {
+      req.session.recipe = parseAssToRecipeTest();
+    } else {
+      try {
+        const assistant = getAssistant();
+        const response = await assistant.sendMessage(testMsg);
+        console.log(response);
+        req.session.recipe = parseAssToRecipe(response, recipe);
+      }
+      catch (error) {
+        console.log(error)
+        success = false;
+      }
+    }
+    if (success) {
+      //calculate nutritional value & check allergies:
+      req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true);
+      req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
+      sess.flag = true;
+    }
   }
   return res.redirect(req.get("referer"));
 });

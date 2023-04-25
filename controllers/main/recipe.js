@@ -1,4 +1,4 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
 const recipe = require("../../schemas/recipe");
@@ -15,17 +15,15 @@ router.get("/recipe", async (req, res) => {
 });
 
 //post
-router.post("/recipe", async (req, res) => {
+router.post("/recipe", async (req, res) => {//is this even used?
   var session = req.session;
   const recipeData = req.body;
   var recipe = new recipe(recipeData);
-  let {success,msg} = await recipe.addRecipe();
+  let { success, msg } = await recipe.addRecipe();
 
-  if(success){
+  if (success) {
     return res.redirect("/home");
-  }
-
-  else{
+  } else {
     console.log(msg);
     return res.redirect(req.get("referer"));
   }

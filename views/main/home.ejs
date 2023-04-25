@@ -142,32 +142,43 @@
             <p class="text-latte group-hover:text-espresso transition-all pr-3 font-bold uppercase">Sort
             </p>
           </button>
-          <div 
+          <form action="/search" method="post" 
             class="hidden absolute right-20 z-10 mt-2 origin-top-right divide-y divide-coffee rounded-md bg-espresso drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-none"
             id="sort-menu"
           >
             <div class="p-4" role="none">
               <div class="grid grid-cols-4 gap-4 items-center">
                 <p class="text-latte text-sm col-span-1">Sort By:</p>
-                <select class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
-                  <option value="energy">Energy</option>
-                  <option value="acids">Fatty Acids</option>
-                  <option value="sodium">Sodium</option>
-                  <option value="sugar">Sugar</option>
-                  <option value="protein">Protein</option>
-                </select>
+                <select required name="category" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
+                  <%if (!locals.search || !search.sort) {%>
+                    <option hidden value="">Choose one...</option>
+                    <%} for (const opt of sorts.opts) {%>
+                      <% if (locals.search && search.sort && search.sort.category==opt.value) {%>
+                      <option selected value="<%=opt.value%>"><%= opt.name %></option>
+                      <%} else {%>
+                      <option value="<%=opt.value%>"><%= opt.name %></option>
+                      <%} %>
+                    <%} %>
+                  </select>  
                 <p class="text-latte text-sm col-span-1">Sort Order:</p>
-                <select class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
-                  <option value="descend">Descending</option>
-                  <option value="ascend">Ascending</option>
+                <select required name="dir" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
+                  <%if (!locals.search || !search.sort) {%>
+                    <option hidden value="">Choose one...</option>
+                  <%} for (const dir of sorts.dir) {%>
+                    <%if (locals.search && search.sort && search.sort.dir==dir.value) {%>
+                    <option selected value="<%=dir.value%>"><%= dir.name %></option>
+                    <%} else {%>
+                    <option value="<%=dir.value%>"><%= dir.name %></option>
+                    <%} %>
+                  <%} %>
                 </select>
               </div>
             </div>
             <div class="py-1" role="none">
-              <button class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
-              <button class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
+              <button name="submit" value="sortReset" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
+              <button name="submit" value="sortApply" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

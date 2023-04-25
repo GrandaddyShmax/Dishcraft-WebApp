@@ -1,4 +1,4 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
 const { Junior, Expert } = require("../../models/user");

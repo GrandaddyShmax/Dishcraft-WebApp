@@ -1,0 +1,33 @@
+{
+  "defNutritions": { "energy": "", "fattyAcids": "", "sodium": "", "sugar": "", "protein": "" },
+  "defIngs": { "amount": 0.1, "unit": "Cups", "name": "" },
+  "units": [
+    "Cups",
+    "Deciliters",
+    "Galons",
+    "Grams",
+    "Kilograms",
+    "Liters",
+    "Ounces",
+    "Pieces",
+    "Pints",
+    "Pounds",
+    "Quarts",
+    "Tablespoon",
+    "Teaspoon"
+  ],
+  "defSearch": { "term": "", "sort": "", "filter": "" },
+  "sorts": {
+    "opts": [
+      { "name": "Energy", "value": "energy" },
+      { "name": "Faty Acids", "value": "fattyAcids" },
+      { "name": "Sodium", "value": "sodium" },
+      { "name": "Sugar", "value": "sugar" },
+      { "name": "Protein", "value": "protein" }
+    ],
+    "dir": [
+      { "name": "Descending", "value": "descend" },
+      { "name": "Ascending", "value": "ascend" }
+    ]
+  }
+}

@@ -1,8 +1,8 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
+//[Clases]
 const { Suggestion } = require("../../models/suggestion");
-
 
 router.get("/suggest", async (req, res) => {
   var session = req.session;
@@ -16,18 +16,17 @@ router.get("/suggest", async (req, res) => {
 //post
 router.post("/suggest", async (req, res) => {
   var session = req.session;
-  const suggestionData= req.body;
+  const suggestionData = req.body;
   var suggestion = new Suggestion(suggestionData);
-  let {success,msg} = await suggestion.addSuggestion();
+  let { success, msg } = await suggestion.addSuggestion();
   console.log(req.body);
-  if(success){
+  if (success) {
     return res.redirect("/home");
-  }
-  else{
+  } else {
     console.log(msg);
     return res.redirect(req.get("referer"));
   }
-  });
+});
 
 /*[ External access ]*/
 module.exports = router;

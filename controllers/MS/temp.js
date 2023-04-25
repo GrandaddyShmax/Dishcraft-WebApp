@@ -1,5 +1,5 @@
 //needed so github won't delete this folder
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
 

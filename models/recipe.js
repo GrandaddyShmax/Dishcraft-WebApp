@@ -1,4 +1,4 @@
-/*[ Import ]*/
+//[Import]
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { Junior } = require("./user");
@@ -87,22 +87,35 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(search, filter, sort) {
+  static async fetchRecipes(search) {
     let recipes = [];
     let recipesArr = await schemas.Recipe.find({});
+    const { term, filter, sort } = search;
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
-      if (search) {
+      if (term) {
         if (
-          !recipe.recipeName.toLowerCase().includes(search) &&
-          !user.userName.toLowerCase().includes(search) &&
-          !recipe.ingredients.some((ing) => ing.name.toLowerCase() === search)
+          !recipe.recipeName.toLowerCase().includes(term) &&
+          !user.userName.toLowerCase().includes(term) &&
+          !recipe.ingredients.some((ing) => ing.name.toLowerCase() === term)
         )
           continue;
       }
       var tempRecipe = offloadFields(
-        ["id", "recipeName", "recipeImages", "rating", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate"],
+        [
+          "id",
+          "recipeName",
+          "recipeImages",
+          "rating",
+          "aiMade",
+          "ingredients",
+          "instructions",
+          "badges",
+          "color",
+          "uploadDate",
+          "nutritions",
+        ],
         null,
         recipe
       );
@@ -113,6 +126,15 @@ class Recipe {
       recipes.push(tempRecipe);
     }
     if (sort) {
+      const { category, dir } = sort;
+      const sign = dir == "descend" ? -1 : 1;
+      return recipes.sort((a, b) => {
+        const aCat = a.nutritions[category] || -1;
+        const bCat = b.nutritions[category] || -1;
+        if (aCat < bCat) return sign;
+        if (aCat > bCat) return sign * -1;
+        return 0;
+      });
       //address sort
     }
     return recipes || [];

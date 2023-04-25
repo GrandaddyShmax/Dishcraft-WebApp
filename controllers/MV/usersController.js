@@ -1,4 +1,4 @@
-/*[ Import ]*/
+//[Import]
 const express = require("express");
 const router = express.Router();
 const { User } = require("../../models/user");
@@ -36,8 +36,8 @@ router.get("/register", (req, res) => {
     pageTitle: "Register",
     message: session.message || null,
     error: session.error || null,
-    temp: session.temp || {username: "", email: ""},
-    user: null
+    temp: session.temp || { username: "", email: "" },
+    user: null,
   });
 });
 
@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
   }
   session.message = message;
   session.error = error;
-  session.temp = {username: tempUser.userName, email: tempUser.email};
+  session.temp = { username: tempUser.userName, email: tempUser.email };
   return res.redirect(req.get("referer"));
 });
 
