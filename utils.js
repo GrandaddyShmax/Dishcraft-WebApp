@@ -26,18 +26,18 @@ function capitalizeArray(_string) {
   string = [];
   var index = 0;
   _string.forEach((str) => {
-    string[index++] = aidLib.capitalize(str);
+    string[index++] = capitalize(str);
   });
   return string;
 }
 //aid func
 function capitalizeSentence(_string) {
   const strings = _string.split("-");
-  var string = "";
+  var string = [];
   strings.forEach((str) => {
-    string += aidLib.capitalize(str);
+    string.push(capitalize(str));
   });
-  return string;
+  return string.join("-");
 }
 
 //Add s to word if needed

@@ -16,7 +16,7 @@
     "Tablespoon",
     "Teaspoon"
   ],
-  "defSearch": { "term": "", "sort": "", "filter": "" },
+  "defSearch": { "term": "", "sort": null, "filter": null },
   "sorts": {
     "opts": [
       { "name": "Energy", "value": "energy" },

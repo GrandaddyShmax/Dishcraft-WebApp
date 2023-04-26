@@ -3,20 +3,28 @@ const express = require("express");
 const router = express.Router();
 //[Clases]
 const { Recipe } = require("../../models/recipe");
-//[API]
+const { Category } = require("../../models/category");
+//[Aid]
 const { offloadFields } = require("../../utils");
 const { defSearch, sorts } = require("../../jsons/views.json");
+var filters;
 
 router.get("/home", async (req, res) => {
   const session = req.session;
   const recipes = await Recipe.fetchRecipes(session.search || defSearch);
   session.recipe = null;
+  if (!filters)
+    filters = {
+      allergy: await Category.fetchCategories("allergy", true),
+      diet: await Category.fetchCategories("diet", true),
+    };
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
     page: "home",
     recipes: recipes,
     search: session.search || defSearch,
     sorts: sorts,
+    filters: filters,
     user: session.user,
   });
 });
@@ -38,24 +46,31 @@ router.post("/search", async (req, res) => {
   const session = req.session;
   const buttonPress = req.body.submit;
   if (!session.search) session.search = defSearch;
-  //console.log(req.body);
   switch (buttonPress) {
     case "home":
       session.search = defSearch;
       break;
     case "search":
-      session.search.term = req.body.search;
+      if (req.body.search) session.search.term = req.body.search.toLowerCase();
+      else session.search.term = "";
       break;
     case "sortApply":
-      console.log("yes");
       session.search.sort = offloadFields(["category", "dir"], null, req.body);
       break;
     case "sortReset":
       session.search.sort = null;
       break;
+    case "filterApply":
+      if (Array.isArray(req.body.filter)) session.search.filter = req.body.filter;
+      else session.search.filter = req.body.filter ? [req.body.filter] : null;
+      break;
+    case "filterReset":
+      session.search.filter = null;
+      break;
     default:
       return res.redirect(req.get("referer"));
   }
+  //console.log(req.body);
   return res.redirect("/home");
 });
 

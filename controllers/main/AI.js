@@ -84,38 +84,29 @@ router.post("/assistant", async (req, res) => {
         return res.redirect(req.get("referer"));
       }
     }
-    recipe.ingredients=[
-      { amount: '2', unit: 'Cups', name: 'rice' },
-      { amount: '20', unit: 'Grams', name: 'green onion' },
-      { amount: '0.5', unit: 'Kilograms', name: 'bell pepper' },
-      { amount: '50', unit: 'Pounds', name: 'chicken' }
-    ]
-    //parse prompt:
-    const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
-    console.log(recipe.ingredients);
-    var success = true;
-    //code to talk with ai (can be disabled to avoid exceeding request limits)
-    if (disabled) {
-      req.session.recipe = parseAssToRecipeTest();
-    } else {
-      try {
+    try {
+      //parse prompt:
+      const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
+      console.log(recipe.ingredients);
+
+      //code to talk with ai (can be disabled to avoid exceeding request limits)
+      if (disabled) {
+        req.session.recipe = parseAssToRecipeTest();
+      } else {
         const assistant = getAssistant();
         const response = await assistant.sendMessage(testMsg);
         console.log(response);
         req.session.recipe = parseAssToRecipe(response, recipe);
       }
-      catch (error) {
-        console.log(error)
-        sess.recipe.extra = "Failed to generate recipe, please try again later.";
-        sess.recipe.instructions = "Failed to generate recipe, please try again later.";
-        success = false;
-      }
-    }
-    if (success) {
+
       //calculate nutritional value & check allergies:
       req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true);
       req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
       sess.flag = true;
+    } catch (error) {
+      console.log(error);
+      sess.recipe.extra = "Failed to generate recipe, please try again later.";
+      sess.recipe.instructions = "Failed to generate recipe, please try again later.";
     }
   }
   return res.redirect(req.get("referer"));

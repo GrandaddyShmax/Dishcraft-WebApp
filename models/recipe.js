@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { Junior } = require("./user");
 const { Category } = require("./category");
-const { offloadFields } = require("../utils");
+const { offloadFields, capitalize } = require("../utils");
 
 //Recipe class
 class Recipe {
@@ -95,7 +95,9 @@ class Recipe {
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
+      //search term:
       if (term) {
+        term = term.toLowerCase();
         if (
           !recipe.recipeName.toLowerCase().includes(term) &&
           !user.userName.toLowerCase().includes(term) &&
@@ -121,11 +123,16 @@ class Recipe {
         recipe
       );
       tempRecipe.user = user;
+      //category filters:
       if (filter) {
-        //address additonal filter?
+        //const categories = await Category.findCategory(tempRecipe.ingredients, null, false, true);
+        //let remove = filter.some((filt) => categories.includes(filt.toLowerCase()));
+        let remove = await Category.compareCategory(tempRecipe.ingredients, filter);
+        if (remove) continue;
       }
       recipes.push(tempRecipe);
     }
+    //sort by nutritional value:
     if (sort) {
       const { category, dir } = sort;
       const sign = dir == "descend" ? -1 : 1;
@@ -136,7 +143,6 @@ class Recipe {
         if (aCat > bCat) return sign * -1;
         return 0;
       });
-      //address sort
     }
     return recipes || [];
   }

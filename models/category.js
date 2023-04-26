@@ -10,14 +10,30 @@ class Category {
   }
 
   //find category for ingredients and return text or object
-  static async findCategory(ingredients, type, text) {
+  static async findCategory(ingredients, type, text, lowerCase) {
     var alg = [];
     for (const ing of ingredients) {
-      let categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase(), categoryType: type });
-      if (categories && categories.length > 0) for (const category of categories) alg.push(category.categoryName);
+      let categories;
+      if (type) categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase(), categoryType: type });
+      else categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase() });
+      if (categories && categories.length > 0)
+        for (const category of categories)
+          if (lowerCase) alg.push(category.categoryName.toLowerCase());
+          else alg.push(category.categoryName);
     }
     if (text) return alg.length > 0 ? alg.join(", ") + "." : "None.";
     return alg;
+  }
+  //compare category array x categories of ingredients and return true/false
+  static async compareCategory(ingredients, catList) {
+    var result = false;
+    for (const ing of ingredients) {
+      let categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase() });
+      if (!categories || categories.length == 0) continue;
+      result = categories.some((cat) => catList.includes(cat.categoryName));
+      if (result) break;
+    }
+    return result;
   }
 
   async addIngredToCategory(ingredient) {
@@ -46,6 +62,18 @@ class Category {
   static async fetchAllCategories() {
     let categories = await schemas.Category.find({});
     return categories || [];
+  }
+
+  //get all the categories from db
+  static async fetchCategories(type, format) {
+    let categories = await schemas.Category.find({ categoryType: type });
+    if (!format) return categories || [];
+    const filter = categories.map((cat) => {
+      var n = cat.categoryName;
+      var v = type == "allergy" ? `${n}-Free` : type == "diet" ? n.replace("Non-", "").replace("non-", "") : n;
+      return { name: v, value: n };
+    });
+    return filter;
   }
 
   //fetch category from db
