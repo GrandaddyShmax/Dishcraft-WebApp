@@ -80,7 +80,7 @@
               <span class="sr-only">View details</span>
             </button>
           </div>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Ingredients:
           </p>
           <div class="flex flex-col">
@@ -110,18 +110,18 @@
               </button>
             </div>
           </div>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Instructions:
           </p>
           <div class="pt-2 flex">
             <textarea name="instructions" placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
           </div>
           <%if (locals.user && user.role > 1){%>
-            <p class="pt-8 text-2xl">
+            <p class="pt-8 text-2xl text-latte">
               Extra:
             </p>
             <div class="flex pt-2 items-center">
-              <p>Change Color:</p>
+              <p class="text-espresso font-bold">Change Color:</p>
               <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
                 <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
                 <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
@@ -172,17 +172,17 @@
   function loadColor() {
     const color = select.value;
     if (color === "original") {
-      bg.classList.remove(`bg-orange-300`, "bg-cyan-300", "bg-fuchsia-300");
+      bg.classList.remove(`bg-tasty`, "bg-cold", "bg-sweet");
       bg.classList.add("bg-coffee");
     } else if (color === "tasty") {
-      bg.classList.remove("bg-coffee", "bg-cyan-300", "bg-fuchsia-300");
-      bg.classList.add("bg-orange-300");
+      bg.classList.remove("bg-coffee", "bg-cold", "bg-sweet");
+      bg.classList.add("bg-tasty");
     } else if (color === "cold") {
-      bg.classList.remove("bg-coffee", `bg-orange-300`, "bg-fuchsia-300");
-      bg.classList.add(`bg-cyan-300`);
+      bg.classList.remove("bg-coffee", `bg-tasty`, "bg-sweet");
+      bg.classList.add(`bg-cold`);
     } else if (color === "sweet") {
-      bg.classList.remove("bg-coffee", `bg-orange-300`, "bg-cyan-300");
-      bg.classList.add(`bg-fuchsia-300`);
+      bg.classList.remove("bg-coffee", `bg-tasty`, "bg-cold");
+      bg.classList.add(`bg-sweet`);
     }
   }
 

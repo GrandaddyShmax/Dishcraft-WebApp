@@ -15,6 +15,9 @@ module.exports = {
         latte: '#F3DEBA',
         pistachio: '#ABC4AA',
         espresso: '#675D50',
+        tasty: '#AD7A6F',
+        cold: '#699EA1',
+        sweet: '#9485AF',
       },
       dropShadow: {
         lg: '0 4px 4px rgba(171, 196, 170, 0.1)',
