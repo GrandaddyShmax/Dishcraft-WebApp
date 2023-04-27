@@ -17,10 +17,10 @@
       </div>
       <form action="/assistant" method="POST" class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
-          <p class="text-black text-3xl text-bold">
+          <p class="text-latte text-3xl font-bold">
             <%=recipe.recipeName%>
           </p>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Ingredients:
           </p>
           <div class="flex flex-col">
@@ -50,36 +50,36 @@
               </button>
             </div>
           </div>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Extra Ingredients:
           </p>
           <div class="pt-2 flex">
             <textarea readonly name="extra" class="block px-4 py-3 w-full h-48 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%=recipe.extra%></textarea>
           </div>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Instructions:
           </p>
           <div class="pt-2 flex">
             <textarea readonly name="instructions" class="block px-4 py-3 w-full h-96 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%=recipe.instructions%></textarea>
           </div>
-          <p class="pt-8 text-2xl pb-2">
+          <p class="pt-8 text-2xl pb-2 text-latte">
             Allergies:
           </p>
           <input readonly value="<%= allergies %>" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </input>
-          <p class="pt-8 text-2xl">
+          <p class="pt-8 text-2xl text-latte">
             Nutritions:
           </p>
           <div class="grid grid-cols-6 pt-4 gap-4 items-center">
-            <p>Energy (kcal):</p>
+            <p class="text-latte">Energy (kcal):</p>
             <input readonly type="text" value="<%= nutritions.energy %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Fatty acids (kg):</p>
+            <p class="text-latte">Fatty acids (kg):</p>
             <input readonly type="text" value="<%= nutritions.fattyAcids %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Sodium (kg):</p>
+            <p class="text-latte">Sodium (kg):</p>
             <input readonly type="text" value="<%= nutritions.sodium %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Sugar (kg):</p>
+            <p class="text-latte">Sugar (kg):</p>
             <input readonly type="text" value="<%= nutritions.sugar %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            <p>Protein (kg):</p>
+            <p class="text-latte">Protein (kg):</p>
             <input readonly type="text" value="<%= nutritions.protein %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </div>
         </div>
