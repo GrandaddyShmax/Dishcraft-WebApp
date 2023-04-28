@@ -1,0 +1,47 @@
+<div class="flex flex-1">
+  <div class="flex flex-col flex-1 px-2 sm:px-6 lg:px-10 xl:px-20 pb-10">
+    <div class="flex-none w-full h-28">
+      <div class="w-full h-full flex justify-center items-center">
+        <div class="group flex bg-espresso rounded-full drop-shadow-lg">
+          <a href="/admin/manageusers">
+            <button class="text-latte text-lg font-bold pr-8 pl-10 py-2 bg-espresso transition-all rounded-l-full border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Users
+            </button>
+          </a>
+          <a href="/admin/managerecipes">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
+              </button>
+          </a>
+          <a href="/admin/managecategories">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
+              </button>
+          </a>
+          <button class="text-espresso text-lg font-bold px-8 py-2 bg-coffee transition-all hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl cursor-default">View Suggestions
+          </button>
+          <a href="/admin/manageingredients">
+            <button class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Ingredients
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 w-full">
+      <div class="flex h-full w-full">
+        <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
+          <ul class="w-full h-full flex flex-col p-4 gap-4">
+            <!-- Insert Flights here -->
+            <form action="/admin/viewsuggestions" method="POST" class="flex border w-full pt-2 items-start justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
+              <div class="flex flex-col py-4 pl-3">
+                <p class="font-bold text-xl">Suggestion Name</p>
+                <p class="pt-2 whitespace-pre-line break-words">Some
+                  Description
+                </p>
+              </div>
+              <button id="remove" onclick="rememberScroll()" type="submit" name="submit" value="" class="bg-espresso mx-2 px-6 mt-2 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
+              </button>
+            </form>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
