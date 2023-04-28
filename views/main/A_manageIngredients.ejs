@@ -1,0 +1,76 @@
+<div class="flex flex-1">
+  <div class="flex flex-col flex-1 px-2 sm:px-6 lg:px-10 xl:px-20 pb-10">
+    <div class="flex-none w-full h-28">
+      <div class="w-full h-full flex justify-center items-center">
+        <div class="group flex bg-espresso rounded-full drop-shadow-lg">
+          <a href="/admin/manageusers">
+            <button class="text-latte text-lg font-bold pr-8 pl-10 py-2 bg-espresso transition-all rounded-l-full border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Users
+            </button>
+          </a>
+          <a href="/admin/managerecipes">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
+              </button>
+          </a>
+          <a href="/admin/managecategories">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
+              </button>
+          </a>
+          <a href="/admin/viewsuggestions">
+            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">View Suggestions
+            </button>
+          </a>
+          <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl cursor-default">Manage Ingredients
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="flex-1 w-full">
+      <div class="flex h-full w-full">
+        <div class="flex w-2/3">
+          <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
+            <div class="w-full h-full flex flex-col p-4 gap-4">
+              <!-- Insert Flights here -->
+              <button class="h-24 border w-full text-latte text-xl px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+                <p>Add Ingredient</p>
+              </button>
+              <button class="h-24 pl-6 border w-full text-left text-latte text-base px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+                <p>Example Ingredient</p>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex w-1/3">
+          <div class="bg-espresso flex-1 flex flex-col m-2">
+            <div class="border border-latte rounded-md flex flex-col divide-y divide-latte sticky h-auto top-24">
+              <div class="grid grid-cols-6 p-4 gap-2 items-center">
+                <p class="col-span-1 text-latte font-bold text-lg uppercase">Ingredient</p>
+                <p class="col-span-5"></p>
+                <p class="col-span-2 text-latte font-bold">Name:</p>
+                <input type="text" placeholder="None" class="px-4 py-3 col-span-4 w-full font-bold transition-all rounded-md placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Energy (kcal):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Fatty acids (kg):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Sodium (kg):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Sugar (kg):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Protein (kg):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Weight (kg):</p>
+                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+              </div>
+              <div class="grid grid-cols-2 p-4 gap-2 items-center">
+                <p class="hidden col-span-2 text-red-500 text-center font-bold">Some Error Message</p>
+                <button class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Apply
+                </button>
+                <button class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

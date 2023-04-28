@@ -12,7 +12,6 @@ router.get("/admin/managerecipes", async (req, res) => {
     page: "A_manageRecipes",
     recipes: recipes,
     user: session.user || null,
-    hideSearch: true,
   });
 });
 
