@@ -8,6 +8,7 @@ class Suggestion {
   constructor(tempV) {
     offloadFields(["id", "suggestionName", "suggestionDescription"], this, tempV);
   }
+
   async addSuggestion() {
     try {
       await schemas.Suggestion.create({
@@ -19,6 +20,23 @@ class Suggestion {
     } catch (error) {
       console.log(error);
       return { success: false, msg: "error in adding suggestion" };
+    }
+  }
+
+  //get all the suggestions from db
+  static async fetchAllSuggestions() {
+    let suggestions = await schemas.Suggestion.find({});
+    return suggestions || [];
+  }
+
+  //delete a suggestion
+  static async deleteSuggestion(id) {
+    try {
+      await schemas.Suggestion.deleteOne({ _id: id });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 }
