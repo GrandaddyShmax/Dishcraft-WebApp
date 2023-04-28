@@ -3,29 +3,84 @@
     <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
       <div class="flex flex-1 flex-col">
         <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
-          <div class="flex items-center">
-            <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-pistachio"><%= recipe.user.userName %></p>
-            <%if (recipe.user.role > 1){%>
-              <svg
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-pistachio"><%= recipe.user.userName %></p>
+              <%if (recipe.user.role > 1){%>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 text-pistachio items-center pl-1"
+                >
+                  <path
+                    d="M10.2426 16.3137L6 12.071L7.41421 10.6568L10.2426 13.4853L15.8995 7.8284L17.3137 9.24262L10.2426 16.3137Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              <%}%>
+            </div>
+            <div class="flex items-center">
+              <button id="report" class="group hover:scale-105 active:scale-90 transition-all border border-latte items-center relative p-2 m-1 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 6C12.5523 6 13 6.44772 13 7V13C13 13.5523 12.5523 14 12 14C11.4477 14 11 13.5523 11 13V7C11 6.44772 11.4477 6 12 6Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 16C11.4477 16 11 16.4477 11 17C11 17.5523 11.4477 18 12 18C12.5523 18 13 17.5523 13 17C13 16.4477 12.5523 16 12 16Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button onclick="Bookmark()" id="bookmark" class="group hover:scale-105 active:scale-90 transition-all border border-latte items-center relative p-2 m-1 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
+                <svg
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-pistachio items-center pl-1"
               >
-                <path
-                  d="M10.2426 16.3137L6 12.071L7.41421 10.6568L10.2426 13.4853L15.8995 7.8284L17.3137 9.24262L10.2426 16.3137Z"
-                  fill="currentColor"
-                />
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z"
+                  d="M12.0122 5.57169L10.9252 4.48469C8.77734 2.33681 5.29493 2.33681 3.14705 4.48469C0.999162 6.63258 0.999162 10.115 3.14705 12.2629L11.9859 21.1017L11.9877 21.0999L12.014 21.1262L20.8528 12.2874C23.0007 10.1395 23.0007 6.65711 20.8528 4.50923C18.705 2.36134 15.2226 2.36134 13.0747 4.50923L12.0122 5.57169ZM11.9877 18.2715L16.9239 13.3352L18.3747 11.9342L18.3762 11.9356L19.4386 10.8732C20.8055 9.50635 20.8055 7.29028 19.4386 5.92344C18.0718 4.55661 15.8557 4.55661 14.4889 5.92344L12.0133 8.39904L12.006 8.3918L12.005 8.39287L9.51101 5.89891C8.14417 4.53207 5.92809 4.53207 4.56126 5.89891C3.19442 7.26574 3.19442 9.48182 4.56126 10.8487L7.10068 13.3881L7.10248 13.3863L11.9877 18.2715Z"
                   fill="currentColor"
                 />
               </svg>
-            <%}%>
+              </button>
+              <button onclick="Unbookmark()" id="unbookmark" class="hidden group hover:scale-105 active:scale-90 transition-all border border-latte items-center relative p-2 m-1 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
+                <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M 12.012 5.572 L 10.925 4.485 C 8.777 2.337 5.295 2.337 3.147 4.485 C 0.999 6.633 0.999 10.115 3.147 12.263 L 11.986 21.102 L 11.988 21.1 L 12.014 21.126 L 20.853 12.287 C 23.001 10.14 23.001 6.657 20.853 4.509 C 18.705 2.361 15.223 2.361 13.075 4.509 L 12.012 5.572 Z" fill="currentColor"></path>
+              </svg>
+              </button>
+            </div>
           </div>
           <p class="text-3xl font-bold text-latte"><%= recipe.recipeName %></p>
           <div class="flex px-6 pt-4">
@@ -168,6 +223,18 @@
   {
     bg.classList.remove('bg-coffee', `bg-tasty`, 'bg-cold');
     bg.classList.add(`bg-sweet`);
+  }
+  const bookmark = document.querySelector('#bookmark');
+  const unbookmark = document.querySelector('#unbookmark');
+  function Bookmark()
+  {
+    bookmark.classList.add('hidden');
+    unbookmark.classList.remove('hidden');
+  }
+  function Unbookmark()
+  {
+    bookmark.classList.remove('hidden');
+    unbookmark.classList.add('hidden');
   }
   const rating5 = document.querySelector('#rating-5');
   const rating4 = document.querySelector('#rating-4');
