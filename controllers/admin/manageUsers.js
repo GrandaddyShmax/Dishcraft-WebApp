@@ -12,6 +12,7 @@ router.get("/admin/manageusers", async (req, res) => {
     users: users,
     message: sess.message || null,
     user: sess.user || null,
+    hideSearch: true,
   });
 });
 

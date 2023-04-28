@@ -19,6 +19,7 @@ router.get("/admin/managecategories", async (req, res) => {
     categories: categories,
     categoryIndex: session.categoryIndex || 0,
     errorIngred: error,
+    hideSearch: true,
   });
 });
 
