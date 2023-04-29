@@ -24,18 +24,25 @@
         </div>
       </div>
     </div>
-    <div class="flex-1 w-full">
+    <form action="/admin/manageingredients" method="POST" class="flex-1 w-full">
       <div class="flex h-full w-full">
         <div class="flex w-2/3">
           <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
             <div class="w-full h-full flex flex-col p-4 gap-4">
               <!-- Insert Flights here -->
-              <button class="h-24 border w-full text-latte text-xl px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+              <button id="add" type="submit" name="submit" value="<%=`ingred&`+(-1)%>" class="h-24 border w-full text-latte text-xl px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                 <p>Add Ingredient</p>
               </button>
-              <button class="h-24 pl-6 border w-full text-left text-latte text-base px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
-                <p>Example Ingredient</p>
-              </button>
+              <% 
+              var index = 0;
+              for (const ingredient of ingredients) 
+              { %>
+                <button type="submit" name="submit" value="<%=`ingred&`+index%>" class="h-24 pl-6 border w-full text-left text-latte text-base px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+                  <p><%= ingredient.name %></p>
+                </button>
+              <% 
+              index++;
+              } %>
             </div>
           </div>
         </div>
@@ -46,31 +53,33 @@
                 <p class="col-span-1 text-latte font-bold text-lg uppercase">Ingredient</p>
                 <p class="col-span-5"></p>
                 <p class="col-span-2 text-latte font-bold">Name:</p>
-                <input type="text" placeholder="None" class="px-4 py-3 col-span-4 w-full font-bold transition-all rounded-md placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input name="name" type="text" value="<%=currIngred.name%>" placeholder="None" class="px-4 py-3 col-span-4 w-full font-bold transition-all rounded-md placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
                 <p class="col-span-3 text-latte font-bold">Energy (kcal):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <p class="col-span-3 text-latte font-bold">Fatty acids (kg):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <p class="col-span-3 text-latte font-bold">Sodium (kg):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <p class="col-span-3 text-latte font-bold">Sugar (kg):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <p class="col-span-3 text-latte font-bold">Protein (kg):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <p class="col-span-3 text-latte font-bold">Weight (kg):</p>
-                <input type="number" placeholder="0" min="0.01" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input name="energy" type="number" value="<%=currIngred.energy%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Fatty acids (g):</p>
+                <input name="fattyAcids" type="number" value="<%=currIngred.fattyAcids%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Sodium (g):</p>
+                <input name="sodium" type="number" value="<%=currIngred.sodium%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Sugar (g):</p>
+                <input name="sugar" type="number" value="<%=currIngred.sugar%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Protein (g):</p>
+                <input name="protein" type="number" value="<%=currIngred.protein%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <p class="col-span-3 text-latte font-bold">Weight (g):</p>
+                <input name="totalWeight" type="number" value="<%=currIngred.totalWeight%>" placeholder="0" min="0" step="0.01" class="px-4 py-3 col-span-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
               </div>
               <div class="grid grid-cols-2 p-4 gap-2 items-center">
-                <p class="hidden col-span-2 text-red-500 text-center font-bold">Some Error Message</p>
-                <button class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Apply
+                <% if(error !== "") { %>
+                <p class="col-span-2 text-red-500 text-center font-bold"><%= error %></p>
+                <% } %>
+                <button id="apply" type="submit" name="submit" value="<%=`apply&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Apply
                 </button>
-                <button class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
+                <button id="remove" type="submit" name="submit" value="<%=`remove&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>
