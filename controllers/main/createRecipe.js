@@ -4,8 +4,6 @@ const router = express.Router();
 //[Clases]
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
-//[API]
-const { checkIgredient } = require("../../API/ingred");
 //[Aid]
 const { offloadFields } = require("../../utils");
 const { defIngs, units } = require("../../jsons/views.json");
@@ -61,7 +59,7 @@ router.post("/createRecipe", async (req, res) => {
   else if (buttonPress == "publish") {
     let status;
     for (let ingred of recipe.ingredients) {
-      status = await checkIgredient(ingred.name);
+      status = await Ingredient.checkIngredient(ingred.name);
       if (!status) {
         sess.errorIngred = "Ingredient " + ingred.name + " not found.";
         return res.redirect(req.get("referer"));

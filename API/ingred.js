@@ -14,10 +14,10 @@ async function getJsonFoodDB(ingredient){
     return await result.json();
 }
 
+// try to get the ingredient from the API
 async function getData(ingredient){
     const nutJson = await getJsonNutritionDB(ingredient); 
     if (!nutJson) return false;
-
     const nutrients = nutJson.totalNutrients;
     return {  
         //[Health Labels(Array)]
@@ -35,7 +35,8 @@ async function getData(ingredient){
     };
 }
 
-async function checkIgredient(ingredient) {
+// check ingredient in the API
+async function checkIgredientAPI(ingredient) {
     if ((await getJsonFoodDB(ingredient)).parsed.length === 0) {
         return false;
     }
@@ -43,4 +44,4 @@ async function checkIgredient(ingredient) {
 }
 
 /*[ External access ]*/
-module.exports = { getData, checkIgredient };
+module.exports = { getData, checkIgredientAPI };

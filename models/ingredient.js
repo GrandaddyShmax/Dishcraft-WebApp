@@ -36,13 +36,40 @@ class Ingredient {
     this.protein = data.protein;
   }
 
+  static async checkIngredient(ingredient) {
+    // check ingredient in the db
+    if (await Ingredient.checkIngredientDB(ingredient)) {
+      return true;
+    }
+    // check ingredient in the API
+    if (await connection.checkIgredientAPI(ingredient)) {
+      return true;
+    }
+    return false;
+  }
+
+  static async updateRecContainsIngred(ingredName, check) {
+    let recipesArr = await schemas.Recipe.find({});
+    for(const recipe of recipesArr) {
+      for(const ingred of recipe.ingredients) {
+        if (ingred.name === ingredName) {
+          const nutritions = await Ingredient.calcRecipeNutVal(recipe.ingredients, check);
+          await schemas.Recipe.updateOne({ _id: recipe._id }, { nutritions: nutritions });
+        }
+      }
+    }
+  }
+
   static async calcRecipeNutVal(ingredArr, check) {
     var { energy = 0, fattyAcids = 0, sodium = 0, sugar = 0, protein = 0 } = {};
     let calcPerGrams = (unit, amount) => unitsTable[unit] * amount;
 
     for (let ingred of ingredArr) {
-      if (check && !(await connection.checkIgredient(ingred.name))) continue;
-      const ingredient = new Ingredient(await connection.getData(ingred.name));
+      if (check && !(await Ingredient.checkIngredient(ingred.name))) continue;
+      let ingredient = await Ingredient.fetchIngredient(ingred.name);
+      if (!ingredient) {
+        ingredient = new Ingredient(await connection.getData(ingred.name)); 
+      }
       const unit = ingred.unit.toLowerCase();
       const amount = parseFloat(ingred.amount);
       let valueByUnit;
@@ -80,6 +107,14 @@ class Ingredient {
       return new Ingredient(details);
     }
     return null;
+  }
+
+  static async checkIngredientDB(inputName) {
+    let details = await schemas.Ingredient.findOne({ name: inputName });
+    if (details) {
+      return true;
+    }
+    return false;
   }
 
   async addIngredient() {

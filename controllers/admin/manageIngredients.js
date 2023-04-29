@@ -59,6 +59,7 @@ router.post("/admin/manageingredients", async (req, res) => {
         sess.error = "Failed to update ingredient";
       }
     }
+    await Ingredient.updateRecContainsIngred(req.body.name, false);
   } 
   else if (buttonPress === "remove") {
     const ingredients = await Ingredient.fetchAllIngredients();
@@ -74,6 +75,7 @@ router.post("/admin/manageingredients", async (req, res) => {
       ingred = new Ingredient(ingredients[index]);
       ingred.deleteIngredient();
     }
+    await Ingredient.updateRecContainsIngred(req.body.name, true);
   }
   return res.redirect("/admin/manageingredients");
 });

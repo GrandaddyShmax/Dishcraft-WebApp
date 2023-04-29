@@ -6,7 +6,6 @@ const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
 //[API]
-const { checkIgredient } = require("../../API/ingred");
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //disable AI to avoid accidental exceeding request limits during testing
 const disabled = false;
@@ -78,7 +77,7 @@ router.post("/assistant", async (req, res) => {
     //check ingredients exist in foodAPI:
     let status;
     for (let ingred of recipe.ingredients) {
-      status = await checkIgredient(ingred.name);
+      status = await Ingredient.checkIngredient(ingred.name);
       if (!status) {
         sess.errorIngred = "Ingredient " + ingred.name + " not found.";
         return res.redirect(req.get("referer"));
