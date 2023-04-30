@@ -11,6 +11,7 @@ module.exports = (schemas) => {
     avatar: String,
     role: Number,
     banned: Boolean,
+    latest: [{ energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number }]
   });
 
   //[Registers in database]

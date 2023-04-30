@@ -79,7 +79,7 @@ class Ingredient {
       } else {
         valueByUnit = calcPerGrams(ingred.unit.toLowerCase(), parseFloat(ingred.amount));
       }
-      energy += (valueByUnit * ingredient.energy) / 1000;
+      energy += valueByUnit * ingredient.energy;
       fattyAcids += (valueByUnit * ingredient.fattyAcids) / 1000;
       sodium += (valueByUnit * ingredient.sodium) / 1000;
       sugar += (valueByUnit * ingredient.sugar) / 1000;

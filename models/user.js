@@ -4,14 +4,28 @@ const bcrypt = require("bcrypt");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 const saltRounds = 10;
-const role = { junior: 1, expert: 2, admin: 3 };
+const roles = { "junior": 1, "expert": 2, "admin": 3 };
+
+//[advised nutrional average]//
+const nutAvgVals = {
+  "energy": { min: 1600, max: 3600 },
+  "fattyAcids": { min: 20, max: 200 },
+  "sodium": { min: 0.015, max: 0.02 },
+  "sugar": { min: 20, max: 200 },
+  "protein": { min: 20, max: 200 }
+};
+//[nutritional units]//
+const nutUnits = [ "energy", "fattyAcids", "sodium", "sugar", "protein" ];
+//[unit's format]//
+const unitFormat = { "energy": "Energy", "fattyAcids": "Fatty acids", "sodium": "Sodium", 
+  "sugar": "Sugar", "protein": "Protein" };
 
 /*[ Handle base class database ]*/
 class User {
   constructor(details, id) {
     if (details)
       offloadFields(
-        ["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned"],
+        ["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned", "latest"],
         this,
         details
       );
@@ -35,7 +49,7 @@ class User {
       if (this.password !== this.passwordRep) return { successful: false, error: "password", message: "Passwords don't match" };
 
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
-      let role = isAdmin ? role["admin"] : role["junior"];
+      let role = isAdmin ? roles["admin"] : roles["junior"];
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
@@ -44,6 +58,7 @@ class User {
         password: await bcrypt.hash(this.password, saltRounds),
         role: role,
         banned: false,
+        latest: []
       });
       return { successful: true, message: "success" };
     } catch (
@@ -57,7 +72,7 @@ class User {
   /*[ Modifying data ]*/
   async upgradeUser() {
     try {
-      await schemas.User.updateOne({ _id: this.id }, { role: role["expert"] });
+      await schemas.User.updateOne({ _id: this.id }, { role: roles["expert"] });
       return true;
     } catch {
       return false;
@@ -69,7 +84,7 @@ class User {
   async fetchUser() {
     let details = await schemas.User.findOne({ _id: this.id });
     if (details) {
-      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned"], this, details);
+      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned", "latest"], this, details);
       return true;
     }
     return false;
@@ -89,6 +104,7 @@ class User {
           userName: this.userName,
           avatar: this.avatar,
           role: account.role,
+          latest: account.latest
         },
       }; //succeseful login
     }
@@ -110,7 +126,7 @@ class Junior extends User {
   }
   //get all Junior Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: role["junior"] });
+    let accounts = await schemas.User.find({ role: roles["junior"] });
     return accounts || [];
   }
 }
@@ -122,7 +138,7 @@ class Expert extends User {
   }
   //get all Expert Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: role["expert"] });
+    let accounts = await schemas.User.find({ role: roles["expert"] });
     return accounts || [];
   }
   //get all Junior&Expert Cook users from db
@@ -137,6 +153,62 @@ class Expert extends User {
       if (a.userName > b.userName) return 1;
       return 0;
     });
+  }
+  //update latest recipes nutritional value
+  async updateLatest(nutritions) {
+    while (this.id.latest.length >= 5) {
+      this.id.latest.shift();
+    }
+    this.id.latest.push(nutritions);
+    try {
+      await schemas.User.updateOne({ _id: this.id.id}, { latest: this.id.latest});
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  // find the warnings according to the latest searches
+  checkWarnings() {
+    if (this.id.latest.length < 3) { //not enough information
+      return "";
+    }
+    const lowWarning = "Insufficient consumption of ";
+    const highWarning = "Excessive consumption of ";
+    let low = "", high = "";
+    const nutAvg = this.calcNutAvg();
+    let index = 0;
+
+    for (const unit of nutUnits) {
+      if (nutAvgVals[unit].min > nutAvg[index]) {
+        if (low === "") { low += lowWarning; }
+        else { low += ", "; }
+        low += unitFormat[unit]; 
+      }
+      else if (nutAvgVals[unit].max < nutAvg[index]) { 
+        if (high === "") { high += highWarning; }
+        else { high += ", "; }
+        high += unitFormat[unit]; 
+      }
+      index++;
+    }
+    return low + '\n' + high;
+  }
+  // calculate accumulative nutritional average value from the latest searches
+  calcNutAvg() {
+    let nutSum = [ 0, 0, 0, 0, 0 ], nutAvg = [];;
+    for (const nutritions of this.id.latest) {
+      nutSum = [
+        nutSum[0] + parseFloat(nutritions.energy), 
+        nutSum[1] + parseFloat(nutritions.fattyAcids), 
+        nutSum[2] + parseFloat(nutritions.sodium), 
+        nutSum[3] + parseFloat(nutritions.sugar), 
+        nutSum[4] + parseFloat(nutritions.protein) 
+      ];
+    }
+    for (let i = 0; i < nutSum.length; i++) {
+      nutAvg.push(nutSum[i] / this.id.latest.length)
+    }
+    return nutAvg;
   }
 }
 

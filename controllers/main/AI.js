@@ -5,6 +5,7 @@ const router = express.Router();
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
+const { Expert } = require("../../models/user");
 //[API]
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //disable AI to avoid accidental exceeding request limits during testing
