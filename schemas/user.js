@@ -11,7 +11,8 @@ module.exports = (schemas) => {
     avatar: String,
     role: Number,
     banned: Boolean,
-    latest: [{ energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number }]
+    latest: [{ energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number }],
+    bookmarks: [Schema.Types.ObjectId]
   });
 
   //[Registers in database]

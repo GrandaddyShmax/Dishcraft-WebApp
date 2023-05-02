@@ -86,6 +86,16 @@ class Recipe {
     return false;
   }
 
+  //get a specific array of recipes by ids array
+  static async fetchRecipesFromArray(array) {
+    let result = await schemas.Recipe.find({ _id: { $in: array } });
+    for (const recipe of result) {
+      const user = new Junior(null, recipe.userID);
+      recipe.user = await user.fetchUser();
+    }
+    return result;
+  }
+
   //get all/filtered recipes from db
   static async fetchRecipes(search) {
     var term, filter, sort;

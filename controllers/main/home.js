@@ -37,6 +37,7 @@ router.post("/home", async (req, res) => {
   let successful = await recipe.fetchRecipe();
   if (successful) {
     session.recipe = recipe;
+    session.returnPage = "/home";
     return res.redirect("/recipe");
   }
   return res.redirect(req.get("referer"));

@@ -8,7 +8,7 @@
     <div class="flex justify-center">
       <ul role="list" class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 md:grid-cols-4 md:gap-x-6 lg:grid-cols-5 lg:gap-x-7 xl:grid-cols-6 xl:gap-x-8">
         <% for (const recipe of recipes) { %>
-          <form action="/home" method="POST" class="relative">
+          <form action="/bookmarks" method="POST" class="relative">
             <button value="<%= recipe.id %>" type="submit" name="submit" class="group block w-full aspect-square overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
               <img src="<%= recipe.recipeImages[0] %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
               <span class="sr-only">View details</span>

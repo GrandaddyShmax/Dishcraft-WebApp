@@ -25,7 +25,7 @@ class User {
   constructor(details, id) {
     if (details)
       offloadFields(
-        ["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned", "latest"],
+        ["id", "userName", "recipeImages", "email", "password", "passwordRep", "avatar", "role", "banned", "latest", "bookmarks"],
         this,
         details
       );
@@ -58,7 +58,8 @@ class User {
         password: await bcrypt.hash(this.password, saltRounds),
         role: role,
         banned: false,
-        latest: []
+        latest: [],
+        bookmarks: []
       });
       return { successful: true, message: "success" };
     } catch (
@@ -84,7 +85,7 @@ class User {
   async fetchUser() {
     let details = await schemas.User.findOne({ _id: this.id });
     if (details) {
-      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned", "latest"], this, details);
+      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned", "latest", "bookmarks"], this, details);
       return true;
     }
     return false;
@@ -104,7 +105,8 @@ class User {
           userName: this.userName,
           avatar: this.avatar,
           role: account.role,
-          latest: account.latest
+          latest: account.latest,
+          bookmarks: account.bookmarks
         },
       }; //succeseful login
     }
@@ -161,7 +163,7 @@ class Expert extends User {
     }
     this.id.latest.push(nutritions);
     try {
-      await schemas.User.updateOne({ _id: this.id.id}, { latest: this.id.latest});
+      await schemas.User.updateOne({ _id: this.id.id}, { latest: this.id.latest });
       return true;
     } catch {
       return false;
@@ -209,6 +211,27 @@ class Expert extends User {
       nutAvg.push(nutSum[i] / this.id.latest.length)
     }
     return nutAvg;
+  }
+
+  async bookmark(recipe) {
+    let filtered = this.bookmarks;
+    filtered.push(recipe);
+    try {
+      await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
+      return { success: true, bookmarks: filtered };
+    } catch {
+      return { success: false, bookmarks: this.bookmarks };
+    }
+  }
+
+  async unBookmark(recipe) {
+    const filtered = (this.bookmarks).filter(item => item !== recipe);
+    try {
+      await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
+      return { success: true, bookmarks: filtered };
+    } catch {
+      return { success: false, bookmarks: this.bookmarks };
+    }
   }
 }
 
