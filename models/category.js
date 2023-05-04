@@ -24,16 +24,10 @@ class Category {
     if (text) return alg.length > 0 ? alg.join(", ") + "." : "None.";
     return alg;
   }
-  //compare category array x categories of ingredients and return true/false
-  static async compareCategory(ingredients, catList) {
-    var result = false;
-    for (const ing of ingredients) {
-      let categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase() });
-      if (!categories || categories.length == 0) continue;
-      result = categories.some((cat) => catList.includes(cat.categoryName));
-      if (result) break;
-    }
-    return result;
+  //find category/categories by name
+  static async findCategoryByName(name, multiple) {
+    if (multiple) return await schemas.Category.find({ categoryName: name });
+    return await schemas.Category.findOne({ categoryName: name });
   }
 
   async addIngredToCategory(ingredient) {
