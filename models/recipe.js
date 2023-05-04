@@ -100,21 +100,14 @@ class Recipe {
   static async fetchRecipes(search) {
     var term, filter, sort;
     if (search) ({ term, filter, sort } = search);
+    if (filter) filter = await this.fetchFilter(filter);
     let recipes = [];
     let recipesArr = await schemas.Recipe.find({});
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:
-      if (term) {
-        term = term.toLowerCase();
-        if (
-          !recipe.recipeName.toLowerCase().includes(term) &&
-          !user.userName.toLowerCase().includes(term) &&
-          !recipe.ingredients.some((ing) => ing.name.toLowerCase() === term)
-        )
-          continue;
-      }
+      if (this.checkTerm(term, recipe, user)) continue;
       var tempRecipe = offloadFields(
         [
           "id",
@@ -134,27 +127,65 @@ class Recipe {
       );
       tempRecipe.user = user;
       //category filters:
-      if (filter) {
-        //const categories = await Category.findCategory(tempRecipe.ingredients, null, false, true);
-        //let remove = filter.some((filt) => categories.includes(filt.toLowerCase()));
-        let remove = await Category.compareCategory(tempRecipe.ingredients, filter);
-        if (remove) continue;
-      }
+      if (this.checkFilter(filter, tempRecipe)) continue;
       recipes.push(tempRecipe);
     }
     //sort by nutritional value:
-    if (sort) {
-      const { category, dir } = sort;
-      const sign = dir == "descend" ? -1 : 1;
-      return recipes.sort((a, b) => {
-        const aCat = a.nutritions[category] || -1;
-        const bCat = b.nutritions[category] || -1;
-        if (aCat < bCat) return sign;
-        if (aCat > bCat) return sign * -1;
-        return 0;
-      });
-    }
+    recipes = this.checkSort(sort, recipes);
     return recipes || [];
+  }
+  //search term:
+  static checkTerm(term, recipe, user) {
+    if (!term) return false;
+    term = term.toLowerCase();
+    if (
+      //check recipe names
+      !recipe.recipeName.toLowerCase().includes(term) &&
+      //check usernames
+      !user.userName.toLowerCase().includes(term) &&
+      //check ingredients (check plural&singular)
+      !recipe.ingredients.some((ing) => {
+        let name = ing.name.toLowerCase();
+        if (name.charAt(name.length - 1) == "s") name = name.slice(0 - 1);
+        return name === term || name + "s" === term;
+      })
+    )
+      return true;
+    return false;
+  }
+  static async fetchFilter(filter) {
+    if (!filter) return null;
+    let badIngs = [];
+    let categories = await Category.findCategoryByName(filter, true);
+    if (categories.length == 0) return null; //failsafe
+    categories.forEach((category) => badIngs.push(...category.ingredients));
+    badIngs = Array.from(new Set(badIngs)); //remove duplicates
+    if (badIngs.length == 0) return null;
+    return badIngs;
+  }
+  //category filters:
+  static checkFilter(filter, recipe) {
+    if (!filter) return false;
+    for (const ing of recipe.ingredients) {
+      let name = ing.name.toLowerCase();
+      if (name.charAt(name.length - 1) == "s") name = name.slice(0 - 1);
+      let result = filter.includes(name) || filter.includes(name + "s");
+      if (result) return true;
+    }
+    return false;
+  }
+  //sort by nutritional value:
+  static checkSort(sort, recipes) {
+    if (!sort) return recipes;
+    const { category, dir } = sort;
+    const sign = dir == "descend" ? -1 : 1;
+    return recipes.sort((a, b) => {
+      const aCat = a.nutritions[category] || -1;
+      const bCat = b.nutritions[category] || -1;
+      if (aCat < bCat) return sign;
+      if (aCat > bCat) return sign * -1;
+      return 0;
+    });
   }
   //parse ingredients into text
   static parseIngredients(ingredients) {
