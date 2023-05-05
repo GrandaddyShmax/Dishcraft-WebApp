@@ -4,6 +4,7 @@ const router = express.Router();
 const recipe = require("../../schemas/recipe");
 const { Recipe } = require("../../models/recipe");
 const { Expert } = require("../../models/user");
+const { report } = require("superagent");
 
 //get
 router.get("/recipe", async (req, res) => {
@@ -42,6 +43,13 @@ router.post("/recipe", async (req, res) => {
     session.user.bookmarks = bookmarks;
   }
 
+  else if (buttonType === "report"){
+    const recipe = new Recipe(null,session.recipe.id);
+    await recipe.fetchRecipe();
+    await recipe.reportFunc(session.user.id);
+
+  }
+
   if(rating){
     const recipe = new Recipe(null,session.recipe.id);
     await recipe.fetchRecipe();
@@ -49,6 +57,7 @@ router.post("/recipe", async (req, res) => {
     await recipe.voteRating(session.user.id,rating);
 
   }
+
   
     return res.redirect(req.get("referer"));
 });

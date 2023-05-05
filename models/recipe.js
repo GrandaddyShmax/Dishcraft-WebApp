@@ -215,6 +215,22 @@ async updateRatingNum(){
   this.rating= ((this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length)/5).toFixed(2);
 }
 
+async reportFunc(userID){
+  if(!(this.report.includes(userID))){
+    this.report.push(userID);
+
+    try {
+      await schemas.Recipe.updateOne({ _id: this.id },{report: this.report});
+      return true;
+    }
+  
+    catch (error) {
+     console.log(error);
+      return false;
+  }
+  
+  }
+}
 async voteRating (userID,num){
   //remove previous vote
   var filtered1 = (this.rating1).filter(item => item !== userID);
@@ -226,8 +242,6 @@ async voteRating (userID,num){
   var filtered4 =  (this.rating4).filter(x => x!==userID);
 
   var filtered5 =  (this.rating5).filter(x => x!==userID);
-
-  //var filteredRep = (this.report).filter(x => x!==userID)
 
   //place in new vote
   if(num==1){
