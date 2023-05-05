@@ -21,6 +21,7 @@ class Category {
           if (lowerCase) alg.push(category.categoryName.toLowerCase());
           else alg.push(category.categoryName);
     }
+    alg = Array.from(new Set(alg)); //remove duplicates
     if (text) return alg.length > 0 ? alg.join(", ") + "." : "None.";
     return alg;
   }

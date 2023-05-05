@@ -8,8 +8,8 @@ const { Expert } = require("../../models/user");
 router.get("/recipe", async (req, res) => {
   var session = req.session;
   let isMarked = false;
-  if (session.user.role > 1) {
-    isMarked = (session.user.bookmarks).includes(session.recipe.id);
+  if (session.user && session.user.role > 1) {
+    isMarked = session.user.bookmarks.includes(session.recipe.id);
   }
   res.render("template", {
     pageTitle: "Dishcraft - Recipe View",
@@ -17,7 +17,7 @@ router.get("/recipe", async (req, res) => {
     user: session.user || null,
     recipe: session.recipe || null,
     returnPage: session.returnPage || "/home",
-    isMarked: isMarked
+    isMarked: isMarked,
   });
 });
 
@@ -32,12 +32,11 @@ router.post("/recipe", async (req, res) => {
   if (buttonType === "bookmark") {
     const { success, bookmarks } = await user.bookmark(session.recipe.id);
     session.user.bookmarks = bookmarks;
-  }
-  else if (buttonType === "unbookmark") {
+  } else if (buttonType === "unbookmark") {
     const { success, bookmarks } = await user.unBookmark(session.recipe.id);
     session.user.bookmarks = bookmarks;
   }
-    return res.redirect(req.get("referer"));
+  return res.redirect(req.get("referer"));
 });
 
 /*[ External access ]*/
