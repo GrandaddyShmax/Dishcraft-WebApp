@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const recipe = require("../../schemas/recipe");
+const { Recipe } = require("../../models/recipe");
 const { Expert } = require("../../models/user");
 
 //get
@@ -25,9 +26,12 @@ router.get("/recipe", async (req, res) => {
 router.post("/recipe", async (req, res) => {
   var session = req.session;
   const buttonType = req.body.submit;
+  const rating = req.body.rating;
   const user = new Expert(null, session.user.id);
   user.bookmarks = session.user.bookmarks;
   let success = true;
+
+  //console.log(rating);
 
   if (buttonType === "bookmark") {
     const { success, bookmarks } = await user.bookmark(session.recipe.id);
@@ -37,6 +41,15 @@ router.post("/recipe", async (req, res) => {
     const { success, bookmarks } = await user.unBookmark(session.recipe.id);
     session.user.bookmarks = bookmarks;
   }
+
+  if(rating){
+    const recipe = new Recipe(null,session.recipe.id);
+    await recipe.fetchRecipe();
+    //console.log(recipe);
+    await recipe.voteRating(session.user.id,rating);
+
+  }
+  
     return res.redirect(req.get("referer"));
 });
 

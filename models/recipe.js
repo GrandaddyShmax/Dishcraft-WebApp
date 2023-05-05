@@ -40,6 +40,12 @@ class Recipe {
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
         rating: this.rating,
+        rating1: [],
+        rating2: [],
+        rating3: [],
+        rating4: [],
+        rating5: [],
+        report: [],
         aiMade: this.aiMade || false,
         ingredients: this.ingredients,
         instructions: this.instructions,
@@ -75,7 +81,7 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "recipeImages", "rating", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions"],
+        ["recipeName", "recipeImages", "rating","rating1","rating2","rating3","rating4","rating5", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions"],
         this,
         details
       );
@@ -114,6 +120,12 @@ class Recipe {
           "recipeName",
           "recipeImages",
           "rating",
+          "rating1",
+          "rating2",
+          "rating3",
+          "rating4",
+          "rating5",
+          "report",
           "aiMade",
           "ingredients",
           "instructions",
@@ -195,7 +207,57 @@ class Recipe {
     }
     return ings.join("\n");
   }
+
+
+async updateRatingNum(){
+  
+  //console.log("test"+rating1.length);
+  this.rating= ((this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length)/5).toFixed(2);
 }
 
+async voteRating (userID,num){
+  //remove previous vote
+  var filtered1 = (this.rating1).filter(item => item !== userID);
+
+  var filtered2 =  (this.rating2).filter(x => x!==userID);
+
+  var filtered3 =  (this.rating3).filter(x => x!==userID);
+
+  var filtered4 =  (this.rating4).filter(x => x!==userID);
+
+  var filtered5 =  (this.rating5).filter(x => x!==userID);
+
+  //var filteredRep = (this.report).filter(x => x!==userID)
+
+  //place in new vote
+  if(num==1){
+    filtered1.push(userID);
+  }
+  else if(num==2){
+    filtered2.push(userID);
+  }
+  else if(num==3){
+    filtered3.push(userID);
+  }
+  else if(num==4){
+    filtered4.push(userID);
+  }
+  else if(num==5){
+    filtered5.push(userID);
+  }
+
+    try {
+      await schemas.Recipe.updateOne({ _id: this.id },{rating1:filtered1, rating2:filtered2, rating3:filtered3, rating4:filtered4, rating5:filtered5});
+      this.updateRatingNum();
+      return true;
+    }
+
+    catch (error) {
+     console.log(error);
+      return false;
+  } 
+}
+
+}
 /*[ External access ]*/
 module.exports = { Recipe };
