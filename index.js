@@ -4,6 +4,7 @@ const fs = require("fs"); //accessing other folders & files
 const express = require("express");
 var session = require("express-session");
 const { exec } = require("child_process"); //run terminal commands
+const multer = require("multer"); //save files
 //Database access:
 require("./schemas/paths");
 const mongoose = require("mongoose"); //database access
@@ -59,6 +60,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); //define public folder
 app.use("/images", express.static(path.join(__dirname, "public/images")));
+
+//[Initialize storage]
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "public/images/temp/"),
+  filename: (req, file, cb) => cb(null, file.originalname),
+});
+const uploadImage = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 } });
+module.exports = { uploadImage };
 
 //[Prepare routes]
 const controllers = fs.readdirSync(`./controllers`);

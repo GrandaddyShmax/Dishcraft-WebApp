@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <form action="/assistant" method="POST" class="flex flex-1 flex-col">
+      <form action="/assistant" method="POST" id="form" class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <p class="text-latte text-3xl font-bold">
             <%=recipe.recipeName%>
@@ -39,14 +39,14 @@
                   <% } %>
                 </select>
                 <input required placeholder="Ingredient" type="text" name="name" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-                <button value="<%=`remove&`+index%>" onclick="rememberScroll()" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
+                <button value="<%=`remove&`+index%>" onclick="forceSubmit();" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
                 </button>
               </div> <!-- ingredient object -->
               <% var index=index+1; %>
             <% } %>
             <!-- duplicate the new ingredient object here -->
             <div class="pt-2 flex">
-              <button value="addmore" onclick="rememberScroll()" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
+              <button value="addmore" onclick="forceSubmit();" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
               </button>
             </div>
           </div>
@@ -137,4 +137,13 @@
   function Generate() {
     window.onbeforeunload = (e) => 
       document.getElementById("loading").classList.remove("hidden");};
+
+  //allows to addmore&remove without validation    
+  function forceSubmit(submit){
+    rememberScroll();
+    var form = document.getElementById("form")
+    form.setAttribute("novalidate",true);
+    if(submit)
+      form.dispatchEvent(new Event('submit'));
+  }    
 </script>
