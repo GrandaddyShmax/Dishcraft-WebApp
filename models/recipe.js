@@ -15,6 +15,7 @@ class Recipe {
           "userID",
           "recipeName",
           "recipeImages",
+          "userRating",
           "rating",
           "aiMade",
           "ingredients",
@@ -39,7 +40,6 @@ class Recipe {
         userID: this.userID || "6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
-        rating: this.rating,
         fullRating: {
           rating1: [],
           rating2: [],
@@ -75,8 +75,8 @@ class Recipe {
   }
 
   /*[ Handling data ]*/
-  //fetch recipe from db
-  async fetchRecipe() {
+  //fetch single recipe from db
+  async fetchRecipe(userID) {
     let details = await schemas.Recipe.findOne({ _id: this.id });
     const user = new Junior(null, details.userID);
     await user.fetchUser();
@@ -88,6 +88,16 @@ class Recipe {
         details
       );
       offloadFields(["rating1", "rating2", "rating3", "rating4", "rating5"], this, details.fullRating);
+      this.userRating = null;
+      if (userID) {
+        //check logged in user's vote
+        if (this.rating1.includes(userID)) this.userRating = "1";
+        else if (this.rating2.includes(userID)) this.userRating = "2";
+        else if (this.rating3.includes(userID)) this.userRating = "3";
+        else if (this.rating4.includes(userID)) this.userRating = "4";
+        else if (this.rating5.includes(userID)) this.userRating = "5";
+      }
+      this.refreshRating(details.fullRating);
       this.recipeImages = Recipe.parseImages(details.recipeImages, true);
       this.ingredients = Recipe.parseIngredients(details.ingredients);
       this.allergies = await Category.findCategory(details.ingredients, "allergy", true);
@@ -96,23 +106,15 @@ class Recipe {
     return false;
   }
 
-  //get a specific array of recipes by ids array
-  static async fetchRecipesFromArray(array) {
-    let result = await schemas.Recipe.find({ _id: { $in: array } });
-    for (const recipe of result) {
-      const user = new Junior(null, recipe.userID);
-      recipe.user = await user.fetchUser();
-    }
-    return result;
-  }
-
   //get all/filtered recipes from db
-  static async fetchRecipes(search) {
+  static async fetchRecipes(search, bookmarks) {
     var term, filter, sort;
     if (search) ({ term, filter, sort } = search);
     if (filter) filter = await this.fetchFilter(filter);
     let recipes = [];
-    let recipesArr = await schemas.Recipe.find({});
+    let recipesArr;
+    if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: { $in: bookmarks } });
+    else recipesArr = await schemas.Recipe.find({});
     for await (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
@@ -123,7 +125,12 @@ class Recipe {
         null,
         recipe
       );
-      offloadFields(["rating1", "rating2", "rating3", "rating4", "rating5"], this, recipe.fullRating);
+      var rating = Recipe.updateRatingNum(recipe.fullRating);
+      tempRecipe.rating = {
+        avg: rating.avg,
+        total: rating.total,
+        star: rating.star,
+      };
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
       //category filters:
@@ -202,20 +209,35 @@ class Recipe {
     return [this.parseImage(recipeImages[0])];
   }
   static parseImage(img) {
-    if (!img) return "";
-    if (img.url) return img.url;
+    if (!img) return null;
     if (img.contentType && img.data) return `data:image/${img.contentType};base64,${img.data.toString("base64")}`;
+    if ("url" in img) return img.url ? img.url : null;
     return img;
   }
 
-  async updateRatingNum() {
+  static updateRatingNum(rating) {
     //console.log("test"+rating1.length);
-    this.rating = (
-      (this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length) /
-      5
-    ).toFixed(2);
-  }
+    //return (this.rating = ((this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length) / 5).toFixed(2));
 
+    //attempt at different weight for each rating?
+    const total =
+      rating.rating1.length + rating.rating2.length + rating.rating3.length + rating.rating4.length + rating.rating5.length;
+    if (total == 0) return 0.0;
+    const avg =
+      (rating.rating1.length * 1 +
+        rating.rating2.length * 2 +
+        rating.rating3.length * 3 +
+        rating.rating4.length * 4 +
+        rating.rating5.length * 5) /
+      total;
+    let star = 0;
+    if (avg >= 1 && avg < 2) star = 1;
+    else if (avg >= 2 && avg < 3) star = 2;
+    else if (avg >= 3 && avg < 4) star = 3;
+    else if (avg >= 4 && avg < 5) star = 4;
+    else if (avg >= 5) star = 5;
+    return { avg: avg.toFixed(2), total: total, star: star };
+  }
   async reportFunc(userID) {
     if (!this.report.includes(userID)) {
       this.report.push(userID);
@@ -231,37 +253,62 @@ class Recipe {
   }
   async voteRating(userID, num) {
     //remove previous vote
-    var filtered1 = this.rating1.filter((item) => item !== userID);
+    this.rating1 = this.rating1.filter((item) => item !== userID);
 
-    var filtered2 = this.rating2.filter((x) => x !== userID);
+    this.rating2 = this.rating2.filter((x) => x !== userID);
 
-    var filtered3 = this.rating3.filter((x) => x !== userID);
+    this.rating3 = this.rating3.filter((x) => x !== userID);
 
-    var filtered4 = this.rating4.filter((x) => x !== userID);
+    this.rating4 = this.rating4.filter((x) => x !== userID);
 
-    var filtered5 = this.rating5.filter((x) => x !== userID);
+    this.rating5 = this.rating5.filter((x) => x !== userID);
 
     //place in new vote
     if (num == 1) {
-      filtered1.push(userID);
+      this.rating1.push(userID);
     } else if (num == 2) {
-      filtered2.push(userID);
+      this.rating2.push(userID);
     } else if (num == 3) {
-      filtered3.push(userID);
+      this.rating3.push(userID);
     } else if (num == 4) {
-      filtered4.push(userID);
+      this.rating4.push(userID);
     } else if (num == 5) {
-      filtered5.push(userID);
+      this.rating5.push(userID);
     }
-    const newRating = { rating1: filtered1, rating2: filtered2, rating3: filtered3, rating4: filtered4, rating5: filtered5 };
+    this.userRating = num;
+    const newRating = {
+      rating1: this.rating1,
+      rating2: this.rating2,
+      rating3: this.rating3,
+      rating4: this.rating4,
+      rating5: this.rating5,
+    };
     try {
       await schemas.Recipe.updateOne({ _id: this.id }, { fullRating: newRating });
-      this.updateRatingNum();
+      //Recipe.updateRatingNum();
+      this.refreshRating(newRating);
+      console.log(this);
       return true;
     } catch (error) {
       console.log(error);
       return false;
     }
+  }
+  refreshRating(fullRating) {
+    var rating = Recipe.updateRatingNum(fullRating);
+    this.rating = {
+      avg: rating.avg,
+      total: rating.total,
+      star: rating.star,
+    };
+    const parseFancy = (rating) => (rating.length / (this.rating.total || 1)) * 100;
+    this.ratingFancy = [
+      parseFancy(this.rating1),
+      parseFancy(this.rating2),
+      parseFancy(this.rating3),
+      parseFancy(this.rating4),
+      parseFancy(this.rating5),
+    ];
   }
 }
 /*[ External access ]*/

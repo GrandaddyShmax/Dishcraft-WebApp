@@ -8,7 +8,7 @@ const { uploadImage } = require("../../index");
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
 //[Aid]
-const { offloadFields } = require("../../utils");
+const { offloadFields, handleIngAdding } = require("../../utils");
 const { defIngs, units } = require("../../jsons/views.json");
 
 //get
@@ -49,20 +49,10 @@ router.post("/createRecipe", async (req, res) => {
   //sess.recipe.recipeImages = Recipe.parseImages(sess.recipe.imagesData);
   if (req.body.submit) {
     const [buttonPress, index] = req.body.submit.split("&");
-    var list = [];
-    const { amount, unit, name } = req.body;
-    if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
-    else list.push({ amount: amount, unit: unit, name: name });
-    recipe.ingredients = list;
-
-    //add ingredient
-    if (buttonPress == "addmore") {
-      recipe.ingredients.push(defIngs);
-    } //remove ingredient
-    else if (buttonPress == "remove") {
-      recipe.ingredients.splice(index, 1);
-    } //Create and save recipe
-    else if (buttonPress == "publish") {
+    //Update ingredients & "addmore" & "remove"
+    if (handleIngAdding(req, res, buttonPress, index)) return res.redirect(req.get("referer"));
+    //Create and save recipe
+    if (buttonPress == "publish") {
       let status;
       for (let ingred of recipe.ingredients) {
         status = await Ingredient.checkIngredient(ingred.name);
@@ -71,9 +61,16 @@ router.post("/createRecipe", async (req, res) => {
           return res.redirect(req.get("referer"));
         }
       }
-      var recipeData = offloadFields(["recipeName", "instructions", "color"], this, req.body);
+      var recipeData = offloadFields(["recipeName", "instructions", "color"], null, req.body);
       recipeData.userID = sess.user ? sess.user.id : null;
-      recipeData.recipeImages = [recipe.imagesData.img1, recipe.imagesData.img2, recipe.imagesData.img3] || [];
+      var images = [];
+      if (recipe.imagesData) {
+        if (recipe.imagesData.img1) images.push(recipe.imagesData.img1);
+        if (recipe.imagesData.img2) images.push(recipe.imagesData.img2);
+        if (recipe.imagesData.img3) images.push(recipe.imagesData.img3);
+        for (var i = images.length; i < 3; i++) images.push({ url: "" });
+      }
+      recipeData.recipeImages = images;
       console.log(recipeData);
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
@@ -91,6 +88,9 @@ router.post("/uploadImage2", uploadImage.single("image2"), async (req, res) => h
 router.post("/uploadImage3", uploadImage.single("image3"), async (req, res) => handleImage(req, res, 3));
 function handleImage(req, res, index) {
   var sess = req.session;
+  offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
+  //Update ingredients & "addmore" & "remove"
+  handleIngAdding(req, res);
   if (req.file) {
     if (!sess.recipe) sess.recipe = new Object();
     if (!sess.recipe.imagesData) sess.recipe.imagesData = new Object();

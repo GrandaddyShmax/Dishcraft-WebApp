@@ -221,7 +221,7 @@
               <%}%>
             </div>
             <p class="pointer-events-none block text-sm font-medium text-latte"><%= recipe.uploadDate.toLocaleDateString() %></p>
-            <p class="pointer-events-none mt-1 block text-sm font-bold text-latte">Rating: <%= recipe.rating %></p>
+            <p class="pointer-events-none mt-1 block text-sm font-bold text-latte">Rating: <%= recipe.rating.avg%> (<%= recipe.rating.total %> votes)</p>
           </form>
         <% } %>
       </ul>

@@ -1,10 +1,9 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-const recipe = require("../../schemas/recipe");
+//[Clases]
 const { Recipe } = require("../../models/recipe");
 const { Expert } = require("../../models/user");
-const { report } = require("superagent");
 
 //get
 router.get("/recipe", async (req, res) => {
@@ -17,7 +16,7 @@ router.get("/recipe", async (req, res) => {
     pageTitle: "Dishcraft - Recipe View",
     page: "recipe",
     user: session.user || null,
-    recipe: session.recipe || null,
+    recipe: session.recipe,
     returnPage: session.returnPage || "/home",
     isMarked: isMarked,
   });
@@ -26,6 +25,7 @@ router.get("/recipe", async (req, res) => {
 //post
 router.post("/recipe", async (req, res) => {
   var session = req.session;
+  if (!session.user) return res.redirect("/");
   const buttonType = req.body.submit;
   const rating = req.body.rating;
   const user = new Expert(null, session.user.id);
@@ -44,6 +44,7 @@ router.post("/recipe", async (req, res) => {
     const recipe = new Recipe(null, session.recipe.id);
     await recipe.fetchRecipe();
     await recipe.reportFunc(session.user.id);
+    session.recipe = recipe;
   }
 
   if (rating) {
@@ -51,6 +52,7 @@ router.post("/recipe", async (req, res) => {
     await recipe.fetchRecipe();
     //console.log(recipe);
     await recipe.voteRating(session.user.id, rating);
+    session.recipe = recipe;
   }
 
   return res.redirect(req.get("referer"));

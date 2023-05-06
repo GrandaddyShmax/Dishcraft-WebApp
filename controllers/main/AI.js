@@ -5,14 +5,13 @@ const router = express.Router();
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
-const { Expert } = require("../../models/user");
 //[API]
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //disable AI to avoid accidental exceeding request limits during testing
 const disabled = false;
 const msg = "A.I. is currently disabled!";
 //[Aid]
-const { offloadFields } = require("../../utils");
+const { offloadFields, handleIngAdding } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
 
@@ -61,27 +60,20 @@ router.post("/assistant", async (req, res) => {
   const sess = req.session;
   var recipe = sess.recipe;
   const [buttonPress, index] = req.body.submit.split("&");
-  var list = [];
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
-  const { amount, unit, name } = req.body;
-  if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
-  else list.push({ amount: amount, unit: unit, name: name });
-  recipe.ingredients = list;
-
-  //add ingredient
-  if (buttonPress == "addmore") {
-    recipe.ingredients.push(defIngs);
-  } //remove ingredient
-  else if (buttonPress == "remove") {
-    recipe.ingredients.splice(index, 1);
-  } else if (buttonPress == "generate") {
+  //Update ingredients & "addmore" & "remove"
+  if (handleIngAdding(req, res, buttonPress, index)) return res.redirect(req.get("referer"));
+  //Generate recipe
+  if (buttonPress == "generate") {
     //check ingredients exist in foodAPI:
-    let status;
-    for (let ingred of recipe.ingredients) {
-      status = await Ingredient.checkIngredient(ingred.name);
-      if (!status) {
-        sess.errorIngred = "Ingredient " + ingred.name + " not found.";
-        return res.redirect(req.get("referer"));
+    if (!disabled) {
+      let status;
+      for (let ingred of recipe.ingredients) {
+        status = await Ingredient.checkIngredient(ingred.name);
+        if (!status) {
+          sess.errorIngred = "Ingredient " + ingred.name + " not found.";
+          return res.redirect(req.get("referer"));
+        }
       }
     }
     try {

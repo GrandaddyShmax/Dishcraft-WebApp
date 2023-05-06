@@ -7,7 +7,7 @@ const { Recipe } = require("../../models/recipe");
 
 router.get("/bookmarks", async (req, res) => {
   var session = req.session;
-  const recipes = await Recipe.fetchRecipesFromArray(session.user.bookmarks);
+  const recipes = await Recipe.fetchRecipes(null, session.user.bookmarks);
   session.recipe = null;
   res.render("template", {
     pageTitle: "Dishcraft - Bookmarks",
@@ -23,7 +23,7 @@ router.post("/bookmarks", async (req, res) => {
   const smt = req.body.submit;
   const recipe = new Recipe(null, smt);
   //find recipe
-  let successful = await recipe.fetchRecipe();
+  let successful = await recipe.fetchRecipe(session.user.id);
   if (successful) {
     session.recipe = recipe;
     session.returnPage = "/bookmarks";

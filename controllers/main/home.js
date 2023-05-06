@@ -34,7 +34,7 @@ router.post("/home", async (req, res) => {
   const smt = req.body.submit;
   const recipe = new Recipe(null, smt);
   //find recipe
-  let successful = await recipe.fetchRecipe();
+  let successful = await recipe.fetchRecipe(session.user ? session.user.id : null);
   if (successful) {
     session.recipe = recipe;
     session.returnPage = "/home";

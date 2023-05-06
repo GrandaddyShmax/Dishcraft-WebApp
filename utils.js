@@ -1,5 +1,6 @@
 //[Import]
 const AsciiTable = require("ascii-table");
+const { defIngs } = require("./jsons/views.json");
 
 //Forces code to wait until condition is met
 function until(condition) {
@@ -75,6 +76,26 @@ function offloadFields(fields, object1, object2) {
   });
   return object1;
 }
+//Update ingredients & "addmore" & "remove"
+function handleIngAdding(req, res, buttonPress, index) {
+  var recipe = req.session.recipe;
+  var list = [];
+  const { amount, unit, name } = req.body;
+  if (Array.isArray(name)) for (var i = 0; i < name.length; i++) list.push({ amount: amount[i], unit: unit[i], name: name[i] });
+  else list.push({ amount: amount, unit: unit, name: name });
+  recipe.ingredients = list;
+
+  //add ingredient
+  if (buttonPress == "addmore") {
+    recipe.ingredients.push(defIngs);
+    return true;
+  } //remove ingredient
+  else if (buttonPress == "remove") {
+    recipe.ingredients.splice(index, 1);
+    return true;
+  }
+  return false;
+}
 
 //Prints all registered routes
 function printAllRoutes(app, url) {
@@ -108,4 +129,4 @@ function printAllRoutes(app, url) {
 }
 
 /*[ External access ]*/
-module.exports = { until, capitalize, endPlural, offloadFields, printAllRoutes };
+module.exports = { until, capitalize, endPlural, offloadFields, handleIngAdding, printAllRoutes };
