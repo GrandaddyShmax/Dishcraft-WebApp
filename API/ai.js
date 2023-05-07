@@ -131,11 +131,11 @@ function parseAssToRecipeTest() {
   recipe.ingredients2 = [];
   recipe.instructions = "";
   const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
-  console.log(ings);
+  //console.log(ings);
   const fields = ["$recipe name", "$ingredients", "$instructions"];
   var index;
   for (const line of response.split("\n")) {
-    console.log(line);
+    //console.log(line);
     if (line.includes("$")) index = fields.indexOf(line.toLowerCase());
     else {
       switch (index) {

@@ -89,10 +89,10 @@
           </div>
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
-          <button value="tryagain" type="submit" name="submit" class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Try Again
+          <%if (recipeTrue) { %>
+          <button value="publish" type="submit" name="submit" class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
           </button>
-          <button value="sharerecipe" type="submit" name="submit" class="hidden bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
-          </button>
+          <% } %>
           <button value="generate" type="submit" name="submit" onclick="Generate()" class="bg-espresso flex mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Generate
             <div id="loading" class="hidden h-6 w-6 pl-2">
               <svg
