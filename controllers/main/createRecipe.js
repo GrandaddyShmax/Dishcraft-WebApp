@@ -100,7 +100,7 @@ function handleImage(req, res, index) {
       contentType: "image/png",
     };
     sess.recipe.recipeImages["img" + index] = Recipe.parseImage(sess.recipe.imagesData["img" + index]);
-    fs.unlinkSync(url);
+    //fs.unlinkSync(url);
   }
   return res.redirect(req.get("referer"));
 }
