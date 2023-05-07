@@ -27,11 +27,11 @@ async function getData(ingredient) {
     calories: nutJson.calories,
     totalWeight: nutJson.totalWeight,
     //[Nutrients]//
-    energy: nutrients.ENERC_KCAL.quantity, //(unit: kcal)
-    fattyAcids: nutrients.FASAT.quantity, //(unit: g)
-    sodium: nutrients.NA.quantity, //(unit: g)
-    sugar: nutrients.SUGAR.quantity, //(unit: g)
-    protein: nutrients.PROCNT.quantity, //(unit: g)
+    energy: nutrients.ENERC_KCAL.quantity,  //(unit: kcal)
+    fattyAcids: nutrients.FASAT.quantity,   //(unit: g)
+    sodium: nutrients.NA.quantity,          //(unit: g)
+    sugar: nutrients.SUGAR.quantity,        //(unit: g)
+    protein: nutrients.PROCNT.quantity,     //(unit: g)
   };
 }
 

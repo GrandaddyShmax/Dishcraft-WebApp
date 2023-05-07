@@ -8,18 +8,22 @@ var assistant;
 //connect to A.I. API
 async function connectAI(testing) {
   var aiLabel = chalk.green("[AI]");
-  var msg = await loadLib1();
+  const access = await schemas.AIAccess.findOne({});
+  var msg;
+  if (access.lib == "1") msg = await loadLib1(access.accessToken);
+  else if (access.lib == "2") msg = await loadLib2(access.disabled);
+  else msg = " Couldn't load Api, invalid lib selected.";
   if (!testing) console.log(aiLabel + msg);
 }
 
 //Main module
-async function loadLib1() {
+async function loadLib1(accessToken) {
   try {
     const rProxy1 = "https://ai.fakeopen.com/api/conversation"; //0.5 r/s
     const rProxy2 = "https://api.pawan.krd/backend-api/conversation"; //~3  r/s
     const ChatGPTUnofficialProxyAPI = (await import("chatgpt")).ChatGPTUnofficialProxyAPI;
-    const access = await schemas.AIAccess.findOne({});
-    assistant = new ChatGPTUnofficialProxyAPI({ accessToken: access.accessToken, apiReverseProxyUrl: rProxy1 });
+
+    assistant = new ChatGPTUnofficialProxyAPI({ accessToken: accessToken, apiReverseProxyUrl: rProxy1 });
 
     await until((_) => assistant);
     return " Api loaded using main module.";
@@ -29,11 +33,11 @@ async function loadLib1() {
   }
 }
 //Backup module
-async function loadLib2() {
+async function loadLib2(disabled) {
   try {
-    return " Backup module disabled.";
+    if (disabled) return " Backup module disabled.";
     const ChatGPTAPI = (await import("chatgpt")).ChatGPTAPI;
-    //assistant = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
+    assistant = new ChatGPTAPI({ apiKey: process.env.OPENAI_API_KEY });
 
     await until((_) => assistant);
     return " Api loaded using backup module.";
@@ -48,7 +52,7 @@ const getAssistant = () => assistant;
 
 //parse A.I. response
 function parseAssToRecipe(response, recipe) {
-  console.log(response)
+  console.log(response);
   if (response.text) response = response.text;
   recipe.extra = "";
   recipe.ingredients2 = [];
@@ -104,25 +108,25 @@ function parseAssToRecipeTest() {
     ],
   };
   response =
-  "$Recipe name\n" +
-  "Chocolate French Toast\n" +
-  "$Ingredients\n" +
-  "5@Pieces@bread\n" +
-  "2@Tablespoons@chocolate chips\n" +
-  "10@Grams@butter\n" +
-  "1@Piece@egg\n" +
-  "0.5@Teaspoon@vanilla extract\n" +
-  "0.25@Cups@milk\n" +
-  "1@Teaspoon@cinnamon\n" +
-  "1@Pinch@salt\n" +
-  "$Instructions\n" +
-  "In a shallow bowl, whisk together the egg, milk, vanilla extract, cinnamon, and salt until well combined.\n" +
-  "Melt the butter in a large non-stick skillet over medium heat.\n" +
-  "Dip each slice of bread into the egg mixture, making sure to coat both sides.\n" +
-  "Place the coated bread in the skillet and cook until golden brown, about 2-3 minutes per side.\n" +
-  "Sprinkle the chocolate chips over the top of each slice of bread and let them melt for a minute or two.\n" +
-  "Using a spatula, fold the bread in half, pressing gently to melt the chocolate chips and seal the toast together.\n" +
-  "Serve immediately and enjoy your delicious Chocolate French Toast!";
+    "$Recipe name\n" +
+    "Chocolate French Toast\n" +
+    "$Ingredients\n" +
+    "5@Pieces@bread\n" +
+    "2@Tablespoons@chocolate chips\n" +
+    "10@Grams@butter\n" +
+    "1@Piece@egg\n" +
+    "0.5@Teaspoon@vanilla extract\n" +
+    "0.25@Cups@milk\n" +
+    "1@Teaspoon@cinnamon\n" +
+    "1@Pinch@salt\n" +
+    "$Instructions\n" +
+    "In a shallow bowl, whisk together the egg, milk, vanilla extract, cinnamon, and salt until well combined.\n" +
+    "Melt the butter in a large non-stick skillet over medium heat.\n" +
+    "Dip each slice of bread into the egg mixture, making sure to coat both sides.\n" +
+    "Place the coated bread in the skillet and cook until golden brown, about 2-3 minutes per side.\n" +
+    "Sprinkle the chocolate chips over the top of each slice of bread and let them melt for a minute or two.\n" +
+    "Using a spatula, fold the bread in half, pressing gently to melt the chocolate chips and seal the toast together.\n" +
+    "Serve immediately and enjoy your delicious Chocolate French Toast!";
   recipe.extra = "";
   recipe.ingredients2 = [];
   recipe.instructions = "";
