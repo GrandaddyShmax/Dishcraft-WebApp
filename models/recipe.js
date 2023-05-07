@@ -228,9 +228,14 @@ class Recipe {
     //return (this.rating = ((this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length) / 5).toFixed(2));
 
     //attempt at different weight for each rating?
+    if (!rating.rating1) rating.rating1 = [];
+    if (!rating.rating2) rating.rating2 = [];
+    if (!rating.rating3) rating.rating3 = [];
+    if (!rating.rating4) rating.rating4 = [];
+    if (!rating.rating5) rating.rating5 = [];
     const total =
       rating.rating1.length + rating.rating2.length + rating.rating3.length + rating.rating4.length + rating.rating5.length;
-    if (total == 0) return { avg: "0.00", total: "0", star: 0 };
+    if (total == 0) return { avg: "0.00", total: 0, star: 0 };
     const avg =
       (rating.rating1.length * 1 +
         rating.rating2.length * 2 +
