@@ -9,7 +9,7 @@ describe(testLabel + " Checking Admin features...", function () {
   it("Manage Users page", () => {
     request(app)
       .get("/admin/manageusers")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -18,7 +18,7 @@ describe(testLabel + " Checking Admin features...", function () {
   it("Manage Recipes page", () => {
     request(app)
       .get("/admin/managerecipes")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -27,7 +27,25 @@ describe(testLabel + " Checking Admin features...", function () {
   it("Manage Categories page", () => {
     request(app)
       .get("/admin/managecategories")
-      .expect(200)
+      .expect(302) //redirect
+      .end(function (err, response) {
+        assert.equal(response.header["content-type"], "text/html; charset=utf-8");
+        setTimeout(() => done(), 1000);
+      });
+  });
+  it("Manage Ingredients page", () => {
+    request(app)
+      .get("/admin/manageingredients")
+      .expect(302) //redirect
+      .end(function (err, response) {
+        assert.equal(response.header["content-type"], "text/html; charset=utf-8");
+        setTimeout(() => done(), 1000);
+      });
+  });
+  it("View Suggestions page", () => {
+    request(app)
+      .get("/admin/viewsuggestions")
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);

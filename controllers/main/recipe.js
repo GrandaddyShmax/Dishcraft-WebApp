@@ -41,16 +41,13 @@ router.post("/recipe", async (req, res) => {
     const { success, bookmarks } = await user.unBookmark(session.recipe.id);
     session.user.bookmarks = bookmarks;
   } else if (buttonType === "report") {
-    const recipe = new Recipe(null, session.recipe.id);
-    await recipe.fetchRecipe();
+    const recipe = new Recipe(session.recipe);
     await recipe.reportFunc(session.user.id);
     session.recipe = recipe;
   }
 
   if (rating) {
-    const recipe = new Recipe(null, session.recipe.id);
-    await recipe.fetchRecipe();
-    //console.log(recipe);
+    const recipe = new Recipe(session.recipe);
     await recipe.voteRating(session.user.id, rating);
     session.recipe = recipe;
   }

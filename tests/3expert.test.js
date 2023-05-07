@@ -14,5 +14,14 @@ describe(testLabel + " Checking Expert Cook features...", function () {
       setTimeout(() => done(), 1000);
     }
   });
+  it("Bookmarks page", () => {
+    try {
+      request(app).get("/bookmarks");
+    } catch {
+      //can't access without being logged as an expert
+      setTimeout(() => done(), 1000);
+    }
+  });
+
   after(() => console.log("  " + testLabel + " Done checking Expert Cook features."));
 });

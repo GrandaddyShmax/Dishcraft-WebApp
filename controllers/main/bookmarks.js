@@ -7,6 +7,7 @@ const { Recipe } = require("../../models/recipe");
 
 router.get("/bookmarks", async (req, res) => {
   var session = req.session;
+  if (!session.user) return res.redirect("/");
   const recipes = await Recipe.fetchRecipes(null, session.user.bookmarks);
   session.recipe = null;
   res.render("template", {

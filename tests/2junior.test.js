@@ -9,7 +9,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
   it("Login page", () => {
     request(app)
       .get("/")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -19,7 +19,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
     request(app)
       .post("/")
       .send({ userName: "test", password: "000000", submit: "login" })
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -28,7 +28,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
   it("Logging out", () => {
     request(app)
       .get("/logout")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -37,7 +37,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
   it("Registration page", () => {
     request(app)
       .get("/register")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -55,7 +55,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
   it("Home page", () => {
     request(app)
       .get("/home")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -72,7 +72,7 @@ describe(testLabel + " Checking Junior Cook features...", function () {
   it("Assistant page", () => {
     request(app)
       .get("/assistant")
-      .expect(200)
+      .expect(302) //redirect
       .end(function (err, response) {
         assert.equal(response.header["content-type"], "text/html; charset=utf-8");
         setTimeout(() => done(), 1000);
@@ -86,5 +86,38 @@ describe(testLabel + " Checking Junior Cook features...", function () {
       setTimeout(() => done(), 1000);
     }
   });
+  it("Searching recipes", () => {
+    request(app)
+      .post("/search")
+      .send({ search: "bread" })
+      .expect(302) //redirect
+      .end(function (err, response) {
+        assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
+        setTimeout(() => done(), 1000);
+      });
+  });
+  it("Filtering recipes", () => {
+    request(app)
+      .post("/search")
+      .send({ filter: "Gluten" })
+      .expect(302) //redirect
+      .expect("Location", "/home")
+      .end(function (err, response) {
+        assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
+        setTimeout(() => done(), 1000);
+      });
+  });
+  it("Sorting recipes", () => {
+    request(app)
+      .post("/search")
+      .send({ category: "energy", dir: "ascend" })
+      .expect(302) //redirect
+      .expect("Location", "/home")
+      .end(function (err, response) {
+        assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
+        setTimeout(() => done(), 1000);
+      });
+  });
+
   after(() => console.log("  " + testLabel + " Done checking Junior Cook features."));
 });

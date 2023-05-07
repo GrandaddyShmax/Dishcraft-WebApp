@@ -13,10 +13,18 @@ class Recipe {
         [
           "id",
           "userID",
+          "user",
           "recipeName",
           "recipeImages",
-          "userRating",
           "rating",
+          "rating1",
+          "rating2",
+          "rating3",
+          "rating4",
+          "rating5",
+          "ratingFancy",
+          "report",
+          "userRating",
           "aiMade",
           "ingredients",
           "instructions",
@@ -113,9 +121,9 @@ class Recipe {
     if (filter) filter = await this.fetchFilter(filter);
     let recipes = [];
     let recipesArr;
-    if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: { $in: bookmarks } });
+    if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
     else recipesArr = await schemas.Recipe.find({});
-    for await (const recipe of recipesArr) {
+    for (const recipe of recipesArr) {
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:
@@ -222,7 +230,7 @@ class Recipe {
     //attempt at different weight for each rating?
     const total =
       rating.rating1.length + rating.rating2.length + rating.rating3.length + rating.rating4.length + rating.rating5.length;
-    if (total == 0) return 0.0;
+    if (total == 0) return { avg: "0.00", total: "0", star: 0 };
     const avg =
       (rating.rating1.length * 1 +
         rating.rating2.length * 2 +
@@ -287,7 +295,6 @@ class Recipe {
       await schemas.Recipe.updateOne({ _id: this.id }, { fullRating: newRating });
       //Recipe.updateRatingNum();
       this.refreshRating(newRating);
-      console.log(this);
       return true;
     } catch (error) {
       console.log(error);
