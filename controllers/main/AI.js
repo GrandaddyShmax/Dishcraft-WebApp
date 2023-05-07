@@ -1,24 +1,24 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+const { schemas } = require("../../schemas/paths");
 //[Clases]
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
 //[API]
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
-//disable AI to avoid accidental exceeding request limits during testing
-const disabled = true;
+//disable AI *in database* to avoid accidental exceeding request limits during testing
 const msg = "A.I. is currently disabled!";
 //[Aid]
 const { offloadFields, handleIngAdding } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
-const recipe = require("../../schemas/recipe");
-`1`;
+
 //display assistant page
 router.get("/assistant", async (req, res) => {
   const sess = req.session;
+  const access = await schemas.AIAccess.findOne({});
 
   //premium cleanup service
   let nutritions = defNutritions, //default values in jsons/views.json
@@ -46,7 +46,7 @@ router.get("/assistant", async (req, res) => {
       extra: "",
       instructions: "",
     };
-    if (disabled) {
+    if (access.disabled) {
       sess.recipe.extra = msg;
       sess.recipe.instructions = msg;
     }
@@ -68,7 +68,9 @@ router.get("/assistant", async (req, res) => {
 //get ingredients from assistant page
 router.post("/assistant", async (req, res) => {
   const sess = req.session;
+  if (!sess.user) return res.redirect("/");
   var recipe = sess.recipe;
+  const access = await schemas.AIAccess.findOne({});
   const [buttonPress, index] = req.body.submit.split("&");
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
@@ -76,7 +78,7 @@ router.post("/assistant", async (req, res) => {
   //Generate recipe
   if (buttonPress == "generate") {
     //check ingredients exist in foodAPI:
-    if (!disabled) {
+    if (!access.disabled) {
       let status;
       for (let ingred of recipe.ingredients) {
         status = await Ingredient.checkIngredient(ingred.name);
@@ -89,10 +91,8 @@ router.post("/assistant", async (req, res) => {
     try {
       //parse prompt:
       const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
-      //console.log(recipe.ingredients);
-
       //code to talk with ai (can be disabled to avoid exceeding request limits)
-      if (disabled) {
+      if (access.disabled) {
         req.session.recipe = parseAssToRecipeTest();
       } else {
         const assistant = getAssistant();
@@ -103,7 +103,8 @@ router.post("/assistant", async (req, res) => {
 
       //calculate nutritional value & check allergies:
       req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true);
-      req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
+      const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
+      req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       sess.flag = true;
       sess.recipeTrue = true;
@@ -125,8 +126,8 @@ router.post("/assistant", async (req, res) => {
       if (recipe.imagesData.img1) images.push(recipe.imagesData.img1);
       if (recipe.imagesData.img2) images.push(recipe.imagesData.img2);
       if (recipe.imagesData.img3) images.push(recipe.imagesData.img3);
-      for (var i = images.length; i < 3; i++) images.push({ url: "" });
     }
+    for (var i = images.length; i < 3; i++) images.push({ url: "" });
     recipe.recipeImages = images;
     let AiRecipe = new Recipe(recipe);
     // add the recipe to the db

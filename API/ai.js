@@ -101,32 +101,34 @@ function parseAssToRecipeTest() {
   recipe = {
     ai: true,
     ingredients: [
-      { amount: 5, unit: "Pieces", name: "bread" },
-      { amount: 2, unit: "Tablespoon", name: "chocolate" },
-      { amount: 10, unit: "Grams", name: "butter" },
-      { amount: 1, unit: "Pieces", name: "egg" },
+      { amount: "0.1", unit: "Cups", name: "milk" },
+      { amount: 8, unit: "Ounces", name: "linguine pasta" },
+      { amount: 2, unit: "Tablespoon", name: "unsalted butter" },
     ],
   };
   response =
     "$Recipe name\n" +
-    "Chocolate French Toast\n" +
+    "Creamy Garlic Parmesan Pasta\n" +
     "$Ingredients\n" +
-    "5@Pieces@bread\n" +
-    "2@Tablespoons@chocolate chips\n" +
-    "10@Grams@butter\n" +
-    "1@Piece@egg\n" +
-    "0.5@Teaspoon@vanilla extract\n" +
-    "0.25@Cups@milk\n" +
-    "1@Teaspoon@cinnamon\n" +
-    "1@Pinch@salt\n" +
+    "0.1@Cups@milk\n" +
+    "8@Ounces@linguine pasta\n" +
+    "2@Tablespoons@unsalted butter\n" +
+    "4@Cloves@garlic, minced\n" +
+    "1@Cup@heavy cream\n" +
+    "1/2@Cup@grated Parmesan cheese\n" +
+    "1/2@Teaspoon@salt\n" +
+    "1/4@Teaspoon@black pepper\n" +
+    "1/4@Cup@chopped fresh parsley leaves\n" +
     "$Instructions\n" +
-    "In a shallow bowl, whisk together the egg, milk, vanilla extract, cinnamon, and salt until well combined.\n" +
-    "Melt the butter in a large non-stick skillet over medium heat.\n" +
-    "Dip each slice of bread into the egg mixture, making sure to coat both sides.\n" +
-    "Place the coated bread in the skillet and cook until golden brown, about 2-3 minutes per side.\n" +
-    "Sprinkle the chocolate chips over the top of each slice of bread and let them melt for a minute or two.\n" +
-    "Using a spatula, fold the bread in half, pressing gently to melt the chocolate chips and seal the toast together.\n" +
-    "Serve immediately and enjoy your delicious Chocolate French Toast!";
+    "In a large pot, bring water to a boil and cook the linguine pasta according to the package instructions. Drain and set aside.\n" +
+    "In a separate skillet, melt the butter over medium heat. Add the minced garlic and cook for about 2 minutes until fragrant and lightly golden.\n" +
+    "Reduce the heat to low and pour in the milk. Stir well to combine with the garlic and butter.\n" +
+    "Slowly pour in the heavy cream while continuously stirring. Allow the mixture to simmer gently for about 5 minutes, until it thickens slightly.\n" +
+    "Add the grated Parmesan cheese, salt, and black pepper to the sauce. Stir until the cheese has melted and the sauce is smooth and creamy.\n" +
+    "Add the cooked linguine pasta to the skillet and toss it in the sauce until well coated.\n" +
+    "Remove the skillet from the heat and sprinkle the chopped parsley over the pasta. Toss again to incorporate the parsley.\n" +
+    "Serve the creamy garlic Parmesan pasta immediately and enjoy!\n" +
+    "Note: Feel free to adjust the seasoning according to your taste preferences. You can also add cooked chicken, shrimp, or vegetables to make it a heartier dish.";
   recipe.extra = "";
   recipe.ingredients2 = [];
   recipe.instructions = "";
@@ -145,6 +147,7 @@ function parseAssToRecipeTest() {
         case 1: //ingredients or extra ingredients
           var [amount, unit, name] = line.split("@");
           if (!parseInt(amount) && !parseFloat(amount)) amount = 0;
+          else amount = parseFloat(amount);
           if (!name && !units.includes(unit)) {
             name = unit;
             unit = "Pieces";
@@ -167,6 +170,7 @@ function parseAssToRecipeTest() {
       }
     }
   }
+  console.log(recipe);
   return recipe;
 }
 //[External access]

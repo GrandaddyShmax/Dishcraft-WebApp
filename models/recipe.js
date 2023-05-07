@@ -191,7 +191,12 @@ class Recipe {
   }
   //sort by nutritional value:
   static checkSort(sort, recipes) {
-    if (!sort) return recipes;
+    if (!sort)
+      return recipes.sort((a, b) => {
+        if (a.uploadDate > b.uploadDate) return 1;
+        if (a.uploadDate < b.uploadDate) return -1;
+        return 0;
+      });
     const { category, dir } = sort;
     const sign = dir == "descend" ? -1 : 1;
     return recipes.sort((a, b) => {

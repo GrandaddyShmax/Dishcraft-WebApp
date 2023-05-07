@@ -68,8 +68,8 @@ router.post("/createRecipe", async (req, res) => {
         if (recipe.imagesData.img1) images.push(recipe.imagesData.img1);
         if (recipe.imagesData.img2) images.push(recipe.imagesData.img2);
         if (recipe.imagesData.img3) images.push(recipe.imagesData.img3);
-        for (var i = images.length; i < 3; i++) images.push({ url: "" });
       }
+      for (var i = images.length; i < 3; i++) images.push({ url: "" });
       recipeData.recipeImages = images;
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
