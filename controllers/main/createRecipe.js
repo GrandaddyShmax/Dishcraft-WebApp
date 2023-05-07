@@ -71,7 +71,6 @@ router.post("/createRecipe", async (req, res) => {
         for (var i = images.length; i < 3; i++) images.push({ url: "" });
       }
       recipeData.recipeImages = images;
-      console.log(recipeData);
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
       sess.recipe = null;
@@ -88,19 +87,22 @@ router.post("/uploadImage2", uploadImage.single("image2"), async (req, res) => h
 router.post("/uploadImage3", uploadImage.single("image3"), async (req, res) => handleImage(req, res, 3));
 function handleImage(req, res, index) {
   var sess = req.session;
-  offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
-  //Update ingredients & "addmore" & "remove"
-  handleIngAdding(req, res);
+  if (!sess.recipe) sess.recipe = new Object();
+  if (sess.recipe.create) {
+    offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
+    //Update ingredients & "addmore" & "remove"
+    handleIngAdding(req, res);
+  }
   if (req.file) {
-    if (!sess.recipe) sess.recipe = new Object();
     if (!sess.recipe.imagesData) sess.recipe.imagesData = new Object();
     const url = path.resolve("./public/images/temp/" + req.file.filename);
     sess.recipe.imagesData["img" + index] = {
       data: fs.readFileSync(url),
       contentType: "image/png",
     };
+    if (!sess.recipe.recipeImages) sess.recipe.recipeImages = new Object();
     sess.recipe.recipeImages["img" + index] = Recipe.parseImage(sess.recipe.imagesData["img" + index]);
-    //fs.unlinkSync(url);
+    fs.unlinkSync(url);
   }
   return res.redirect(req.get("referer"));
 }

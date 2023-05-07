@@ -25,6 +25,76 @@
           <p class="text-latte text-3xl font-bold">
             <%=recipe.recipeName%>
           </p>
+          <%if (recipeTrue) { %>
+            <div class="flex px-6 pt-4">
+              <div class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+                <%if(recipe.recipeImages && recipe.recipeImages.img1) {%>
+                  <img src="<%= recipe.recipeImages.img1 %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+                <%}%>
+                <label class="w-full h-full"> <!-- hide when there is picture -->
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-full h-full cursor-pointer p-28"
+                  >
+                    <path
+                      d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <input name="image1" type='file' oninput="forceSubmit(true,1);" class="hidden w-full" />
+                </label>
+                <span class="sr-only">View details</span>
+              </div>
+              <div class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+                <%if(recipe.recipeImages && recipe.recipeImages.img2) {%>
+                  <img src="<%= recipe.recipeImages.img2 %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+                <%}%>
+                <label class="w-full h-full"> <!-- hide when there is picture -->
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-full h-full cursor-pointer p-28"
+                  >
+                    <path
+                      d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <input name="image2" type='file' oninput="forceSubmit(true,2);" class="hidden w-full" />
+                </label>
+                <span class="sr-only">View details</span>
+              </div>
+              <div onclick="clear(3)" class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
+                <%if(recipe.recipeImages && recipe.recipeImages.img3) {%>
+                  <img src="<%= recipe.recipeImages.img3 %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+                <%}%>
+                <label class="w-full h-full"> <!-- hide when there is picture -->
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-full h-full cursor-pointer p-28"
+                  >
+                    <path
+                      d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  <input name="image3" type='file' oninput="forceSubmit(true,3);" class="hidden w-full" />
+                </label>
+                <span class="sr-only">View details</span>
+              </div>
+            </div>
+          <%}%>
           <p class="pt-8 text-2xl text-latte">
             Ingredients:
           </p>
@@ -90,7 +160,7 @@
         </div>
         <div class="flex justify-end px-2 pt-2 pb-12">
           <%if (recipeTrue) { %>
-          <button value="publish" type="submit" name="submit" class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Share Recipe
+          <button value="publish" type="submit" name="submit" class="bg-espresso mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Publish
           </button>
           <% } %>
           <button value="generate" type="submit" name="submit" onclick="Generate()" class="bg-espresso flex mx-2 px-4 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Generate
@@ -143,12 +213,15 @@
     window.onbeforeunload = (e) => 
       document.getElementById("loading").classList.remove("hidden");};
 
-  //allows to addmore&remove without validation    
-  function forceSubmit(submit){
+//allows to addmore&remove without validation   
+function forceSubmit(submit, index){
     rememberScroll();
     var form = document.getElementById("form")
     form.setAttribute("novalidate",true);
-    if(submit)
+    if(submit){
+      form.setAttribute("action","/uploadImage"+(index||""));
+      form.setAttribute("enctype","multipart/form-data");
       form.dispatchEvent(new Event('submit'));
-  }    
+    }
+  }
 </script>

@@ -8,14 +8,14 @@ const { Category } = require("../../models/category");
 //[API]
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //disable AI to avoid accidental exceeding request limits during testing
-const disabled = true; 
+const disabled = true;
 const msg = "A.I. is currently disabled!";
 //[Aid]
 const { offloadFields, handleIngAdding } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
 const recipe = require("../../schemas/recipe");
-`1`
+`1`;
 //display assistant page
 router.get("/assistant", async (req, res) => {
   const sess = req.session;
@@ -37,7 +37,15 @@ router.get("/assistant", async (req, res) => {
   }
 
   if (!sess.recipe || !sess.recipe.ai) {
-    sess.recipe = { ai: true, recipeName: "Recipe name", ingredients: [defIngs], extra: "", instructions: "" };
+    sess.recipe = {
+      ai: true,
+      recipeName: "Recipe name",
+      recipeImages: new Object(),
+      imagesData: new Object(),
+      ingredients: [defIngs],
+      extra: "",
+      instructions: "",
+    };
     if (disabled) {
       sess.recipe.extra = msg;
       sess.recipe.instructions = msg;
@@ -52,7 +60,7 @@ router.get("/assistant", async (req, res) => {
     user: sess.user || null,
     errorIngred: error,
     nutritions: nutritions,
-    allergies: allergies, 
+    allergies: allergies,
     recipeTrue: sess.recipeTrue || false,
   });
 });
@@ -93,12 +101,10 @@ router.post("/assistant", async (req, res) => {
         req.session.recipe = parseAssToRecipe(response, recipe);
       }
 
-
-      console.log(req.session.recipe); //test
       //calculate nutritional value & check allergies:
       req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true);
       req.session.nutritions = await Ingredient.calcRecipeNutVal(req.session.recipe.ingredients, true);
-      req.session.recipe.nutritions= req.session.nutritions; //taking the nutritions into the recipe
+      req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       sess.flag = true;
       sess.recipeTrue = true;
     } catch (error) {
@@ -107,20 +113,26 @@ router.post("/assistant", async (req, res) => {
       sess.recipe.instructions = "Failed to generate recipe, please try again later.";
     }
   }
-if (buttonPress == "publish"){ //publish the recipe
-  console.log(recipe);
-let ing2 = recipe.ingredients2;
-let ing1 = recipe.ingredients.concat(ing2);
-recipe.aiMade = true; //made by AI
-recipe.userID = sess.user.id; //userID
-recipe.ingredients= ing1;
-let AiRecipe = new Recipe(recipe);
-console.log(AiRecipe); //test
-// add the recipe to the db
-let { success, msg } = await AiRecipe.addRecipe();
-      if (success) return res.redirect("/home");
-}
-
+  if (buttonPress == "publish") {
+    //publish the recipe
+    let ing2 = recipe.ingredients2;
+    let ing1 = recipe.ingredients.concat(ing2);
+    recipe.aiMade = true; //made by AI
+    recipe.userID = sess.user.id; //userID
+    recipe.ingredients = ing1;
+    var images = [];
+    if (recipe.imagesData) {
+      if (recipe.imagesData.img1) images.push(recipe.imagesData.img1);
+      if (recipe.imagesData.img2) images.push(recipe.imagesData.img2);
+      if (recipe.imagesData.img3) images.push(recipe.imagesData.img3);
+      for (var i = images.length; i < 3; i++) images.push({ url: "" });
+    }
+    recipe.recipeImages = images;
+    let AiRecipe = new Recipe(recipe);
+    // add the recipe to the db
+    let { success, msg } = await AiRecipe.addRecipe();
+    if (success) return res.redirect("/home");
+  }
   return res.redirect(req.get("referer"));
 });
 
