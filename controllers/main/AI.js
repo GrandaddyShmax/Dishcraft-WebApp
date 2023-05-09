@@ -25,7 +25,8 @@ router.get("/assistant", async (req, res) => {
   let nutritions = defNutritions, //default values in jsons/views.json
     allergies = "",
     error = "",
-    alert = "";
+    alert = "",
+    recipeTrue = false;
   if (sess.flag) {
     sess.flag = false;
     nutritions = sess.nutritions;
@@ -40,6 +41,11 @@ router.get("/assistant", async (req, res) => {
   if (sess.alert) {
     alert = sess.alert;
     sess.alert = "";
+  }
+  if (sess.recipeTrue) 
+  {
+    recipeTrue = sess.recipeTrue;
+    sess.recipeTrue = false;
   }
 
   if (!sess.recipe || !sess.recipe.ai) {
@@ -67,7 +73,7 @@ router.get("/assistant", async (req, res) => {
     errorIngred: error,
     nutritions: nutritions,
     allergies: allergies,
-    recipeTrue: sess.recipeTrue || false,
+    recipeTrue: recipeTrue,
     alert: alert
   });
 });
