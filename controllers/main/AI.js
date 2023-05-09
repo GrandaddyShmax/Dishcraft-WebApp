@@ -6,6 +6,7 @@ const { schemas } = require("../../schemas/paths");
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
+const { Expert } = require("../../models/user");
 //[API]
 const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //disable AI *in database* to avoid accidental exceeding request limits during testing
@@ -23,7 +24,8 @@ router.get("/assistant", async (req, res) => {
   //premium cleanup service
   let nutritions = defNutritions, //default values in jsons/views.json
     allergies = "",
-    error = "";
+    error = "",
+    alert = "";
   if (sess.flag) {
     sess.flag = false;
     nutritions = sess.nutritions;
@@ -34,6 +36,10 @@ router.get("/assistant", async (req, res) => {
   if (sess.errorIngred != "") {
     error = sess.errorIngred;
     sess.errorIngred = "";
+  }
+  if (sess.alert) {
+    alert = sess.alert;
+    sess.alert = "";
   }
 
   if (!sess.recipe || !sess.recipe.ai) {
@@ -62,6 +68,7 @@ router.get("/assistant", async (req, res) => {
     nutritions: nutritions,
     allergies: allergies,
     recipeTrue: sess.recipeTrue || false,
+    alert: alert
   });
 });
 
@@ -112,6 +119,13 @@ router.post("/assistant", async (req, res) => {
       console.log(error);
       sess.recipe.extra = "Failed to generate recipe, please try again later.";
       sess.recipe.instructions = "Failed to generate recipe, please try again later.";
+    }
+    //alert the unaware expert user about his unhealthy way of life
+    if (sess.user.role > 1) {
+      const user = new Expert(null, sess.user.id);
+      user.latest = sess.user.latest;
+      user.updateLatest(req.session.nutritions);
+      sess.alert = user.checkWarnings();
     }
   }
   if (buttonPress == "publish") {

@@ -67,9 +67,13 @@ class Ingredient {
     for (let ingred of ingredArr) {
       if (check && !(await Ingredient.checkIngredient(ingred.name))) continue;
       let ingredient = await Ingredient.fetchIngredient(ingred.name);
+
       if (!ingredient) {
         ingredient = new Ingredient(await connection.getData(ingred.name)); 
       }
+
+      console.log(ingredient); //
+      
       const unit = ingred.unit.toLowerCase();
       const amount = parseFloat(ingred.amount);
       let valueByUnit;
@@ -79,7 +83,7 @@ class Ingredient {
       } else {
         valueByUnit = calcPerGrams(ingred.unit.toLowerCase(), parseFloat(ingred.amount));
       }
-      energy += valueByUnit * ingredient.energy;
+      energy += (valueByUnit * ingredient.energy) / 100;
       fattyAcids += (valueByUnit * ingredient.fattyAcids) / 1000;
       sodium += (valueByUnit * ingredient.sodium) / 1000;
       sugar += (valueByUnit * ingredient.sugar) / 1000;

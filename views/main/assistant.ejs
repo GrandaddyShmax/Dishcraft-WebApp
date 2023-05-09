@@ -15,11 +15,13 @@
           </div>
         </div>
       </div>
-      <div class="flex-none w-full h-20 mb-4">
-        <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
-          testing
+      <%if (user.role > 1 && alert != "") { %>
+        <div class="flex-none w-full h-20 mb-4">
+          <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
+            <%=alert%>
+          </div>
         </div>
-      </div>
+      <%}%>
       <form action="/assistant" method="POST" id="form" class="flex flex-1 flex-col">
         <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <p class="text-latte text-3xl font-bold">

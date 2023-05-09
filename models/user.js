@@ -6,13 +6,13 @@ const { capitalize, offloadFields } = require("../utils");
 const saltRounds = 10;
 const roles = { "junior": 1, "expert": 2, "admin": 3 };
 
-//[advised nutrional average]//
+//[advised nutrional daily]//
 const nutAvgVals = {
-  "energy": { min: 1600, max: 3600 },
-  "fattyAcids": { min: 20, max: 200 },
-  "sodium": { min: 0.015, max: 0.02 },
-  "sugar": { min: 20, max: 200 },
-  "protein": { min: 20, max: 200 }
+  "energy": { min: 1500, max: 3600 },
+  "fattyAcids": { min: 0.5, max: 13 },
+  "sodium": { min: 0.1, max: 2.3 },
+  "sugar": { min: 3, max: 36 },
+  "protein": { min: 0.8, max: 1.6 }
 };
 //[nutritional units]//
 const nutUnits = [ "energy", "fattyAcids", "sodium", "sugar", "protein" ];
@@ -158,12 +158,18 @@ class Expert extends User {
   }
   //update latest recipes nutritional value
   async updateLatest(nutritions) {
-    while (this.id.latest.length >= 5) {
-      this.id.latest.shift();
-    }
-    this.id.latest.push(nutritions);
+    const today = new Date(Date.now());
+    const dateIsToday = (recipe) => {
+      const date = new Date(recipe.date);
+      return date.getFullYear === today.getFullYear &&
+             date.getMonth === today.getMonth &&
+             date.getDate === today.getDate;
+      }
+    const filtered = (this.latest).filter(recipe => dateIsToday(recipe));
+    nutritions.date = today;
+    filtered.push(nutritions);
     try {
-      await schemas.User.updateOne({ _id: this.id.id}, { latest: this.id.latest });
+      await schemas.User.updateOne({ _id: this.id }, { latest: filtered });
       return true;
     } catch {
       return false;
@@ -171,46 +177,46 @@ class Expert extends User {
   }
   // find the warnings according to the latest searches
   checkWarnings() {
-    if (this.id.latest.length < 3) { //not enough information
-      return "";
-    }
     const lowWarning = "Insufficient consumption of ";
     const highWarning = "Excessive consumption of ";
-    let low = "", high = "";
-    const nutAvg = this.calcNutAvg();
+    let enter = "";
+    let low = "", high = "", flagMin = true;
+
+    if (this.latest.length < 3) {
+      flagMin = false;
+    }
+    const nutAvg = this.calcNutSum();
     let index = 0;
 
     for (const unit of nutUnits) {
-      if (nutAvgVals[unit].min > nutAvg[index]) {
+      if (flagMin && nutAvgVals[unit].min > nutAvg[index]) {
         if (low === "") { low += lowWarning; }
         else { low += ", "; }
         low += unitFormat[unit]; 
       }
-      else if (nutAvgVals[unit].max < nutAvg[index]) { 
+      if (nutAvgVals[unit].max < nutAvg[index]) { 
         if (high === "") { high += highWarning; }
         else { high += ", "; }
         high += unitFormat[unit]; 
       }
       index++;
     }
-    return low + '\n' + high;
+    if (low !== "" && high !== "") enter = " and ";
+    return low + enter + high;
   }
   // calculate accumulative nutritional average value from the latest searches
-  calcNutAvg() {
-    let nutSum = [ 0, 0, 0, 0, 0 ], nutAvg = [];;
-    for (const nutritions of this.id.latest) {
+  calcNutSum() {
+    let nutSum = [ 0, 0, 0, 0, 0 ];
+    for (const nutritions of this.latest) {
       nutSum = [
-        nutSum[0] + parseFloat(nutritions.energy), 
-        nutSum[1] + parseFloat(nutritions.fattyAcids), 
-        nutSum[2] + parseFloat(nutritions.sodium), 
-        nutSum[3] + parseFloat(nutritions.sugar), 
-        nutSum[4] + parseFloat(nutritions.protein) 
+        nutSum[0] += parseFloat(nutritions.energy), 
+        nutSum[1] += parseFloat(nutritions.fattyAcids), 
+        nutSum[2] += parseFloat(nutritions.sodium), 
+        nutSum[3] += parseFloat(nutritions.sugar), 
+        nutSum[4] += parseFloat(nutritions.protein) 
       ];
     }
-    for (let i = 0; i < nutSum.length; i++) {
-      nutAvg.push(nutSum[i] / this.id.latest.length)
-    }
-    return nutAvg;
+    return nutSum;
   }
 
   async bookmark(recipe) {
