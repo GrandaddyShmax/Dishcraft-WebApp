@@ -29,12 +29,11 @@
         <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
           <ul class="w-full h-full flex flex-col p-4 gap-4">
             <!-- Insert Suggestions here -->
-            <form action="/admin/viewsuggestions" method="POST" >
             <% 
               var index = 0;
               for (const suggestion of suggestions) 
             { %>
-              <div class="flex border w-full pt-2 items-start justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg"> 
+              <form action="/admin/viewsuggestions" method="POST" class="flex border w-full pt-2 items-start justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
                 <div class="flex flex-col py-4 pl-3">
                   <p class="font-bold text-xl"><%= suggestion.suggestionName %></p>
                   <p class="pt-2 whitespace-pre-line break-words">
@@ -43,11 +42,10 @@
                 </div>
                 <button id="remove" type="submit" name="submit" value="<%=suggestions[index]._id%>" class="bg-espresso mx-2 px-6 mt-2 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
                 </button>
-              </div>
+              </form>
             <% 
               index++;
             } %>
-          </form>
           </ul>
         </div>
       </div>
