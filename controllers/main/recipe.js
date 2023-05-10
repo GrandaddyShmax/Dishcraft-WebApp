@@ -32,8 +32,6 @@ router.post("/recipe", async (req, res) => {
   user.bookmarks = session.user.bookmarks;
   let success = true;
 
-  //console.log(rating);
-
   if (buttonType === "bookmark") {
     const { success, bookmarks } = await user.bookmark(session.recipe.id);
     session.user.bookmarks = bookmarks;

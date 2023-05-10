@@ -38,6 +38,16 @@ pipeline {
         sh 'npm test'
       }
     }
+    stage('Check for code duplicates') {
+      steps {
+        sh 'npm cpd'
+      }
+    }
+    stage('Check for complience with coding rules') {
+      steps {
+        sh 'npm cpd'
+      }
+    }
   }
   post {
     failure {

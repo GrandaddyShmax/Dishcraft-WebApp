@@ -12,14 +12,23 @@ class Category {
   //find category for ingredients and return text or object
   static async findCategory(ingredients, type, text, lowerCase) {
     var alg = [];
+    let categories;
+    if (type) categories = await schemas.Category.find({ categoryType: type });
+    else categories = await schemas.Category.find({});
     for (const ing of ingredients) {
-      let categories;
-      if (type) categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase(), categoryType: type });
-      else categories = await schemas.Category.find({ ingredients: ing.name.toLowerCase() });
-      if (categories && categories.length > 0)
-        for (const category of categories)
+      for (const category of categories) {
+        let catIngs = category.ingredients;
+        let name = ing.name.toLowerCase();
+        if (name.charAt(name.length - 1) == "s") name = name.slice(0, -1);
+        /* jshint -W083 */
+        let result = catIngs.some((cat) => {
+          return cat.includes(name) || cat.includes(name + "s") || name.includes(cat) || (name + "s").includes(cat);
+        });
+        if (result) {
           if (lowerCase) alg.push(category.categoryName.toLowerCase());
           else alg.push(category.categoryName);
+        }
+      }
     }
     alg = Array.from(new Set(alg)); //remove duplicates
     if (text) return alg.length > 0 ? alg.join(", ") + "." : "None.";

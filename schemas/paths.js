@@ -2,7 +2,7 @@
 const fs = require("fs"); //accessing other folders & files
 
 //[Object to store schemas]
-const schemas = new Object();
+const schemas = {};
 
 //[Prepare schemas]
 const aidFiles = fs.readdirSync(`./schemas`).filter((file) => file.endsWith(".js"));

@@ -54,7 +54,7 @@ function endPlural(number, string) {
 
 //Update fields in object
 function offloadFields(fields, object1, object2) {
-  if (!object1) object1 = new Object();
+  if (!object1) object1 = {};
   if (object2) {
     //Fill fields from array
     if (Array.isArray(object2)) {

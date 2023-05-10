@@ -10,7 +10,19 @@
   "scripts": {
     "start": "node index.js",
     "test": "mocha 'tests/**.test.js' --exit",
+    "cpd": "jscpd ./",
+    "grunt": "grunt jshint",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css"
+  },
+  "jscpd": {
+    "threshold": 1,
+    "minTokens": 70,
+    "ignore": [
+      "node_modules/**",
+      "views/**",
+      "tests/**"
+    ],
+    "gitignore": true
   },
   "repository": {
     "type": "git",
@@ -38,6 +50,10 @@
   },
   "devDependencies": {
     "assert": "^2.0.0",
+    "git": "^0.1.5",
+    "grunt": "^1.6.1",
+    "grunt-contrib-jshint": "^3.2.0",
+    "jscpd": "^3.5.9",
     "mocha": "^10.2.0",
     "supertest": "^6.3.3"
   }

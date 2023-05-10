@@ -184,7 +184,10 @@ class Recipe {
     for (const ing of recipe.ingredients) {
       let name = ing.name.toLowerCase();
       if (name.charAt(name.length - 1) == "s") name = name.slice(0 - 1);
-      let result = filter.includes(name) || filter.includes(name + "s");
+      /* jshint -W083 */
+      let result = filter.some((cat) => {
+        return cat.includes(name) || cat.includes(name + "s") || name.includes(cat) || (name + "s").includes(cat);
+      });
       if (result) return true;
     }
     return false;
@@ -229,10 +232,6 @@ class Recipe {
   }
 
   static updateRatingNum(rating) {
-    //console.log("test"+rating1.length);
-    //return (this.rating = ((this.rating1.length + this.rating2.length + this.rating3.length + this.rating4.length + this.rating5.length) / 5).toFixed(2));
-
-    //attempt at different weight for each rating?
     if (!rating.rating1) rating.rating1 = [];
     if (!rating.rating2) rating.rating2 = [];
     if (!rating.rating3) rating.rating3 = [];
@@ -303,7 +302,6 @@ class Recipe {
     };
     try {
       await schemas.Recipe.updateOne({ _id: this.id }, { fullRating: newRating });
-      //Recipe.updateRatingNum();
       this.refreshRating(newRating);
       return true;
     } catch (error) {

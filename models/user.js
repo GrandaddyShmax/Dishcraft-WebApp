@@ -4,21 +4,20 @@ const bcrypt = require("bcrypt");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 const saltRounds = 10;
-const roles = { "junior": 1, "expert": 2, "admin": 3 };
+const roles = { junior: 1, expert: 2, admin: 3 };
 
 //[advised nutrional daily]//
 const nutAvgVals = {
-  "energy": { min: 1500, max: 3600 },
-  "fattyAcids": { min: 0.5, max: 13 },
-  "sodium": { min: 0.1, max: 2.3 },
-  "sugar": { min: 3, max: 36 },
-  "protein": { min: 0.8, max: 1.6 }
+  energy: { min: 1500, max: 3600 },
+  fattyAcids: { min: 0.5, max: 13 },
+  sodium: { min: 0.1, max: 2.3 },
+  sugar: { min: 3, max: 36 },
+  protein: { min: 0.8, max: 1.6 },
 };
 //[nutritional units]//
-const nutUnits = [ "energy", "fattyAcids", "sodium", "sugar", "protein" ];
+const nutUnits = ["energy", "fattyAcids", "sodium", "sugar", "protein"];
 //[unit's format]//
-const unitFormat = { "energy": "Energy", "fattyAcids": "Fatty acids", "sodium": "Sodium", 
-  "sugar": "Sugar", "protein": "Protein" };
+const unitFormat = { energy: "Energy", fattyAcids: "Fatty acids", sodium: "Sodium", sugar: "Sugar", protein: "Protein" };
 
 /*[ Handle base class database ]*/
 class User {
@@ -49,7 +48,7 @@ class User {
       if (this.password !== this.passwordRep) return { successful: false, error: "password", message: "Passwords don't match" };
 
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
-      let role = isAdmin ? roles["admin"] : roles["junior"];
+      let role = isAdmin ? roles.admin : roles.junior;
 
       await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
@@ -59,7 +58,7 @@ class User {
         role: role,
         banned: false,
         latest: [],
-        bookmarks: []
+        bookmarks: [],
       });
       return { successful: true, message: "success" };
     } catch (
@@ -73,7 +72,7 @@ class User {
   /*[ Modifying data ]*/
   async upgradeUser() {
     try {
-      await schemas.User.updateOne({ _id: this.id }, { role: roles["expert"] });
+      await schemas.User.updateOne({ _id: this.id }, { role: roles.expert });
       return true;
     } catch {
       return false;
@@ -85,7 +84,11 @@ class User {
   async fetchUser() {
     let details = await schemas.User.findOne({ _id: this.id });
     if (details) {
-      offloadFields(["userName", "recipeImages", "email", "password", "avatar", "role", "banned", "latest", "bookmarks"], this, details);
+      offloadFields(
+        ["userName", "recipeImages", "email", "password", "avatar", "role", "banned", "latest", "bookmarks"],
+        this,
+        details
+      );
       return true;
     }
     return false;
@@ -106,7 +109,7 @@ class User {
           avatar: this.avatar,
           role: account.role,
           latest: account.latest,
-          bookmarks: account.bookmarks
+          bookmarks: account.bookmarks,
         },
       }; //succeseful login
     }
@@ -128,7 +131,7 @@ class Junior extends User {
   }
   //get all Junior Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: roles["junior"] });
+    let accounts = await schemas.User.find({ role: roles.junior });
     return accounts || [];
   }
 }
@@ -140,7 +143,7 @@ class Expert extends User {
   }
   //get all Expert Cook users from db
   static async fetchUsers() {
-    let accounts = await schemas.User.find({ role: roles["expert"] });
+    let accounts = await schemas.User.find({ role: roles.expert });
     return accounts || [];
   }
   //get all Junior&Expert Cook users from db
@@ -161,11 +164,9 @@ class Expert extends User {
     const today = new Date(Date.now());
     const dateIsToday = (recipe) => {
       const date = new Date(recipe.date);
-      return date.getFullYear === today.getFullYear &&
-             date.getMonth === today.getMonth &&
-             date.getDate === today.getDate;
-      }
-    const filtered = (this.latest).filter(recipe => dateIsToday(recipe));
+      return date.getFullYear === today.getFullYear && date.getMonth === today.getMonth && date.getDate === today.getDate;
+    };
+    const filtered = this.latest.filter((recipe) => dateIsToday(recipe));
     nutritions.date = today;
     filtered.push(nutritions);
     try {
@@ -180,7 +181,9 @@ class Expert extends User {
     const lowWarning = "Insufficient consumption of ";
     const highWarning = "Excessive consumption of ";
     let enter = "";
-    let low = "", high = "", flagMin = true;
+    let low = "",
+      high = "",
+      flagMin = true;
 
     if (this.latest.length < 3) {
       flagMin = false;
@@ -190,14 +193,20 @@ class Expert extends User {
 
     for (const unit of nutUnits) {
       if (flagMin && nutAvgVals[unit].min > nutAvg[index]) {
-        if (low === "") { low += lowWarning; }
-        else { low += ", "; }
-        low += unitFormat[unit]; 
+        if (low === "") {
+          low += lowWarning;
+        } else {
+          low += ", ";
+        }
+        low += unitFormat[unit];
       }
-      if (nutAvgVals[unit].max < nutAvg[index]) { 
-        if (high === "") { high += highWarning; }
-        else { high += ", "; }
-        high += unitFormat[unit]; 
+      if (nutAvgVals[unit].max < nutAvg[index]) {
+        if (high === "") {
+          high += highWarning;
+        } else {
+          high += ", ";
+        }
+        high += unitFormat[unit];
       }
       index++;
     }
@@ -206,14 +215,14 @@ class Expert extends User {
   }
   // calculate accumulative nutritional average value from the latest searches
   calcNutSum() {
-    let nutSum = [ 0, 0, 0, 0, 0 ];
+    let nutSum = [0, 0, 0, 0, 0];
     for (const nutritions of this.latest) {
       nutSum = [
-        nutSum[0] += parseFloat(nutritions.energy), 
-        nutSum[1] += parseFloat(nutritions.fattyAcids), 
-        nutSum[2] += parseFloat(nutritions.sodium), 
-        nutSum[3] += parseFloat(nutritions.sugar), 
-        nutSum[4] += parseFloat(nutritions.protein) 
+        (nutSum[0] += parseFloat(nutritions.energy)),
+        (nutSum[1] += parseFloat(nutritions.fattyAcids)),
+        (nutSum[2] += parseFloat(nutritions.sodium)),
+        (nutSum[3] += parseFloat(nutritions.sugar)),
+        (nutSum[4] += parseFloat(nutritions.protein)),
       ];
     }
     return nutSum;
@@ -222,16 +231,15 @@ class Expert extends User {
   async bookmark(recipe) {
     let filtered = this.bookmarks;
     filtered.push(recipe);
-    try {
-      await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
-      return { success: true, bookmarks: filtered };
-    } catch {
-      return { success: false, bookmarks: this.bookmarks };
-    }
+    return await this.updateBookmarks(filtered);
   }
 
   async unBookmark(recipe) {
-    const filtered = (this.bookmarks).filter(item => item !== recipe);
+    const filtered = this.bookmarks.filter((item) => item !== recipe);
+    return await this.updateBookmarks(filtered);
+  }
+
+  async updateBookmarks(filtered) {
     try {
       await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
       return { success: true, bookmarks: filtered };
@@ -240,6 +248,5 @@ class Expert extends User {
     }
   }
 }
-
 /*[ External access ]*/
 module.exports = { User, Admin, Junior, Expert };

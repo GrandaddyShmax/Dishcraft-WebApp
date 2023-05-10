@@ -22,11 +22,10 @@ router.get("/assistant", async (req, res) => {
   const access = await schemas.AIAccess.findOne({});
 
   //premium cleanup service
-  let nutritions = defNutritions, //default values in jsons/views.json
-    allergies = "",
-    error = "",
-    alert = "",
-    recipeTrue = false;
+  let nutritions = defNutritions; //default values in jsons/views.json
+  let allergies = "";
+  let error = "";
+  let alert = "";
   if (sess.flag) {
     sess.flag = false;
     nutritions = sess.nutritions;
@@ -42,18 +41,12 @@ router.get("/assistant", async (req, res) => {
     alert = sess.alert;
     sess.alert = "";
   }
-  if (sess.recipeTrue) 
-  {
-    recipeTrue = sess.recipeTrue;
-    sess.recipeTrue = false;
-  }
-
   if (!sess.recipe || !sess.recipe.ai) {
     sess.recipe = {
       ai: true,
       recipeName: "Recipe name",
-      recipeImages: new Object(),
-      imagesData: new Object(),
+      recipeImages: {},
+      imagesData: {},
       ingredients: [defIngs],
       extra: "",
       instructions: "",
@@ -64,6 +57,7 @@ router.get("/assistant", async (req, res) => {
     }
   }
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
+  if(sess.recipe.nutritions)nutritions = sess.recipe.nutritions;
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
@@ -72,9 +66,9 @@ router.get("/assistant", async (req, res) => {
     user: sess.user || null,
     errorIngred: error,
     nutritions: nutritions,
-    allergies: allergies,
-    recipeTrue: recipeTrue,
-    alert: alert
+    allergies: sess.allergies||allergies,
+    recipeTrue: sess.recipeTrue||false,
+    alert: alert,
   });
 });
 
@@ -121,17 +115,17 @@ router.post("/assistant", async (req, res) => {
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       sess.flag = true;
       sess.recipeTrue = true;
+      //alert the unaware expert user about his unhealthy way of life
+      if (sess.user.role > 1) {
+        const user = new Expert(null, sess.user.id);
+        user.latest = sess.user.latest;
+        user.updateLatest(req.session.nutritions);
+        sess.alert = user.checkWarnings();
+      }
     } catch (error) {
       console.log(error);
       sess.recipe.extra = "Failed to generate recipe, please try again later.";
       sess.recipe.instructions = "Failed to generate recipe, please try again later.";
-    }
-    //alert the unaware expert user about his unhealthy way of life
-    if (sess.user.role > 1) {
-      const user = new Expert(null, sess.user.id);
-      user.latest = sess.user.latest;
-      user.updateLatest(req.session.nutritions);
-      sess.alert = user.checkWarnings();
     }
   }
   if (buttonPress == "publish") {
@@ -152,6 +146,7 @@ router.post("/assistant", async (req, res) => {
     let AiRecipe = new Recipe(recipe);
     // add the recipe to the db
     let { success, msg } = await AiRecipe.addRecipe();
+    sess.recipeTrue = false;
     if (success) return res.redirect("/home");
   }
   return res.redirect(req.get("referer"));

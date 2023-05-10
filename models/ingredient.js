@@ -72,8 +72,6 @@ class Ingredient {
         ingredient = new Ingredient(await connection.getData(ingred.name)); 
       }
 
-      console.log(ingredient); //
-      
       const unit = ingred.unit.toLowerCase();
       const amount = parseFloat(ingred.amount);
       let valueByUnit;

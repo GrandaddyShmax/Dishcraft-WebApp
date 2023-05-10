@@ -19,7 +19,6 @@ router.post("/suggest", async (req, res) => {
   const suggestionData = req.body;
   var suggestion = new Suggestion(suggestionData);
   let { success, msg } = await suggestion.addSuggestion();
-  console.log(req.body);
   if (success) {
     return res.redirect("/home");
   } else {

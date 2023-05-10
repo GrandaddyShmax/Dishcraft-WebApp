@@ -71,7 +71,6 @@ router.post("/search", async (req, res) => {
     default:
       return res.redirect(req.get("referer"));
   }
-  //console.log(req.body);
   return res.redirect("/home");
 });
 

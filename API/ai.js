@@ -54,49 +54,9 @@ const getAssistant = () => assistant;
 function parseAssToRecipe(response, recipe) {
   console.log(response);
   if (response.text) response = response.text;
-  recipe.extra = "";
-  recipe.ingredients2 = [];
-  recipe.instructions = "";
-  const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
-  console.log(ings);
-  const fields = ["$recipe name", "$ingredients", "$instructions"];
-  var index;
-  for (const line of response.split("\n")) {
-    console.log(line);
-    if (line.includes("$")) index = fields.indexOf(line.toLowerCase());
-    else {
-      switch (index) {
-        case 0: //recipe name
-          recipe.recipeName = line;
-          break;
-        case 1: //ingredients or extra ingredients
-          var [amount, unit, name] = line.split("@");
-          if (!parseInt(amount) && !parseFloat(amount)) amount = 0;
-          if (!name && !units.includes(unit)) {
-            name = unit;
-            unit = "Pieces";
-          }
-          if (!units.includes(unit)) {
-            if (units.includes(unit + "s")) unit = unit + "s";
-            else if (units.includes(unit.slice(0, -1))) unit = unit.slice(0, -1);
-            else unit = "Pieces";
-          }
-          if (!ings.includes(name.toLowerCase())) {
-            recipe.extra += `${amount} ${endPlural(amount, unit)} of ${name}\n`;
-            recipe.ingredients2.push({ amount: amount, unit: unit, name: name });
-          }
-          break;
-        case 2: //instructions
-          recipe.instructions += line + "\n";
-          break;
-        default:
-          break;
-      }
-    }
-  }
-  return recipe;
+  return parseRecipe(response, recipe);
 }
-//test parsing on existing text
+//parse template recipe to test page visually without making API requests
 function parseAssToRecipeTest() {
   recipe = {
     ai: true,
@@ -129,15 +89,17 @@ function parseAssToRecipeTest() {
     "Remove the skillet from the heat and sprinkle the chopped parsley over the pasta. Toss again to incorporate the parsley.\n" +
     "Serve the creamy garlic Parmesan pasta immediately and enjoy!\n" +
     "Note: Feel free to adjust the seasoning according to your taste preferences. You can also add cooked chicken, shrimp, or vegetables to make it a heartier dish.";
+  return parseRecipe(response, recipe);
+}
+
+function parseRecipe(response, recipe) {
   recipe.extra = "";
   recipe.ingredients2 = [];
   recipe.instructions = "";
   const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
-  //console.log(ings);
   const fields = ["$recipe name", "$ingredients", "$instructions"];
   var index;
   for (const line of response.split("\n")) {
-    //console.log(line);
     if (line.includes("$")) index = fields.indexOf(line.toLowerCase());
     else {
       switch (index) {
