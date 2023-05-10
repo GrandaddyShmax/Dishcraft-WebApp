@@ -3,7 +3,7 @@ pipeline {
   agent {
     docker {
       image 'node:bullseye-slim' 
-      args '-p 3000:3000' 
+      args '-p 8080:3000' 
     }
   }
   environment {
