@@ -40,12 +40,12 @@ pipeline {
     }
     stage('Check for code duplicates') {
       steps {
-        sh 'npm cpd'
+        sh 'npm run-script cpd'
       }
     }
     stage('Check for complience with coding rules') {
       steps {
-        sh 'npm cpd'
+        sh 'npm run-script grunt'
       }
     }
   }
