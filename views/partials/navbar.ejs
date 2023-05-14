@@ -30,17 +30,19 @@
               </div>
             </div>
           </form>
-          <a href="../assistant">
+          <a href="/assistant">
             <button type="button" class="flex hover:scale-105 active:scale-90 transition-all flex-none items-center relative p-3 rounded-full text-latte bg-espresso hover:bg-pistachio hover:text-espresso hover:drop-shadow-xl text-sm font-bold uppercase">Create Recipe</button>
           </a>
         </div>
       <% } %>
       <div class="flex items-center">
-        <button class="group hover:scale-105 active:scale-90 transition-all flex items-center relative p-2 m-2 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M14 3V3.28988C16.8915 4.15043 19 6.82898 19 10V17H20V19H4V17H5V10C5 6.82898 7.10851 4.15043 10 3.28988V3C10 1.89543 10.8954 1 12 1C13.1046 1 14 1.89543 14 3ZM7 17H17V10C17 7.23858 14.7614 5 12 5C9.23858 5 7 7.23858 7 10V17ZM14 21V20H10V21C10 22.1046 10.8954 23 12 23C13.1046 23 14 22.1046 14 21Z" fill="currentColor"/>
-          </svg>
-        </button>
+        <a href="/news">
+          <button class="group hover:scale-105 active:scale-90 transition-all flex items-center relative p-2 m-2 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M14 3V3.28988C16.8915 4.15043 19 6.82898 19 10V17H20V19H4V17H5V10C5 6.82898 7.10851 4.15043 10 3.28988V3C10 1.89543 10.8954 1 12 1C13.1046 1 14 1.89543 14 3ZM7 17H17V10C17 7.23858 14.7614 5 12 5C9.23858 5 7 7.23858 7 10V17ZM14 21V20H10V21C10 22.1046 10.8954 23 12 23C13.1046 23 14 22.1046 14 21Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </a>
         <div class="hidden relative sm:inline-block items-center justify-center gap-2"> <!-- user menu container -->
           <button 
             id="menu-dropdown-button" 
@@ -65,10 +67,30 @@
                   </g>
               </svg>
             </div>
-            <p class="pl-2 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all"><%= locals.user ? user.userName : `` %></p>
-            <%if (locals.user && user.role==3){%>
-            <p class="pl-2 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all">(Admin)</p>
-            <%} if (locals.user && user.role > 1){%>
+            <p class="pl-2 pb-0.5 pointer-events-none font-bold leading-tight sm:text-lg block truncate text-latte group-hover:text-espresso transition-all"><%= locals.user ? user.userName : `` %></p>
+            <% if (locals.user && user.role==3) {%>
+              <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 text-latte items-center pl-1 group-hover:text-espresso transition-all"
+              >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M13 12.8293C14.1652 12.4175 15 11.3062 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.3062 9.83481 12.4175 11 12.8293V16C11 16.5523 11.4477 17 12 17C12.5523 17 13 16.5523 13 16V12.8293ZM11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10Z"
+                fill="currentColor"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12Z"
+                fill="currentColor"
+              />
+              </svg>
+            <%} else if (locals.user && user.role > 1) {%>
               <svg
                 width="24"
                 height="24"
@@ -89,19 +111,8 @@
                 />
               </svg>
             <%}%>
-            <div class="block flex-grow-0 flex-shrink-0 h-10 w-12 pl-5">
-              <svg
-                id="user-profile"
-                viewBox="0 0 32 32"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                role="presentation"
-                focusable="false"
-                class="text-latte group-hover:text-espresso transition-all"
-                style="display: block; height: 100%; width: 100%; fill: currentcolor;"
-              >
-                <path d="m16 .7c-8.437 0-15.3 6.863-15.3 15.3s6.863 15.3 15.3 15.3 15.3-6.863 15.3-15.3-6.863-15.3-15.3-15.3zm0 28c-4.021 0-7.605-1.884-9.933-4.81a12.425 12.425 0 0 1 6.451-4.4 6.507 6.507 0 0 1 -3.018-5.49c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5a6.513 6.513 0 0 1 -3.019 5.491 12.42 12.42 0 0 1 6.452 4.4c-2.328 2.925-5.912 4.809-9.933 4.809z"></path>
-              </svg>
+            <div class="block w-8 aspect-square text-latte rounded-full border border-latte group-hover:border-espresso overflow-hidden transition-all ml-2 my-2">
+              <img src="<%= user.avatar %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
             </div>
           </button>
           <div 
@@ -121,7 +132,7 @@
             <% if (locals.user && user.role > 1) { %>
               <div class="py-1" role="none">
                 <a href="/bookmarks" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Bookmarks</a>
-                <a href="#" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">AI Recipe Book</a>
+                <a href="/recipebook" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">AI Recipe Book</a>
                 <a href="/suggest" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Suggest Ingredient</a>
               </div>
             <% } if (locals.user && user.role == 3) { %>

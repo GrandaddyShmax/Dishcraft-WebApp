@@ -44,7 +44,7 @@ router.get("/assistant", async (req, res) => {
   if (!sess.recipe || !sess.recipe.ai) {
     sess.recipe = {
       ai: true,
-      recipeName: "Recipe name",
+      recipeName: "AI Chef",
       recipeImages: {},
       imagesData: {},
       ingredients: [defIngs],
