@@ -10,6 +10,7 @@ router.get("/suggest", async (req, res) => {
     pageTitle: "Dishcraft - Suggest Ingredient",
     page: "suggest",
     user: session.user || null,
+    hideSearch: true,
   });
 });
 
