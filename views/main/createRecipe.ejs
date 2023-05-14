@@ -5,11 +5,11 @@
         <div class="w-full h-full flex justify-center items-center">
           <div class="group flex bg-espresso rounded-full drop-shadow-lg">
             <a href="/assistant">
-              <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-l-full transition-all border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl active:scale-90">
+              <button class="text-latte text-lg font-bold pl-10 pr-8 py-2 bg-espresso rounded-l-full transition-all border border-latte hover:bg-pistachio hover:border-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:drop-shadow-xl active:scale-90">
                 AI Recipe
               </button>
             </a>
-            <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full border border-coffee hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-none hover:drop-shadow-xl cursor-default">
+            <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full border border-coffee hover:bg-pistachio hover:border-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:drop-shadow-xl cursor-default">
               Custom Recipe
             </button>
           </div>
@@ -17,7 +17,11 @@
       </div>
       <form action="/createRecipe" method="POST" id="form" class="flex flex-1 flex-col">
         <div id="background" class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
-          <input required name="recipeName" value="<%= recipe.recipeName %>" type="text" placeholder="Recipe Name..." class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          <p class="pb-2 text-2xl text-latte font-bold">
+            Recipe Name:
+          </p>
+          <p class="pb-2 text-espresso font-bold text-sm">Write below the name of the recipe</p>
+          <input required name="recipeName" value="<%= recipe.recipeName %>" placeholder="Incredible Red Cake..." type="text" class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee">
           <div class="flex px-6 pt-4">
             <div class="group block mx-2 w-full aspect-square cursor-pointer text-latte border border-latte overflow-hidden drop-shadow-lg transition-all hover:drop-shadow-xl hover:scale-105 active:scale-90">
               <%if(recipe.recipeImages && recipe.recipeImages.img1) {%>
@@ -86,9 +90,10 @@
               <span class="sr-only">View details</span>
             </div>
           </div>
-          <p class="pt-8 text-2xl text-latte">
+          <p class="pt-8 text-2xl text-latte font-bold">
             Ingredients:
           </p>
+          <p class="pt-2 text-espresso font-bold text-sm">Add below your ingredients</p>
           <div class="flex flex-col">
             <p class="text-red-700 font-bold"><%= errorIngred %></p>
             <% var index =0; %>
@@ -104,7 +109,7 @@
                     <% } %>
                   <% } %>
                 </select>
-                <input required placeholder="Ingredient" type="text" name="name" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+                <input required placeholder="Milk..." type="text" name="name" value="<%=ing.name%>" class="px-4 py-3 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee">
                 <button value="<%=`remove&`+index%>" onclick="forceSubmit();" type="submit" name="submit" class="bg-espresso mx-2 px-4 w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Remove
                 </button>
               </div> <!-- ingredient object -->
@@ -116,15 +121,17 @@
               </button>
             </div>
           </div>
-          <p class="pt-8 text-2xl text-latte">
+          <p class="pt-8 text-2xl text-latte font-bold">
             Instructions:
           </p>
+          <p class="pt-2 text-espresso font-bold text-sm">Write below recipe instructions</p>
           <div class="pt-2 flex">
-            <textarea required name="instructions" placeholder="Write Instructions..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
+            <textarea required name="instructions" placeholder="Step 1) Heat the water to a...." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee"><%= recipe.instructions %></textarea>
           </div>
-          <p class="pt-8 text-2xl text-latte">
+          <p class="pt-8 text-2xl text-latte font-bold">
             Category:
           </p>
+          <p class="pt-2 text-espresso font-bold text-sm">Select one or more categories for your recipe</p>
           <div class="grid grid-cols-3 grid-rows-3 gap-y-2 gap-x-4 pt-2">
             <div class="flex items-center">
               <input type="checkbox" id="spicy" class="peer hidden" />
@@ -260,12 +267,13 @@
             </div>
           </div>
           <%if (locals.user && user.role > 1){%>
-            <p class="pt-8 text-2xl text-latte">
+            <p class="pt-8 text-2xl text-latte font-bold">
               Extra:
             </p>
-            <div class="grid grid-cols-2 pt-2 items-center">
+            <p class="pt-2 text-espresso font-bold text-sm">Additional options for expert users</p>
+            <div class="grid grid-cols-2 pt-4 items-center">
               <div class="flex items-center">
-                <p class="text-espresso font-bold">Change Color:</p>
+                <p class="text-latte font-bold">Change Color:</p>
                 <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
                   <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
                   <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
@@ -274,7 +282,7 @@
                 </select>
               </div>
               <div class="flex items-center">
-                <p class="text-espresso font-bold">Hide Rating:</p>
+                <p class="text-latte font-bold">Hide Rating:</p>
                 <input name="hideRating" class="h-4 w-4 mx-2 px-4 rounded accent-pistachio" type="checkbox" value="hideRating" id="hideRating">
               </div>
             </div>
