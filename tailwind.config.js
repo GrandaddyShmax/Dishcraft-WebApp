@@ -23,6 +23,17 @@ module.exports = {
         lg: '0 4px 4px rgba(171, 196, 170, 0.1)',
         xl: '0 5px 5px rgba(171, 196, 170, 0.3)',
       },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(0deg) scale(1)'},
+          '20%, 80%': { transform: 'rotate(0deg) scale(1.3)' },
+          '40%': { transform: 'rotate(15deg) scale(1.3)'},
+          '60%': { transform: 'rotate(-15deg) scale(1.3)'},
+        },
+      },
+      animation: {
+        wiggle: 'wiggle 1s',
+      }
     },
   },
   plugins: [],
