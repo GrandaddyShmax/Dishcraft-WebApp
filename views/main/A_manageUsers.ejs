@@ -28,6 +28,7 @@
       <div class="flex h-full w-full">
         <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
           <ul class="w-full h-full flex flex-col p-4 gap-4">
+            <p class="font-bold pl-2 pb-2 text-latte">User Count: 0</p>
             <!-- Insert Flights here -->
             <% for (const user of users) { %>
               <form action="/admin/manageusers" method="POST" class="h-20 flex border w-full items-center justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
@@ -61,10 +62,14 @@
                   </div>
                   <p class="font-bold pl-6">Recipes Published: <%= user.recipeCount %></p>
                 </div>
-                <%if (user.role!=2){%>                
-                  <button id="upgrade" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Upgrade
+                <div class="flex justify-end items-center gap-2">
+                  <%if (user.role!=2){%>                
+                    <button id="upgrade" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Upgrade
+                    </button>
+                  <%}%>
+                  <button id="ban" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Ban
                   </button>
-                <%}%>
+                </div>
                 </form>
             <% } %>
           </ul>
