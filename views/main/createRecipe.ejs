@@ -126,14 +126,20 @@
             <p class="pt-8 text-2xl text-latte">
               Extra:
             </p>
-            <div class="flex pt-2 items-center">
-              <p class="text-espresso font-bold">Change Color:</p>
-              <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
-                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
-                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
-                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
-                <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="sweet">Sweet</option>
-              </select>
+            <div class="grid grid-cols-2 pt-2 items-center">
+              <div class="flex items-center">
+                <p class="text-espresso font-bold">Change Color:</p>
+                <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
+                  <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
+                  <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
+                  <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
+                  <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="sweet">Sweet</option>
+                </select>
+              </div>
+              <div class="flex items-center">
+                <p class="text-espresso font-bold">Hide Rating:</p>
+                <input name="hideRating" class="h-4 w-4 mx-2 px-4 rounded accent-pistachio" type="checkbox" value="hideRating" id="hideRating">
+              </div>
             </div>
           <%}%>
         </div>
