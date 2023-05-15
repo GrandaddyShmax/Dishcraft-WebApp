@@ -80,10 +80,7 @@ router.post("/createRecipe", async (req, res) => {
       recipeData.recipeImages = images;
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
-      recipeData.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
-        salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
-        dairy: req.body.diary != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
-        grill: req.body.grill != null};
+      recipeData.categories = recipe.categories;
       sess.recipe = null;
       recipe = new Recipe(recipeData);
       let { success, msg } = await recipe.addRecipe();
@@ -101,13 +98,13 @@ function handleImage(req, res, index) {
   if (!sess.recipe) sess.recipe = {};
   if (sess.recipe.create) {
     offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
-    sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
-      salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
-      dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
-      grill: req.body.grill != null};
     //Update ingredients & "addmore" & "remove"
     handleIngAdding(req, res);
   }
+  sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
+    salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
+    dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
+    grill: req.body.grill != null};
   if (req.file) {
     if (!sess.recipe.imagesData) sess.recipe.imagesData = {};
     const url = path.resolve("./public/images/temp/" + req.file.filename);
