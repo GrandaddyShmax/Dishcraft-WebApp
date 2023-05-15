@@ -28,7 +28,7 @@
       <div class="flex h-full w-full">
         <div class="bg-espresso flex-1 m-2 border border-latte rounded-md">
           <ul class="w-full h-full flex flex-col p-4 gap-4">
-            <p class="font-bold pl-2 pb-2 text-latte">User Count: 0</p>
+            <p class="font-bold pl-2 pb-2 text-latte">User Count: <%= users.length %></p>
             <!-- Insert Flights here -->
             <% for (const user of users) { %>
               <form action="/admin/manageusers" method="POST" class="h-20 flex border w-full items-center justify-between text-left text-latte text-sm px-2 py-1 border-latte rounded-md transition-all bg-espresso drop-shadow-lg">
