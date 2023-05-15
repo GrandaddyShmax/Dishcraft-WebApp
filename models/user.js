@@ -105,8 +105,8 @@ class User {
         successful: true,
         user: {
           id: account.id,
-          userName: this.userName,
-          avatar: this.avatar,
+          userName: account.userName,
+          avatar: account.avatar,
           role: account.role,
           latest: account.latest,
           bookmarks: account.bookmarks,
