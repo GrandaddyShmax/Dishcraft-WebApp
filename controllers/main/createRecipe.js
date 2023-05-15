@@ -14,6 +14,7 @@ const { defIngs, units } = require("../../jsons/views.json");
 //get
 router.get("/createRecipe", async (req, res) => {
   const sess = req.session;
+  sess.clearAiFlag = true;
   let error = "";
   if (sess.errorIngred != "") {
     error = sess.errorIngred;

@@ -11,6 +11,7 @@ var filters;
 
 router.get("/home", async (req, res) => {
   const session = req.session;
+  session.clearAiFlag = true;
   const recipes = await Recipe.fetchRecipes(session.search || defSearch);
   session.recipe = null;
   if (!filters)

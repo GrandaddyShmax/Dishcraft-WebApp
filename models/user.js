@@ -164,9 +164,9 @@ class Expert extends User {
     const today = new Date(Date.now());
     const dateIsToday = (recipe) => {
       const date = new Date(recipe.date);
-      return date.getFullYear === today.getFullYear && date.getMonth === today.getMonth && date.getDate === today.getDate;
+      return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
     };
-    const filtered = this.latest.filter((recipe) => dateIsToday(recipe));
+    const filtered = this.latest.filter(recipe => dateIsToday(recipe));
     nutritions.date = today;
     filtered.push(nutritions);
     try {

@@ -32,6 +32,7 @@ class Recipe {
           "color",
           "uploadDate",
           "nutritions",
+          "allergies"
         ],
         this,
         tempV

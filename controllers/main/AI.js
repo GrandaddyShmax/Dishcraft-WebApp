@@ -21,25 +21,18 @@ router.get("/assistant", async (req, res) => {
   const sess = req.session;
   const access = await schemas.AIAccess.findOne({});
 
-  //premium cleanup service
-  let nutritions = defNutritions; //default values in jsons/views.json
-  let allergies = "";
+  //premium plus cleanup service
+  //let nutritions = defNutritions; //default values in jsons/views.json
   let error = "";
-  let alert = "";
-  if (sess.flag) {
-    sess.flag = false;
-    nutritions = sess.nutritions;
-    sess.nutritions = defNutritions;
-    allergies = sess.allergies;
+  if (sess.clearAiFlag) {
+    sess.nutritions = "";
     sess.allergies = "";
+    sess.alert = "";
+    sess.recipeTrue = false;
   }
   if (sess.errorIngred != "") {
     error = sess.errorIngred;
     sess.errorIngred = "";
-  }
-  if (sess.alert) {
-    alert = sess.alert;
-    sess.alert = "";
   }
   if (!sess.recipe || !sess.recipe.ai) {
     sess.recipe = {
@@ -56,8 +49,8 @@ router.get("/assistant", async (req, res) => {
       sess.recipe.instructions = msg;
     }
   }
-  if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
-  if(sess.recipe.nutritions)nutritions = sess.recipe.nutritions;
+  //if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
+  //if(sess.recipe.nutritions)nutritions = sess.recipe.nutritions;
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
@@ -65,10 +58,10 @@ router.get("/assistant", async (req, res) => {
     recipe: sess.recipe || null,
     user: sess.user || null,
     errorIngred: error,
-    nutritions: nutritions,
-    allergies: sess.allergies||allergies,
-    recipeTrue: sess.recipeTrue||false,
-    alert: alert,
+    nutritions: sess.nutritions || "",
+    allergies: sess.allergies || "",
+    recipeTrue: sess.recipeTrue || false,
+    alert: sess.alert || "",
   });
 });
 
@@ -81,7 +74,7 @@ router.post("/assistant", async (req, res) => {
   const [buttonPress, index] = req.body.submit.split("&");
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
-  if (handleIngAdding(req, res, buttonPress, index)) return res.redirect(req.get("referer"));
+  if (handleIngAdding(req, res, buttonPress, index)) { return res.redirect(req.get("referer")); }
   //Generate recipe
   if (buttonPress == "generate") {
     //check ingredients exist in foodAPI:
@@ -113,7 +106,7 @@ router.post("/assistant", async (req, res) => {
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
-      sess.flag = true;
+      sess.clearAiFlag = false;
       sess.recipeTrue = true;
       //alert the unaware expert user about his unhealthy way of life
       if (sess.user.role > 1) {
