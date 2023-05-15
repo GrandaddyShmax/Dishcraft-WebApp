@@ -119,8 +119,9 @@ class Recipe {
 
   //get all/filtered recipes from db
   static async fetchRecipes(search, bookmarks) {
-    var term, filter, sort;
-    if (search) ({ term, filter, sort } = search);
+    const currDate = new Date(Date.now());
+    var term, filter, filterRange, sort;
+    if (search) ({ term, filter, filterRange, sort } = search);
     if (filter) filter = await this.fetchFilter(filter);
     let recipes = [];
     let recipesArr;
@@ -144,6 +145,8 @@ class Recipe {
       };
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
+      //time range filter:
+      if (filterRange && !Recipe.checkFilterRange(filterRange, tempRecipe, currDate)) continue;
       //category filters:
       if (this.checkFilter(filter, tempRecipe)) continue;
       recipes.push(tempRecipe);
@@ -180,6 +183,34 @@ class Recipe {
     badIngs = Array.from(new Set(badIngs)); //remove duplicates
     if (badIngs.length == 0) return null;
     return badIngs;
+  }
+  //time range filter:
+  static checkFilterRange(filter, recipe, currDate) {
+    const recipeDate = new Date(recipe.uploadDate);
+    let result = false;
+    switch (filter) {
+      case "today":
+        if (recipeDate.getFullYear() == currDate.getFullYear() && 
+            recipeDate.getMonth() == currDate.getMonth() &&
+            recipeDate.getDate() == currDate.getDate()) result = true;
+        break;
+      case "week":
+        const weekStart = new Date();
+        weekStart.setDate(currDate.getDate() - currDate.getDay());
+        if (recipeDate >= weekStart) result = true;
+        break;
+      case "month":
+        if (recipeDate.getFullYear() == currDate.getFullYear() && 
+            recipeDate.getMonth() == currDate.getMonth()) result = true;
+        break;
+      case "year":
+        if (recipeDate.getFullYear() == currDate.getFullYear()) result = true;
+        break;
+      default: //all
+        result = true;
+        break;
+    }
+    return result;
   }
   //category filters:
   static checkFilter(filter, recipe) {

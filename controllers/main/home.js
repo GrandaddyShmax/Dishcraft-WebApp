@@ -16,6 +16,7 @@ router.get("/home", async (req, res) => {
   session.recipe = null;
   if (!filters)
     filters = {
+      timeRange: 0,
       allergy: await Category.fetchCategories("allergy", true),
       diet: await Category.fetchCategories("diet", true),
     };
@@ -63,10 +64,12 @@ router.post("/search", async (req, res) => {
       session.search.sort = null;
       break;
     case "filterApply":
+      session.search.filterRange = req.body.filterRange;
       if (Array.isArray(req.body.filter)) session.search.filter = req.body.filter;
       else session.search.filter = req.body.filter ? [req.body.filter] : null;
       break;
     case "filterReset":
+      session.search.filterRange = "all";
       session.search.filter = null;
       break;
     default:

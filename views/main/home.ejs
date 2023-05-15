@@ -20,7 +20,7 @@
             <div class="p-4">
               <div class="grid grid-cols-4 gap-4 items-center">
                 <p class="text-latte text-sm col-span-1">Time Range: </p>
-                <select class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
+                <select id="filterRange" name="filterRange" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
                   <option value="today">Today</option>
                   <option value="week">Week</option>
                   <option value="month">Month</option>
@@ -292,6 +292,7 @@
     </div>
   </div>
 </div>
+
 <script>
   const sortButton = document.querySelector('#sort-button');
   const sortBox = document.querySelector('#sort-menu');
@@ -331,4 +332,5 @@
       filterBox.classList.add('hidden');
     }
   });
+  document.getElementById("filterRange").value = "<%= search.filterRange %>";
 </script>
