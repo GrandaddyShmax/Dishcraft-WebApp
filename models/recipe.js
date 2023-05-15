@@ -204,11 +204,19 @@ class Recipe {
         return 0;
       });
     const { category, dir } = sort;
-    if (category == "new" || category == "top") {
-      //sort by top & new
-      return 0;
-    }
     const sign = dir == "descend" ? -1 : 1;
+    if (category == "new" ) {
+      return recipes.sort((a, b) => {
+        const dateA = new Date(a.uploadDate);
+        const dateB = new Date(b.uploadDate);
+        if (dateA > dateB) return sign;
+        if (dateA < dateB) return sign * -1;
+        return 0; 
+      });
+    }
+    if ( category == "top") {
+      return recipes.sort((a, b) => { return sign * (a.rating.avg - b.rating.avg); });
+    }
     return recipes.sort((a, b) => {
       const aCat = a.nutritions[category] || -1;
       const bCat = b.nutritions[category] || -1;
@@ -278,13 +286,9 @@ class Recipe {
   async voteRating(userID, num) {
     //remove previous vote
     this.rating1 = this.rating1.filter((item) => item !== userID);
-
     this.rating2 = this.rating2.filter((x) => x !== userID);
-
     this.rating3 = this.rating3.filter((x) => x !== userID);
-
     this.rating4 = this.rating4.filter((x) => x !== userID);
-
     this.rating5 = this.rating5.filter((x) => x !== userID);
 
     //place in new vote
