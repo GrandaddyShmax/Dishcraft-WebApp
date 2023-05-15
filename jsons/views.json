@@ -19,6 +19,8 @@
   "defSearch": { "term": "", "sort": null, "filter": null },
   "sorts": {
     "opts": [
+      { "name": "New", "value": "new" },
+      { "name": "Top", "value": "top" },
       { "name": "Energy", "value": "energy" },
       { "name": "Faty Acids", "value": "fattyAcids" },
       { "name": "Sodium", "value": "sodium" },
