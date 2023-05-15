@@ -32,7 +32,8 @@ class Recipe {
           "color",
           "uploadDate",
           "nutritions",
-          "allergies"
+          "allergies",
+          "categories"
         ],
         this,
         tempV
@@ -64,6 +65,7 @@ class Recipe {
         color: this.color,
         uploadDate: date,
         nutritions: this.nutritions,
+        categories: this.categories
       });
       return { success: true, msg: null };
     } catch (error) {
@@ -92,7 +94,7 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions"],
+        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions", "categories"],
         this,
         details
       );
@@ -130,7 +132,7 @@ class Recipe {
       //search term:
       if (this.checkTerm(term, recipe, user)) continue;
       var tempRecipe = offloadFields(
-        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions"],
+        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions", "categories"],
         null,
         recipe
       );
