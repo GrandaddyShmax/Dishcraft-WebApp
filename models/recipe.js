@@ -202,6 +202,10 @@ class Recipe {
         return 0;
       });
     const { category, dir } = sort;
+    if (category == "new" || category == "top") {
+      //sort by top & new
+      return 0;
+    }
     const sign = dir == "descend" ? -1 : 1;
     return recipes.sort((a, b) => {
       const aCat = a.nutritions[category] || -1;
