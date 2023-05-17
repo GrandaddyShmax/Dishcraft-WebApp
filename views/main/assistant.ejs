@@ -17,7 +17,7 @@
       </div>
       <%if (user.role > 1 && alert != "") { %>
         <div class="flex-none w-full h-20 mb-4">
-          <div class="bg-coffee flex flex-col flex-1 p-6 font-bold text-latte text-center text-2xl w-full m-2 rounded-md">
+          <div id="backgroundAI" class="bg-coffee flex flex-col flex-1 p-6 font-bold text-latte text-center text-2xl w-full m-2 rounded-md">
             <%=alert%>
           </div>
         </div>
@@ -171,8 +171,12 @@
             <p class="pt-2 text-espresso font-bold text-sm">Select one or more categories for your recipe</p>
             <div class="grid grid-cols-3 grid-rows-3 gap-y-2 gap-x-4 pt-2">
               <div class="flex items-center">
-                <input type="checkbox" id="spicy" class="peer hidden" />
-                <label for="spicy" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.spicy) {%>
+                  <input checked name="spicy" value="<%= recipe.categories.spicy.value %>" type="checkbox" id="spicy" class="peer hidden" />
+                <%} else {%>
+                  <input name="spicy" value="<%= recipe.categories.spicy.value %>" type="checkbox" id="spicy" class="peer hidden" />
+                <%} %>
+                <label for="spicy" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path d="M3658 5104 c-169 -40 -309 -166 -371 -331 -20 -53 -22 -82 -27 -321 l-5 -264 -111 -28 c-313 -79 -570 -281 -713 -560 -64 -124 -95 -226 -126 -412 -122 -726 -347 -1341 -683 -1872 -233 -369 -514 -681 -865 -961 -60 -48 -117 -101 -128 -118 -41 -65 -5 -173 67 -203 74 -31 415 -43 674 -24 908 68 1669 400 2210 966 445 465 739 1067 897 1835 32 156 38 364 14 484 -68 342 -289 631 -600 785 -84 42 -210 84 -284 95 l-48 7 3 248 3 248 30 44 c20 28 49 53 84 71 52 25 62 27 190 27 154 0 189 11 228 69 48 71 20 175 -57 213 -29 15 -61 18 -180 17 -87 0 -168 -6 -202 -15z"/>
@@ -184,8 +188,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="sweet" class="peer hidden" />
-                <label for="sweet" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.sweet) {%>
+                  <input checked name="sweet" value="<%= recipe.categories.sweet.value %>" type="checkbox" id="sweet" class="peer hidden" />
+                <%} else {%>
+                  <input name="sweet" value="<%= recipe.categories.sweet.value %>" type="checkbox" id="sweet" class="peer hidden" />
+                <%} %>
+                <label for="sweet" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M2300 4839 c-808 -91 -1520 -619 -1845 -1371 -136 -316 -193 -619 -182 -982 6 -199 21 -313 63 -481 216 -861 913 -1524 1779 -1694 174 -34 313 -44 518 -38 343 9 621 77 922 222 634 306 1090 884 1245 1576 64 285 67 764 7 889 -24 48 -87 90 -137 90 -14 0 -70 -23 -125 -50 -55 -28 -126 -55 -158 -61 -126 -22 -273 27 -373 126 -32 31 -69 62 -83 69 -16 9 -77 15 -156 18 -107 4 -142 9 -197 30 -187 70 -323 206 -397 396 -25 63 -26 77 -27 252 0 102 -1 190 -2 196 -1 6 -35 44 -75 85 -142 144 -178 298 -111 478 29 78 30 103 3 157 -28 60 -70 83 -171 94 -99 12 -392 11 -498 -1z m-190 -908 c99 -72 92 -225 -13 -275 -124 -58 -260 51 -225 182 12 45 62 99 103 112 40 12 104 4 135 -19z m396 -646 c17 -7 50 -29 72 -49 142 -129 102 -364 -75 -442 -49 -22 -156 -22 -205 0 -192 84 -221 334 -53 462 69 52 177 64 261 29z m-1077 -465 c80 -23 132 -112 111 -190 -22 -82 -85 -126 -169 -118 -87 9 -141 70 -141 161 0 58 32 105 90 135 50 25 61 26 109 12z m1251 -652 c66 -34 93 -79 88 -149 -7 -94 -66 -149 -161 -149 -58 0 -105 32 -135 92 -32 63 -24 115 25 169 55 60 113 72 183 37z m1005 -7 c49 -23 100 -72 128 -125 30 -58 30 -175 0 -231 -83 -155 -267 -197 -404 -92 -98 74 -129 218 -71 327 66 128 216 180 347 121z m-1599 -535 c98 -46 162 -156 151 -262 -22 -217 -272 -318 -437 -177 -102 88 -120 242 -41 354 71 101 213 138 327 85z"/>
@@ -197,8 +205,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="salad" class="peer hidden" />
-                <label for="salad" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.salad) {%>
+                  <input checked name="salad" value="<%= recipe.categories.salad.value %>" type="checkbox" id="salad" class="peer hidden" />
+                <%} else {%>
+                  <input name="salad" value="<%= recipe.categories.salad.value %>" type="checkbox" id="salad" class="peer hidden" />
+                <%} %>
+                <label for="salad" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M2325 5014 c-201 -36 -417 -129 -576 -248 -172 -130 -341 -335 -420 -511 l-34 -75 -85 0 c-236 0 -435 -79 -601 -237 -125 -119 -202 -252 -245 -423 -28 -111 -25 -287 5 -405 l24 -90 -33 -25 c-324 -246 -442 -646 -299 -1009 44 -109 93 -185 178 -274 84 -88 174 -151 276 -194 127 -54 197 -67 340 -66 158 1 247 22 383 89 l93 46 56 -33 c180 -109 336 -299 412 -505 52 -143 61 -230 61 -616 l0 -348 689 0 689 0 5 382 c4 372 5 386 30 480 69 260 230 478 451 611 l57 35 97 -49 c142 -72 228 -92 387 -93 185 0 327 41 476 140 81 53 202 179 251 259 234 386 137 865 -232 1145 l-33 25 24 90 c30 118 33 294 5 405 -43 171 -120 304 -245 423 -166 158 -365 237 -601 237 l-85 0 -34 75 c-79 176 -248 381 -420 511 -162 122 -377 213 -585 249 -111 19 -352 18 -461 -1z m-202 -2634 c51 -16 111 -35 135 -40 l42 -11 0 -572 -1 -572 -23 60 c-96 248 -285 503 -492 661 l-74 57 55 49 c99 89 202 245 236 357 7 23 16 41 21 41 6 0 51 -13 101 -30z m996 -11 c33 -110 136 -267 232 -353 l52 -47 -22 -16 c-225 -157 -439 -418 -527 -644 -15 -38 -29 -69 -31 -69 -1 0 -3 245 -3 545 l0 544 43 11 c23 5 80 23 127 39 114 38 115 38 129 -10z"/>
@@ -210,8 +222,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="meat" class="peer hidden" />
-                <label for="meat" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.meat) {%>
+                  <input checked name="meat" value="<%= recipe.categories.meat.value %>" type="checkbox" id="meat" class="peer hidden" />
+                <%} else {%>
+                  <input name="meat" value="<%= recipe.categories.meat.value %>" type="checkbox" id="meat" class="peer hidden" />
+                <%} %>
+                <label for="meat" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M3308 5105 c-329 -47 -614 -185 -847 -410 -105 -101 -159 -167 -236 -291 -90 -143 -136 -269 -235 -644 -105 -400 -151 -544 -219 -684 -93 -192 -202 -335 -433 -571 l-147 -151 582 -582 582 -582 100 101 c222 224 433 385 630 479 140 67 285 114 680 219 334 90 455 132 583 205 264 150 495 394 622 661 261 547 172 1210 -226 1685 -241 288 -555 475 -924 550 -136 28 -375 35 -512 15z"/>
@@ -224,8 +240,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="soup" class="peer hidden" />
-                <label for="soup" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.soup) {%>
+                  <input checked name="soup" value="<%= recipe.categories.soup.value %>" type="checkbox" id="soup" class="peer hidden" />
+                <%} else {%>
+                  <input name="soup" value="<%= recipe.categories.soup.value %>" type="checkbox" id="soup" class="peer hidden" />
+                <%} %>
+                <label for="soup" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M1690 4778 c-84 -43 -115 -159 -61 -227 111 -139 158 -321 112 -442 -21 -54 -42 -87 -145 -221 -63 -82 -110 -178 -137 -275 -18 -66 -21 -95 -16 -183 7 -129 25 -198 82 -315 55 -112 124 -202 173 -222 99 -41 210 26 219 134 4 51 -1 64 -68 164 -50 75 -80 161 -86 249 -8 116 11 156 161 352 63 82 110 178 137 275 18 66 21 95 16 183 -7 124 -25 196 -76 305 -54 113 -122 202 -174 225 -55 25 -83 25 -137 -2z"/>
@@ -240,8 +260,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="dairy" class="peer hidden" />
-                <label for="dairy" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.dairy) {%>
+                  <input checked name="dairy" value="<%= recipe.categories.dairy.value %>" type="checkbox" id="dairy" class="peer hidden" />
+                <%} else {%>
+                  <input name="dairy" value="<%= recipe.categories.dairy.value %>" type="checkbox" id="dairy" class="peer hidden" />
+                <%} %>
+                <label for="dairy" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M2262 4229 c-976 -34 -1846 -265 -2151 -570 -104 -105 -129 -204 -77 -306 64 -127 258 -265 522 -371 l81 -33 944 302 c597 192 960 303 986 303 33 1 48 -5 68 -25 49 -48 46 -64 -79 -463 -64 -203 -116 -374 -116 -380 0 -24 646 4 1010 44 629 69 1119 208 1403 400 168 114 278 260 263 351 -10 63 -41 114 -110 183 -263 263 -915 465 -1746 541 -152 14 -668 37 -750 33 -19 -1 -131 -5 -248 -9z"/>
@@ -256,8 +280,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="pastry" class="peer hidden" />
-                <label for="pastry" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.pastry) {%>
+                  <input checked name="pastry" value="<%= recipe.categories.pastry.value %>" type="checkbox" id="pastry" class="peer hidden" />
+                <%} else {%>
+                  <input name="pastry" value="<%= recipe.categories.pastry.value %>" type="checkbox" id="pastry" class="peer hidden" />
+                <%} %>
+                <label for="pastry" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M2315 3938 c-301 -34 -621 -140 -880 -293 -128 -75 -130 -78 -116 -212 57 -537 222 -1038 488 -1473 115 -188 154 -206 329 -150 141 45 246 60 424 60 179 0 283 -15 427 -61 155 -50 205 -34 286 89 240 363 430 870 501 1337 30 197 37 294 24 323 -9 18 -50 49 -118 89 -255 153 -579 258 -892 292 -114 13 -359 12 -473 -1z"/>
@@ -273,8 +301,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="fish" class="peer hidden" />
-                <label for="fish" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.fish) {%>
+                  <input checked name="fish" value="<%= recipe.categories.fish.value %>" type="checkbox" id="fish" class="peer hidden" />
+                <%} else {%>
+                  <input name="fish" value="<%= recipe.categories.fish.value %>" type="checkbox" id="fish" class="peer hidden" />
+                <%} %>
+                <label for="fish" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M1765 4473 c88 -215 148 -486 168 -760 l4 -51 -93 -58 c-205 -127 -441 -319 -666 -542 l-128 -127 -87 87 c-188 185 -401 310 -623 367 -110 28 -318 41 -331 20 -12 -19 -11 -136 1 -237 25 -194 105 -407 212 -563 l46 -66 -50 -74 c-129 -192 -201 -408 -215 -640 -8 -146 -5 -155 57 -162 27 -3 91 -1 141 4 262 29 524 164 766 393 l83 78 142 -137 c328 -318 615 -526 951 -691 l138 -68 -8 -85 c-10 -107 -9 -328 1 -444 l8 -89 46 7 c128 19 388 127 520 216 59 41 187 147 226 188 29 30 32 31 125 31 208 1 455 52 674 139 391 156 752 461 1004 848 67 102 172 303 212 406 l31 77 -24 63 c-65 171 -191 395 -318 566 -81 108 -297 330 -404 414 -299 234 -682 393 -1020 422 -80 7 -83 8 -170 71 -174 126 -448 245 -722 314 -203 51 -520 100 -651 100 -47 0 -52 -2 -46 -17z m2275 -1304 c123 -69 114 -252 -14 -310 -111 -51 -232 16 -252 138 -5 34 -2 53 19 95 49 99 151 131 247 77z"/>
@@ -286,8 +318,12 @@
                 </label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="grill" class="peer hidden" />
-                <label for="grill" value="addmore" type="submit" name="submit" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
+                <% if (recipe.categories.grill) {%>
+                  <input checked name="grill" value="<%= recipe.categories.grill.value %>" type="checkbox" id="grill" class="peer hidden" />
+                <%} else {%>
+                  <input name="grill" value="<%= recipe.categories.grill.value %>" type="checkbox" id="grill" class="peer hidden" />
+                <%} %>
+                <label for="grill" class="flex justify-between gap-2 items-center select-none cursor-pointer py-3 px-6 w-full bg-espresso rounded-md font-bold text-latte transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio peer-checked:bg-latte peer-checked:text-espresso peer-checked:hover:border-pistachio peer-checked:hover:bg-pistachio peer-checked:hover:text-espresso">
                   <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                     <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
                       <path xmlns="http://www.w3.org/2000/svg" d="M1796 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -182 -223 -191 -460 -26 -668 53 -67 94 -92 149 -92 100 0 167 82 148 183 -3 17 -26 56 -50 86 -88 107 -82 183 25 314 71 87 112 162 133 243 39 151 2 300 -105 433 -74 89 -147 112 -223 68z"/>
@@ -311,7 +347,7 @@
               <div class="grid grid-cols-2 pt-4 items-center">
                 <div class="flex items-center">
                   <p class="text-latte font-bold">Change Color:</p>
-                  <select name="color" id="colorPicker" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
+                  <select name="color" id="colorPickerAI" class="bg-espresso flex mx-2 px-4 rounded-md items-center justify-center font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Original
                     <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="original">Original</option>
                     <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="tasty">Tasty</option>
                     <option class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" value="cold">Cold</option>
@@ -363,6 +399,27 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", loadScroll);
+  const select = document.querySelector("#colorPickerAI");
+  select.value = "Original";
+  const bg = document.querySelector("#backgroundAI");
+  document.addEventListener("DOMContentLoaded", loadColor);
+  select.addEventListener("change", loadColor);
+  function loadColor() {
+    const color = select.value;
+    if (color === "original") {
+      bg.classList.remove(`bg-tasty`, "bg-cold", "bg-sweet");
+      bg.classList.add("bg-coffee");
+    } else if (color === "tasty") {
+      bg.classList.remove("bg-coffee", "bg-cold", "bg-sweet");
+      bg.classList.add("bg-tasty");
+    } else if (color === "cold") {
+      bg.classList.remove("bg-coffee", `bg-tasty`, "bg-sweet");
+      bg.classList.add(`bg-cold`);
+    } else if (color === "sweet") {
+      bg.classList.remove("bg-coffee", `bg-tasty`, "bg-cold");
+      bg.classList.add(`bg-sweet`);
+    }
+  }
 
   function loadScroll(event) {
     var scrollpos = localStorage.getItem("scrollpos");

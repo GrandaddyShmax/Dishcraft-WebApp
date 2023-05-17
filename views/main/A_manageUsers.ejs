@@ -63,12 +63,14 @@
                   <p class="font-bold pl-6">Recipes Published: <%= user.recipeCount %></p>
                 </div>
                 <div class="flex justify-end items-center gap-2">
-                  <%if (user.role!=2){%>                
+                  <%if (user.role==1){%>                
                     <button id="upgrade" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Upgrade
                     </button>
                   <%}%>
-                  <button id="ban" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Ban
-                  </button>
+                  <%if (locals.user.id!=user.id){%>     
+                    <button id="ban" onclick="rememberScroll()" type="submit" name="submit" value="<%=user.id %>" class="bg-espresso mx-2 px-6 rounded-full font-bold text-latte uppercase py-4 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Ban
+                    </button>
+                  <%}%>
                 </div>
                 </form>
             <% } %>

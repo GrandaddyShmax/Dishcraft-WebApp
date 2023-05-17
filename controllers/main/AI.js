@@ -43,14 +43,15 @@ router.get("/assistant", async (req, res) => {
       ingredients: [defIngs],
       extra: "",
       instructions: "",
+      categories: {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
+        pastry: false, fish: false, grill: false}
     };
     if (access.disabled) {
       sess.recipe.extra = msg;
       sess.recipe.instructions = msg;
     }
   }
-  //if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
-  //if(sess.recipe.nutritions)nutritions = sess.recipe.nutritions;
+  if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
   res.render("template", {
     pageTitle: "Dishcraft - Assistant",
     page: "assistant",
@@ -72,6 +73,12 @@ router.post("/assistant", async (req, res) => {
   var recipe = sess.recipe;
   const access = await schemas.AIAccess.findOne({});
   const [buttonPress, index] = req.body.submit.split("&");
+  if (buttonPress != "generate") {
+    sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
+      salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
+      dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
+      grill: req.body.grill != null};
+  }
   offloadFields(["extra", "instructions"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
   if (handleIngAdding(req, res, buttonPress, index)) { return res.redirect(req.get("referer")); }
@@ -106,6 +113,8 @@ router.post("/assistant", async (req, res) => {
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
+      sess.recipe.categories = {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
+        pastry: false, fish: false, grill: false};
       sess.clearAiFlag = false;
       sess.recipeTrue = true;
       //alert the unaware expert user about his unhealthy way of life

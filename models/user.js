@@ -1,10 +1,10 @@
 //[Import]
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt"); //password encryption
 const { schemas } = require("../schemas/paths");
-const { capitalize, offloadFields } = require("../utils");
+const { offloadFields } = require("../utils");
+const roles = { junior: 1, expert: 2, admin: 3 }; //enum
 const saltRounds = 10;
-const roles = { junior: 1, expert: 2, admin: 3 };
 
 //[advised nutrional daily]//
 const nutAvgVals = {
@@ -115,12 +115,33 @@ class User {
     }
     return { successful: false, message: "User not found" }; //couldn't login
   }
+  //get all users from db
+  static async fetchAllUsers() {
+    let accounts = [...(await Junior.fetchUsers()), ...(await Expert.fetchUsers()), ...(await Admin.fetchUsers())];
+    let recipes = await schemas.Recipe.find({});
+    for await (const account of accounts) {
+      const userRecipes = recipes.filter((recipe) => recipe.userID == account.id);
+      account.recipeCount = userRecipes.length;
+    }
+    return accounts.sort((a, b) => {
+      const aName = a.userName.toLowerCase();
+      const bName = b.userName.toLowerCase();
+      if (aName < bName) return -1;
+      if (aName > bName) return 1;
+      return 0;
+    });
+  }
 }
 
 /*[ Handle Admin class database ]*/
 class Admin extends User {
   constructor(details, id) {
     super(details, id);
+  }
+  //get all Admin Cook users from db
+  static async fetchUsers() {
+    let accounts = await schemas.User.find({ role: roles.admin });
+    return accounts || [];
   }
 }
 
@@ -146,27 +167,16 @@ class Expert extends User {
     let accounts = await schemas.User.find({ role: roles.expert });
     return accounts || [];
   }
-  //get all Junior&Expert Cook users from db
-  static async fetchAllUsers() {
-    let accounts = [...(await Junior.fetchUsers()), ...(await this.fetchUsers())];
-    for await (const account of accounts) {
-      const recipes = await schemas.Recipe.find({ userID: account.id });
-      account.recipeCount = recipes.length;
-    }
-    return accounts.sort((a, b) => {
-      if (a.userName < b.userName) return -1;
-      if (a.userName > b.userName) return 1;
-      return 0;
-    });
-  }
   //update latest recipes nutritional value
   async updateLatest(nutritions) {
     const today = new Date(Date.now());
     const dateIsToday = (recipe) => {
       const date = new Date(recipe.date);
-      return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate();
+      return (
+        date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()
+      );
     };
-    const filtered = this.latest.filter(recipe => dateIsToday(recipe));
+    const filtered = this.latest.filter((recipe) => dateIsToday(recipe));
     nutritions.date = today;
     filtered.push(nutritions);
     try {

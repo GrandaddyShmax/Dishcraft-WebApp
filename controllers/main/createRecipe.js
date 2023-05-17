@@ -29,6 +29,8 @@ router.get("/createRecipe", async (req, res) => {
       ingredients: [defIngs],
       instructions: "",
       color: "original",
+      categories: {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
+        pastry: false, fish: false, grill: false}
     };
   }
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
@@ -46,6 +48,10 @@ router.get("/createRecipe", async (req, res) => {
 router.post("/createRecipe", async (req, res) => {
   var sess = req.session;
   var recipe = sess.recipe;
+  sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
+    salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
+    dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
+    grill: req.body.grill != null};
   offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
   //sess.recipe.recipeImages = Recipe.parseImages(sess.recipe.imagesData);
   if (req.body.submit) {
@@ -74,6 +80,7 @@ router.post("/createRecipe", async (req, res) => {
       recipeData.recipeImages = images;
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
+      recipeData.categories = recipe.categories;
       sess.recipe = null;
       recipe = new Recipe(recipeData);
       let { success, msg } = await recipe.addRecipe();
@@ -94,6 +101,10 @@ function handleImage(req, res, index) {
     //Update ingredients & "addmore" & "remove"
     handleIngAdding(req, res);
   }
+  sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
+    salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
+    dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
+    grill: req.body.grill != null};
   if (req.file) {
     if (!sess.recipe.imagesData) sess.recipe.imagesData = {};
     const url = path.resolve("./public/images/temp/" + req.file.filename);

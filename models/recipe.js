@@ -32,7 +32,10 @@ class Recipe {
           "color",
           "uploadDate",
           "nutritions",
-          "allergies"
+          "allergies",
+          "categories",
+          "badgesUsers",
+          "badgesCount"
         ],
         this,
         tempV
@@ -64,6 +67,9 @@ class Recipe {
         color: this.color,
         uploadDate: date,
         nutritions: this.nutritions,
+        categories: this.categories,
+        badgesUsers: [],
+        badgesCount: [0, 0, 0, 0]
       });
       return { success: true, msg: null };
     } catch (error) {
@@ -92,7 +98,7 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions"],
+        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
         this,
         details
       );
@@ -117,8 +123,9 @@ class Recipe {
 
   //get all/filtered recipes from db
   static async fetchRecipes(search, bookmarks) {
-    var term, filter, sort;
-    if (search) ({ term, filter, sort } = search);
+    const currDate = new Date(Date.now());
+    var term, filter, filterRange, sort;
+    if (search) ({ term, filter, filterRange, sort } = search);
     if (filter) filter = await this.fetchFilter(filter);
     let recipes = [];
     let recipesArr;
@@ -130,7 +137,7 @@ class Recipe {
       //search term:
       if (this.checkTerm(term, recipe, user)) continue;
       var tempRecipe = offloadFields(
-        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions"],
+        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
         null,
         recipe
       );
@@ -142,6 +149,8 @@ class Recipe {
       };
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
+      //time range filter:
+      if (filterRange && !Recipe.checkFilterRange(filterRange, tempRecipe, currDate)) continue;
       //category filters:
       if (this.checkFilter(filter, tempRecipe)) continue;
       recipes.push(tempRecipe);
@@ -179,6 +188,34 @@ class Recipe {
     if (badIngs.length == 0) return null;
     return badIngs;
   }
+  //time range filter:
+  static checkFilterRange(filter, recipe, currDate) {
+    const recipeDate = new Date(recipe.uploadDate);
+    let result = false;
+    switch (filter) {
+      case "today":
+        if (recipeDate.getFullYear() == currDate.getFullYear() && 
+            recipeDate.getMonth() == currDate.getMonth() &&
+            recipeDate.getDate() == currDate.getDate()) result = true;
+        break;
+      case "week":
+        const weekStart = new Date();
+        weekStart.setDate(currDate.getDate() - currDate.getDay());
+        if (recipeDate >= weekStart) result = true;
+        break;
+      case "month":
+        if (recipeDate.getFullYear() == currDate.getFullYear() && 
+            recipeDate.getMonth() == currDate.getMonth()) result = true;
+        break;
+      case "year":
+        if (recipeDate.getFullYear() == currDate.getFullYear()) result = true;
+        break;
+      default: //all
+        result = true;
+        break;
+    }
+    return result;
+  }
   //category filters:
   static checkFilter(filter, recipe) {
     if (!filter) return false;
@@ -202,11 +239,19 @@ class Recipe {
         return 0;
       });
     const { category, dir } = sort;
-    if (category == "new" || category == "top") {
-      //sort by top & new
-      return 0;
-    }
     const sign = dir == "descend" ? -1 : 1;
+    if (category == "new" ) {
+      return recipes.sort((a, b) => {
+        const dateA = new Date(a.uploadDate);
+        const dateB = new Date(b.uploadDate);
+        if (dateA > dateB) return sign;
+        if (dateA < dateB) return sign * -1;
+        return 0; 
+      });
+    }
+    if ( category == "top") {
+      return recipes.sort((a, b) => { return sign * (a.rating.avg - b.rating.avg); });
+    }
     return recipes.sort((a, b) => {
       const aCat = a.nutritions[category] || -1;
       const bCat = b.nutritions[category] || -1;
@@ -276,13 +321,9 @@ class Recipe {
   async voteRating(userID, num) {
     //remove previous vote
     this.rating1 = this.rating1.filter((item) => item !== userID);
-
     this.rating2 = this.rating2.filter((x) => x !== userID);
-
     this.rating3 = this.rating3.filter((x) => x !== userID);
-
     this.rating4 = this.rating4.filter((x) => x !== userID);
-
     this.rating5 = this.rating5.filter((x) => x !== userID);
 
     //place in new vote
@@ -329,6 +370,23 @@ class Recipe {
       parseFancy(this.rating4),
       parseFancy(this.rating5),
     ];
+  }
+  async addBadgeToRecipe(userID, badgeNum) {
+    if (!this.badgesUsers) this.badgesUsers = [];
+    if (!((this.badgesUsers).includes(userID)))
+    {
+      if (!this.badgesCount || this.badgesCount.length < 4) this.badgesCount = [0, 0, 0, 0];
+      this.badgesUsers.push(userID);
+      this.badgesCount[parseInt(badgeNum) - 1] += 1;
+      try {
+        await schemas.Recipe.updateOne({ _id: this.id }, 
+          { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    } return false;
   }
 }
 /*[ External access ]*/

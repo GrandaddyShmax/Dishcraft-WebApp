@@ -16,7 +16,7 @@
     "Tablespoon",
     "Teaspoon"
   ],
-  "defSearch": { "term": "", "sort": null, "filter": null },
+  "defSearch": { "term": "", "sort": null, "filter": null, "filterRange": "all" },
   "sorts": {
     "opts": [
       { "name": "New", "value": "new" },

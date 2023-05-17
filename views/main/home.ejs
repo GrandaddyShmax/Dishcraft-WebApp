@@ -1,5 +1,5 @@
 <div class="flex flex-1">
-  <div class="flex flex-col flex-1 px-6 lg:px-10 xl:px-20">
+  <div class="flex flex-col flex-1 px-6 lg:px-10 xl:px-20 pb-12">
     <div class="flex-none w-full h-24 bg-red-latte">
       <div class="flex justify-between items-center w-full h-full">
         <div class="w-28">
@@ -16,7 +16,20 @@
             action="/search" method="post"
             class="hidden absolute z-10 mt-2 origin-top-left divide-y divide-coffee rounded-md bg-espresso drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-none"
             id="filter-menu"
-          ><!--Allergies-->
+          >
+            <div class="p-4">
+              <div class="grid grid-cols-4 gap-4 items-center">
+                <p class="text-latte text-sm col-span-1">Time Range: </p>
+                <select id="filterRange" name="filterRange" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
+                  <option value="today">Today</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                  <option value="year">Year</option>
+                  <option value="all">All Time</option>
+                </select>
+              </div>
+            </div>
+            <!--Allergies-->
             <div class="p-4" role="none">
               <div class="grid grid-cols-6 gap-4 items-center">
                 <% for (const filter of filters.allergy) {%>
@@ -59,84 +72,111 @@
           </form>
         </div>
         <div class="flex justify-center">
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center items-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path d="M3658 5104 c-169 -40 -309 -166 -371 -331 -20 -53 -22 -82 -27 -321 l-5 -264 -111 -28 c-313 -79 -570 -281 -713 -560 -64 -124 -95 -226 -126 -412 -122 -726 -347 -1341 -683 -1872 -233 -369 -514 -681 -865 -961 -60 -48 -117 -101 -128 -118 -41 -65 -5 -173 67 -203 74 -31 415 -43 674 -24 908 68 1669 400 2210 966 445 465 739 1067 897 1835 32 156 38 364 14 484 -68 342 -289 631 -600 785 -84 42 -210 84 -284 95 l-48 7 3 248 3 248 30 44 c20 28 49 53 84 71 52 25 62 27 190 27 154 0 189 11 228 69 48 71 20 175 -57 213 -29 15 -61 18 -180 17 -87 0 -168 -6 -202 -15z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center items-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M2300 4839 c-808 -91 -1520 -619 -1845 -1371 -136 -316 -193 -619 -182 -982 6 -199 21 -313 63 -481 216 -861 913 -1524 1779 -1694 174 -34 313 -44 518 -38 343 9 621 77 922 222 634 306 1090 884 1245 1576 64 285 67 764 7 889 -24 48 -87 90 -137 90 -14 0 -70 -23 -125 -50 -55 -28 -126 -55 -158 -61 -126 -22 -273 27 -373 126 -32 31 -69 62 -83 69 -16 9 -77 15 -156 18 -107 4 -142 9 -197 30 -187 70 -323 206 -397 396 -25 63 -26 77 -27 252 0 102 -1 190 -2 196 -1 6 -35 44 -75 85 -142 144 -178 298 -111 478 29 78 30 103 3 157 -28 60 -70 83 -171 94 -99 12 -392 11 -498 -1z m-190 -908 c99 -72 92 -225 -13 -275 -124 -58 -260 51 -225 182 12 45 62 99 103 112 40 12 104 4 135 -19z m396 -646 c17 -7 50 -29 72 -49 142 -129 102 -364 -75 -442 -49 -22 -156 -22 -205 0 -192 84 -221 334 -53 462 69 52 177 64 261 29z m-1077 -465 c80 -23 132 -112 111 -190 -22 -82 -85 -126 -169 -118 -87 9 -141 70 -141 161 0 58 32 105 90 135 50 25 61 26 109 12z m1251 -652 c66 -34 93 -79 88 -149 -7 -94 -66 -149 -161 -149 -58 0 -105 32 -135 92 -32 63 -24 115 25 169 55 60 113 72 183 37z m1005 -7 c49 -23 100 -72 128 -125 30 -58 30 -175 0 -231 -83 -155 -267 -197 -404 -92 -98 74 -129 218 -71 327 66 128 216 180 347 121z m-1599 -535 c98 -46 162 -156 151 -262 -22 -217 -272 -318 -437 -177 -102 88 -120 242 -41 354 71 101 213 138 327 85z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M2325 5014 c-201 -36 -417 -129 -576 -248 -172 -130 -341 -335 -420 -511 l-34 -75 -85 0 c-236 0 -435 -79 -601 -237 -125 -119 -202 -252 -245 -423 -28 -111 -25 -287 5 -405 l24 -90 -33 -25 c-324 -246 -442 -646 -299 -1009 44 -109 93 -185 178 -274 84 -88 174 -151 276 -194 127 -54 197 -67 340 -66 158 1 247 22 383 89 l93 46 56 -33 c180 -109 336 -299 412 -505 52 -143 61 -230 61 -616 l0 -348 689 0 689 0 5 382 c4 372 5 386 30 480 69 260 230 478 451 611 l57 35 97 -49 c142 -72 228 -92 387 -93 185 0 327 41 476 140 81 53 202 179 251 259 234 386 137 865 -232 1145 l-33 25 24 90 c30 118 33 294 5 405 -43 171 -120 304 -245 423 -166 158 -365 237 -601 237 l-85 0 -34 75 c-79 176 -248 381 -420 511 -162 122 -377 213 -585 249 -111 19 -352 18 -461 -1z m-202 -2634 c51 -16 111 -35 135 -40 l42 -11 0 -572 -1 -572 -23 60 c-96 248 -285 503 -492 661 l-74 57 55 49 c99 89 202 245 236 357 7 23 16 41 21 41 6 0 51 -13 101 -30z m996 -11 c33 -110 136 -267 232 -353 l52 -47 -22 -16 c-225 -157 -439 -418 -527 -644 -15 -38 -29 -69 -31 -69 -1 0 -3 245 -3 545 l0 544 43 11 c23 5 80 23 127 39 114 38 115 38 129 -10z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M3308 5105 c-329 -47 -614 -185 -847 -410 -105 -101 -159 -167 -236 -291 -90 -143 -136 -269 -235 -644 -105 -400 -151 -544 -219 -684 -93 -192 -202 -335 -433 -571 l-147 -151 582 -582 582 -582 100 101 c222 224 433 385 630 479 140 67 285 114 680 219 334 90 455 132 583 205 264 150 495 394 622 661 261 547 172 1210 -226 1685 -241 288 -555 475 -924 550 -136 28 -375 35 -512 15z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M1090 1545 l-234 -234 -48 45 c-76 71 -161 106 -272 112 -69 3 -107 0 -152 -13 -269 -78 -435 -346 -369 -598 39 -150 122 -238 290 -307 113 -47 198 -132 245 -245 69 -168 157 -251 307 -290 297 -78 613 175 613 489 0 123 -35 214 -114 302 l-45 50 240 240 239 239 -222 222 c-123 123 -227 223 -233 223 -6 0 -116 -106 -245 -235z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M1690 4778 c-84 -43 -115 -159 -61 -227 111 -139 158 -321 112 -442 -21 -54 -42 -87 -145 -221 -63 -82 -110 -178 -137 -275 -18 -66 -21 -95 -16 -183 7 -129 25 -198 82 -315 55 -112 124 -202 173 -222 99 -41 210 26 219 134 4 51 -1 64 -68 164 -50 75 -80 161 -86 249 -8 116 11 156 161 352 63 82 110 178 137 275 18 66 21 95 16 183 -7 124 -25 196 -76 305 -54 113 -122 202 -174 225 -55 25 -83 25 -137 -2z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M2486 4777 c-52 -29 -80 -77 -80 -138 0 -40 8 -58 51 -123 78 -115 97 -171 98 -291 0 -89 -3 -106 -27 -155 -15 -30 -56 -90 -90 -132 -85 -103 -124 -171 -162 -275 -28 -79 -31 -99 -30 -198 0 -80 7 -133 23 -194 41 -156 148 -334 223 -372 104 -53 228 24 228 141 0 41 -8 59 -55 130 -67 100 -99 195 -99 295 -1 62 3 80 36 145 21 41 63 104 94 140 121 141 184 298 184 459 0 119 -13 193 -51 293 -33 84 -109 207 -155 250 -57 53 -124 62 -188 25z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M3290 4778 c-84 -43 -115 -159 -61 -227 111 -139 158 -321 112 -442 -21 -54 -42 -87 -145 -221 -63 -82 -110 -178 -137 -275 -18 -66 -21 -95 -16 -183 7 -129 25 -198 82 -315 55 -112 124 -202 173 -222 99 -41 210 26 219 134 4 51 -1 64 -68 164 -50 75 -80 161 -86 249 -8 116 11 156 161 352 63 82 110 178 137 275 18 66 21 95 16 183 -7 124 -25 196 -76 305 -54 113 -122 202 -174 225 -55 25 -83 25 -137 -2z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M415 2706 c-95 -43 -111 -121 -80 -390 77 -661 429 -1243 969 -1605 l99 -66 -171 -5 c-152 -4 -174 -7 -198 -26 -53 -39 -69 -71 -69 -134 0 -63 16 -95 69 -134 27 -21 28 -21 1526 -21 1498 0 1499 0 1526 21 53 39 69 71 69 134 0 63 -16 95 -69 134 -24 19 -46 22 -198 26 l-170 5 96 64 c547 362 909 974 977 1653 21 214 9 278 -65 332 l-27 21 -2127 2 c-1757 2 -2132 0 -2157 -11z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M2262 4229 c-976 -34 -1846 -265 -2151 -570 -104 -105 -129 -204 -77 -306 64 -127 258 -265 522 -371 l81 -33 944 302 c597 192 960 303 986 303 33 1 48 -5 68 -25 49 -48 46 -64 -79 -463 -64 -203 -116 -374 -116 -380 0 -24 646 4 1010 44 629 69 1119 208 1403 400 168 114 278 260 263 351 -10 63 -41 114 -110 183 -263 263 -915 465 -1746 541 -152 14 -668 37 -750 33 -19 -1 -131 -5 -248 -9z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M1790 3100 c-316 -103 -682 -223 -813 -266 l-237 -77 0 -774 c0 -733 1 -774 18 -769 9 3 332 131 717 284 l700 277 5 435 5 435 99 310 c54 171 101 316 103 323 3 6 -1 12 -8 11 -8 0 -273 -85 -589 -189z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M2 2322 l3 -718 35 -58 c40 -66 93 -117 195 -186 65 -44 204 -119 261 -140 l24 -10 0 780 c0 552 -3 780 -11 780 -43 0 -278 122 -421 218 -42 29 -80 52 -83 52 -3 0 -4 -323 -3 -718z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M5040 2998 c-119 -86 -346 -195 -555 -268 -519 -179 -1081 -262 -1787 -264 l-318 -1 0 -792 0 -793 78 0 c172 0 637 21 782 35 633 61 1138 183 1493 362 164 82 303 199 349 291 l23 47 3 713 c1 391 -1 712 -5 711 -5 0 -33 -19 -63 -41z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M2315 3938 c-301 -34 -621 -140 -880 -293 -128 -75 -130 -78 -116 -212 57 -537 222 -1038 488 -1473 115 -188 154 -206 329 -150 141 45 246 60 424 60 179 0 283 -15 427 -61 155 -50 205 -34 286 89 240 363 430 870 501 1337 30 197 37 294 24 323 -9 18 -50 49 -118 89 -255 153 -579 258 -892 292 -114 13 -359 12 -473 -1z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M1089 3370 c-187 -140 -445 -416 -513 -549 -26 -49 -32 -130 -13 -184 26 -77 214 -314 352 -446 161 -153 372 -303 568 -405 93 -48 160 -55 214 -21 l31 20 -64 105 c-234 381 -399 835 -469 1287 -15 93 -30 185 -33 205 l-7 38 -66 -50z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M3956 3398 c-2 -13 -12 -79 -21 -148 -62 -482 -253 -1009 -509 -1410 -40 -62 -37 -70 37 -92 75 -23 227 48 454 210 228 163 385 316 543 527 93 124 104 148 105 225 0 84 -20 124 -128 260 -125 157 -309 335 -444 429 l-32 22 -5 -23z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M457 2328 c-94 -247 -130 -444 -131 -713 -1 -188 -1 -191 27 -250 34 -73 85 -128 152 -163 43 -23 62 -27 140 -27 119 0 166 24 278 143 122 129 191 194 302 284 55 44 101 82 103 83 1 1 -41 28 -94 60 -52 31 -141 91 -197 133 -121 90 -390 355 -472 465 -31 42 -61 77 -65 77 -4 0 -23 -42 -43 -92z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M4533 2317 c-90 -112 -288 -312 -398 -398 -75 -60 -220 -159 -298 -204 -26 -15 -47 -29 -45 -30 2 -1 48 -38 103 -82 55 -45 166 -148 246 -230 164 -169 201 -193 308 -201 162 -11 279 71 327 230 16 52 19 94 18 233 -1 248 -40 454 -131 693 -20 50 -39 92 -42 92 -4 0 -43 -46 -88 -103z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M1765 4473 c88 -215 148 -486 168 -760 l4 -51 -93 -58 c-205 -127 -441 -319 -666 -542 l-128 -127 -87 87 c-188 185 -401 310 -623 367 -110 28 -318 41 -331 20 -12 -19 -11 -136 1 -237 25 -194 105 -407 212 -563 l46 -66 -50 -74 c-129 -192 -201 -408 -215 -640 -8 -146 -5 -155 57 -162 27 -3 91 -1 141 4 262 29 524 164 766 393 l83 78 142 -137 c328 -318 615 -526 951 -691 l138 -68 -8 -85 c-10 -107 -9 -328 1 -444 l8 -89 46 7 c128 19 388 127 520 216 59 41 187 147 226 188 29 30 32 31 125 31 208 1 455 52 674 139 391 156 752 461 1004 848 67 102 172 303 212 406 l31 77 -24 63 c-65 171 -191 395 -318 566 -81 108 -297 330 -404 414 -299 234 -682 393 -1020 422 -80 7 -83 8 -170 71 -174 126 -448 245 -722 314 -203 51 -520 100 -651 100 -47 0 -52 -2 -46 -17z m2275 -1304 c123 -69 114 -252 -14 -310 -111 -51 -232 16 -252 138 -5 34 -2 53 19 95 49 99 151 131 247 77z"/>
-              </g>
-            </svg>
-          </button>
-          <button class="group transition-all hover:scale-125 px-3 hover:px-5 active:scale-90 justify-center">
-            <svg class="transition-all w-8 sm:block h-8 text-latte group-hover:text-pistachio active:scale-90 group-hover:drop-shadow-xl" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
-                <path xmlns="http://www.w3.org/2000/svg" d="M1796 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -182 -223 -191 -460 -26 -668 53 -67 94 -92 149 -92 100 0 167 82 148 183 -3 17 -26 56 -50 86 -88 107 -82 183 25 314 71 87 112 162 133 243 39 151 2 300 -105 433 -74 89 -147 112 -223 68z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M2486 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -182 -223 -191 -460 -26 -668 53 -67 94 -92 149 -92 100 0 167 82 148 183 -3 17 -26 56 -50 86 -88 107 -82 183 25 314 71 87 112 162 133 243 39 151 2 300 -105 433 -74 89 -147 112 -223 68z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M3176 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -177 -218 -191 -446 -40 -648 63 -84 104 -112 162 -112 101 0 168 82 149 183 -3 17 -26 56 -50 85 -91 112 -85 183 30 321 183 221 191 462 23 670 -74 89 -147 112 -223 68z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M914 3170 c22 -223 124 -489 272 -713 95 -143 301 -348 448 -446 284 -189 586 -281 926 -281 340 0 642 92 926 281 147 98 353 303 448 446 148 224 250 490 272 713 l7 70 -1653 0 -1653 0 7 -70z"/>
-                <path xmlns="http://www.w3.org/2000/svg" d="M1681 1568 c-91 -441 -271 -1420 -266 -1446 3 -18 19 -48 36 -67 78 -89 216 -61 253 52 8 27 40 181 71 343 30 162 58 307 61 323 l6 27 719 0 c395 0 719 -2 719 -4 0 -31 135 -697 146 -717 30 -59 112 -91 178 -69 44 14 93 69 101 112 4 22 -41 279 -134 762 -77 400 -142 731 -145 734 -3 3 -34 -8 -68 -24 -35 -15 -97 -40 -138 -55 -67 -24 -75 -29 -72 -50 3 -26 59 -320 67 -356 l5 -23 -660 0 -660 0 5 23 c8 37 64 330 67 356 3 21 -4 26 -62 46 -36 12 -96 36 -134 54 -38 17 -72 31 -77 31 -4 0 -12 -24 -18 -52z"/>
-              </g>
-            </svg>
-          </button>
+          <div class="flex items-center">
+            <input type="checkbox" id="spicy" class="peer hidden" />
+            <label for="spicy" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path d="M3658 5104 c-169 -40 -309 -166 -371 -331 -20 -53 -22 -82 -27 -321 l-5 -264 -111 -28 c-313 -79 -570 -281 -713 -560 -64 -124 -95 -226 -126 -412 -122 -726 -347 -1341 -683 -1872 -233 -369 -514 -681 -865 -961 -60 -48 -117 -101 -128 -118 -41 -65 -5 -173 67 -203 74 -31 415 -43 674 -24 908 68 1669 400 2210 966 445 465 739 1067 897 1835 32 156 38 364 14 484 -68 342 -289 631 -600 785 -84 42 -210 84 -284 95 l-48 7 3 248 3 248 30 44 c20 28 49 53 84 71 52 25 62 27 190 27 154 0 189 11 228 69 48 71 20 175 -57 213 -29 15 -61 18 -180 17 -87 0 -168 -6 -202 -15z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="sweet" class="peer hidden" />
+            <label for="sweet" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2300 4839 c-808 -91 -1520 -619 -1845 -1371 -136 -316 -193 -619 -182 -982 6 -199 21 -313 63 -481 216 -861 913 -1524 1779 -1694 174 -34 313 -44 518 -38 343 9 621 77 922 222 634 306 1090 884 1245 1576 64 285 67 764 7 889 -24 48 -87 90 -137 90 -14 0 -70 -23 -125 -50 -55 -28 -126 -55 -158 -61 -126 -22 -273 27 -373 126 -32 31 -69 62 -83 69 -16 9 -77 15 -156 18 -107 4 -142 9 -197 30 -187 70 -323 206 -397 396 -25 63 -26 77 -27 252 0 102 -1 190 -2 196 -1 6 -35 44 -75 85 -142 144 -178 298 -111 478 29 78 30 103 3 157 -28 60 -70 83 -171 94 -99 12 -392 11 -498 -1z m-190 -908 c99 -72 92 -225 -13 -275 -124 -58 -260 51 -225 182 12 45 62 99 103 112 40 12 104 4 135 -19z m396 -646 c17 -7 50 -29 72 -49 142 -129 102 -364 -75 -442 -49 -22 -156 -22 -205 0 -192 84 -221 334 -53 462 69 52 177 64 261 29z m-1077 -465 c80 -23 132 -112 111 -190 -22 -82 -85 -126 -169 -118 -87 9 -141 70 -141 161 0 58 32 105 90 135 50 25 61 26 109 12z m1251 -652 c66 -34 93 -79 88 -149 -7 -94 -66 -149 -161 -149 -58 0 -105 32 -135 92 -32 63 -24 115 25 169 55 60 113 72 183 37z m1005 -7 c49 -23 100 -72 128 -125 30 -58 30 -175 0 -231 -83 -155 -267 -197 -404 -92 -98 74 -129 218 -71 327 66 128 216 180 347 121z m-1599 -535 c98 -46 162 -156 151 -262 -22 -217 -272 -318 -437 -177 -102 88 -120 242 -41 354 71 101 213 138 327 85z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="salad" class="peer hidden" />
+            <label for="salad" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2325 5014 c-201 -36 -417 -129 -576 -248 -172 -130 -341 -335 -420 -511 l-34 -75 -85 0 c-236 0 -435 -79 -601 -237 -125 -119 -202 -252 -245 -423 -28 -111 -25 -287 5 -405 l24 -90 -33 -25 c-324 -246 -442 -646 -299 -1009 44 -109 93 -185 178 -274 84 -88 174 -151 276 -194 127 -54 197 -67 340 -66 158 1 247 22 383 89 l93 46 56 -33 c180 -109 336 -299 412 -505 52 -143 61 -230 61 -616 l0 -348 689 0 689 0 5 382 c4 372 5 386 30 480 69 260 230 478 451 611 l57 35 97 -49 c142 -72 228 -92 387 -93 185 0 327 41 476 140 81 53 202 179 251 259 234 386 137 865 -232 1145 l-33 25 24 90 c30 118 33 294 5 405 -43 171 -120 304 -245 423 -166 158 -365 237 -601 237 l-85 0 -34 75 c-79 176 -248 381 -420 511 -162 122 -377 213 -585 249 -111 19 -352 18 -461 -1z m-202 -2634 c51 -16 111 -35 135 -40 l42 -11 0 -572 -1 -572 -23 60 c-96 248 -285 503 -492 661 l-74 57 55 49 c99 89 202 245 236 357 7 23 16 41 21 41 6 0 51 -13 101 -30z m996 -11 c33 -110 136 -267 232 -353 l52 -47 -22 -16 c-225 -157 -439 -418 -527 -644 -15 -38 -29 -69 -31 -69 -1 0 -3 245 -3 545 l0 544 43 11 c23 5 80 23 127 39 114 38 115 38 129 -10z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="meat" class="peer hidden" />
+            <label for="meat" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M3308 5105 c-329 -47 -614 -185 -847 -410 -105 -101 -159 -167 -236 -291 -90 -143 -136 -269 -235 -644 -105 -400 -151 -544 -219 -684 -93 -192 -202 -335 -433 -571 l-147 -151 582 -582 582 -582 100 101 c222 224 433 385 630 479 140 67 285 114 680 219 334 90 455 132 583 205 264 150 495 394 622 661 261 547 172 1210 -226 1685 -241 288 -555 475 -924 550 -136 28 -375 35 -512 15z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1090 1545 l-234 -234 -48 45 c-76 71 -161 106 -272 112 -69 3 -107 0 -152 -13 -269 -78 -435 -346 -369 -598 39 -150 122 -238 290 -307 113 -47 198 -132 245 -245 69 -168 157 -251 307 -290 297 -78 613 175 613 489 0 123 -35 214 -114 302 l-45 50 240 240 239 239 -222 222 c-123 123 -227 223 -233 223 -6 0 -116 -106 -245 -235z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="soup" class="peer hidden" />
+            <label for="soup" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1690 4778 c-84 -43 -115 -159 -61 -227 111 -139 158 -321 112 -442 -21 -54 -42 -87 -145 -221 -63 -82 -110 -178 -137 -275 -18 -66 -21 -95 -16 -183 7 -129 25 -198 82 -315 55 -112 124 -202 173 -222 99 -41 210 26 219 134 4 51 -1 64 -68 164 -50 75 -80 161 -86 249 -8 116 11 156 161 352 63 82 110 178 137 275 18 66 21 95 16 183 -7 124 -25 196 -76 305 -54 113 -122 202 -174 225 -55 25 -83 25 -137 -2z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2486 4777 c-52 -29 -80 -77 -80 -138 0 -40 8 -58 51 -123 78 -115 97 -171 98 -291 0 -89 -3 -106 -27 -155 -15 -30 -56 -90 -90 -132 -85 -103 -124 -171 -162 -275 -28 -79 -31 -99 -30 -198 0 -80 7 -133 23 -194 41 -156 148 -334 223 -372 104 -53 228 24 228 141 0 41 -8 59 -55 130 -67 100 -99 195 -99 295 -1 62 3 80 36 145 21 41 63 104 94 140 121 141 184 298 184 459 0 119 -13 193 -51 293 -33 84 -109 207 -155 250 -57 53 -124 62 -188 25z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M3290 4778 c-84 -43 -115 -159 -61 -227 111 -139 158 -321 112 -442 -21 -54 -42 -87 -145 -221 -63 -82 -110 -178 -137 -275 -18 -66 -21 -95 -16 -183 7 -129 25 -198 82 -315 55 -112 124 -202 173 -222 99 -41 210 26 219 134 4 51 -1 64 -68 164 -50 75 -80 161 -86 249 -8 116 11 156 161 352 63 82 110 178 137 275 18 66 21 95 16 183 -7 124 -25 196 -76 305 -54 113 -122 202 -174 225 -55 25 -83 25 -137 -2z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M415 2706 c-95 -43 -111 -121 -80 -390 77 -661 429 -1243 969 -1605 l99 -66 -171 -5 c-152 -4 -174 -7 -198 -26 -53 -39 -69 -71 -69 -134 0 -63 16 -95 69 -134 27 -21 28 -21 1526 -21 1498 0 1499 0 1526 21 53 39 69 71 69 134 0 63 -16 95 -69 134 -24 19 -46 22 -198 26 l-170 5 96 64 c547 362 909 974 977 1653 21 214 9 278 -65 332 l-27 21 -2127 2 c-1757 2 -2132 0 -2157 -11z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="dairy" class="peer hidden" />
+            <label for="dairy" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2262 4229 c-976 -34 -1846 -265 -2151 -570 -104 -105 -129 -204 -77 -306 64 -127 258 -265 522 -371 l81 -33 944 302 c597 192 960 303 986 303 33 1 48 -5 68 -25 49 -48 46 -64 -79 -463 -64 -203 -116 -374 -116 -380 0 -24 646 4 1010 44 629 69 1119 208 1403 400 168 114 278 260 263 351 -10 63 -41 114 -110 183 -263 263 -915 465 -1746 541 -152 14 -668 37 -750 33 -19 -1 -131 -5 -248 -9z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1790 3100 c-316 -103 -682 -223 -813 -266 l-237 -77 0 -774 c0 -733 1 -774 18 -769 9 3 332 131 717 284 l700 277 5 435 5 435 99 310 c54 171 101 316 103 323 3 6 -1 12 -8 11 -8 0 -273 -85 -589 -189z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2 2322 l3 -718 35 -58 c40 -66 93 -117 195 -186 65 -44 204 -119 261 -140 l24 -10 0 780 c0 552 -3 780 -11 780 -43 0 -278 122 -421 218 -42 29 -80 52 -83 52 -3 0 -4 -323 -3 -718z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M5040 2998 c-119 -86 -346 -195 -555 -268 -519 -179 -1081 -262 -1787 -264 l-318 -1 0 -792 0 -793 78 0 c172 0 637 21 782 35 633 61 1138 183 1493 362 164 82 303 199 349 291 l23 47 3 713 c1 391 -1 712 -5 711 -5 0 -33 -19 -63 -41z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="pastry" class="peer hidden" />
+            <label for="pastry" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2315 3938 c-301 -34 -621 -140 -880 -293 -128 -75 -130 -78 -116 -212 57 -537 222 -1038 488 -1473 115 -188 154 -206 329 -150 141 45 246 60 424 60 179 0 283 -15 427 -61 155 -50 205 -34 286 89 240 363 430 870 501 1337 30 197 37 294 24 323 -9 18 -50 49 -118 89 -255 153 -579 258 -892 292 -114 13 -359 12 -473 -1z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1089 3370 c-187 -140 -445 -416 -513 -549 -26 -49 -32 -130 -13 -184 26 -77 214 -314 352 -446 161 -153 372 -303 568 -405 93 -48 160 -55 214 -21 l31 20 -64 105 c-234 381 -399 835 -469 1287 -15 93 -30 185 -33 205 l-7 38 -66 -50z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M3956 3398 c-2 -13 -12 -79 -21 -148 -62 -482 -253 -1009 -509 -1410 -40 -62 -37 -70 37 -92 75 -23 227 48 454 210 228 163 385 316 543 527 93 124 104 148 105 225 0 84 -20 124 -128 260 -125 157 -309 335 -444 429 l-32 22 -5 -23z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M457 2328 c-94 -247 -130 -444 -131 -713 -1 -188 -1 -191 27 -250 34 -73 85 -128 152 -163 43 -23 62 -27 140 -27 119 0 166 24 278 143 122 129 191 194 302 284 55 44 101 82 103 83 1 1 -41 28 -94 60 -52 31 -141 91 -197 133 -121 90 -390 355 -472 465 -31 42 -61 77 -65 77 -4 0 -23 -42 -43 -92z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M4533 2317 c-90 -112 -288 -312 -398 -398 -75 -60 -220 -159 -298 -204 -26 -15 -47 -29 -45 -30 2 -1 48 -38 103 -82 55 -45 166 -148 246 -230 164 -169 201 -193 308 -201 162 -11 279 71 327 230 16 52 19 94 18 233 -1 248 -40 454 -131 693 -20 50 -39 92 -42 92 -4 0 -43 -46 -88 -103z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="fish" class="peer hidden" />
+            <label for="fish" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1765 4473 c88 -215 148 -486 168 -760 l4 -51 -93 -58 c-205 -127 -441 -319 -666 -542 l-128 -127 -87 87 c-188 185 -401 310 -623 367 -110 28 -318 41 -331 20 -12 -19 -11 -136 1 -237 25 -194 105 -407 212 -563 l46 -66 -50 -74 c-129 -192 -201 -408 -215 -640 -8 -146 -5 -155 57 -162 27 -3 91 -1 141 4 262 29 524 164 766 393 l83 78 142 -137 c328 -318 615 -526 951 -691 l138 -68 -8 -85 c-10 -107 -9 -328 1 -444 l8 -89 46 7 c128 19 388 127 520 216 59 41 187 147 226 188 29 30 32 31 125 31 208 1 455 52 674 139 391 156 752 461 1004 848 67 102 172 303 212 406 l31 77 -24 63 c-65 171 -191 395 -318 566 -81 108 -297 330 -404 414 -299 234 -682 393 -1020 422 -80 7 -83 8 -170 71 -174 126 -448 245 -722 314 -203 51 -520 100 -651 100 -47 0 -52 -2 -46 -17z m2275 -1304 c123 -69 114 -252 -14 -310 -111 -51 -232 16 -252 138 -5 34 -2 53 19 95 49 99 151 131 247 77z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="grill" class="peer hidden" />
+            <label for="grill" class="transition-all text-coffee hover:text-pistachio active:scale-90 hover:scale-125 px-3 hover:px-5 hover:drop-shadow-xl peer-checked:text-latte peer-checked:hover:text-pistachio">
+              <svg class="block h-8 w-8" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="currentColor">
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1796 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -182 -223 -191 -460 -26 -668 53 -67 94 -92 149 -92 100 0 167 82 148 183 -3 17 -26 56 -50 86 -88 107 -82 183 25 314 71 87 112 162 133 243 39 151 2 300 -105 433 -74 89 -147 112 -223 68z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M2486 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -182 -223 -191 -460 -26 -668 53 -67 94 -92 149 -92 100 0 167 82 148 183 -3 17 -26 56 -50 86 -88 107 -82 183 25 314 71 87 112 162 133 243 39 151 2 300 -105 433 -74 89 -147 112 -223 68z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M3176 5097 c-64 -37 -92 -114 -66 -182 6 -15 26 -46 45 -69 90 -110 83 -176 -30 -316 -177 -218 -191 -446 -40 -648 63 -84 104 -112 162 -112 101 0 168 82 149 183 -3 17 -26 56 -50 85 -91 112 -85 183 30 321 183 221 191 462 23 670 -74 89 -147 112 -223 68z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M914 3170 c22 -223 124 -489 272 -713 95 -143 301 -348 448 -446 284 -189 586 -281 926 -281 340 0 642 92 926 281 147 98 353 303 448 446 148 224 250 490 272 713 l7 70 -1653 0 -1653 0 7 -70z"/>
+                  <path xmlns="http://www.w3.org/2000/svg" d="M1681 1568 c-91 -441 -271 -1420 -266 -1446 3 -18 19 -48 36 -67 78 -89 216 -61 253 52 8 27 40 181 71 343 30 162 58 307 61 323 l6 27 719 0 c395 0 719 -2 719 -4 0 -31 135 -697 146 -717 30 -59 112 -91 178 -69 44 14 93 69 101 112 4 22 -41 279 -134 762 -77 400 -142 731 -145 734 -3 3 -34 -8 -68 -24 -35 -15 -97 -40 -138 -55 -67 -24 -75 -29 -72 -50 3 -26 59 -320 67 -356 l5 -23 -660 0 -660 0 5 23 c8 37 64 330 67 356 3 21 -4 26 -62 46 -36 12 -96 36 -134 54 -38 17 -72 31 -77 31 -4 0 -12 -24 -18 -52z"/>
+                </g>
+              </svg>
+            </label>
+          </div>
         </div>
         <div class="w-28 pl-3">
           <button id="sort-button" class="p-2 group hover:scale-105 active:scale-90 transition-all flex items-center relative px-2 border drop-shadow-lg bg-espresso hover:bg-pistachio border-latte hover:border-pistachio rounded-full hover:drop-shadow-xl">
@@ -252,6 +292,7 @@
     </div>
   </div>
 </div>
+
 <script>
   const sortButton = document.querySelector('#sort-button');
   const sortBox = document.querySelector('#sort-menu');
@@ -291,4 +332,5 @@
       filterBox.classList.add('hidden');
     }
   });
+  document.getElementById("filterRange").value = "<%= search.filterRange %>";
 </script>
