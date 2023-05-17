@@ -18,20 +18,10 @@ router.get("/admin/managerecipes", async (req, res) => {
 
 //post
 router.post("/admin/managerecipes", async (req, res) => {
-  const session = req.session;
-  const recipes = await Recipe.fetchRecipes(session.filter || null, session.sort || null);
   const delRec = req.body.submit;
   const fetchRec = new Recipe(null, delRec);
-  //console.log(delRec);
   const result = fetchRec.delRecipe();
-  /*if (result){
-    console.log("delete success");
-
-  }
-  else{
-    console.log("delete error");
-    
-  }*/
+  if (!result) console.log("delete error");
 
   return res.redirect(req.get("referer"));
 });

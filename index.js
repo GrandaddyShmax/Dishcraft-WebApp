@@ -1,3 +1,7 @@
+//[Tests]
+const start = new Date();
+const dtCheck = process.argv.length > 2 && process.argv[2] == "dt"; //deploy time check
+const testing = typeof global.it === "function" || dtCheck; //avoid printing during tests
 //[Import]
 //App:
 const fs = require("fs"); //accessing other folders & files
@@ -22,27 +26,25 @@ const port = 3000;
 const url = `http://localhost:${port}/`;
 const appLabel = chalk.blue("[App]");
 const dbLabel = chalk.magenta("[DB]");
-//Unit tests:
-const testing = typeof global.it === "function";
 
 //[Connect to database]
-let connected = null;
+let db = null;
 (async () => {
   mongoose.set("strictQuery", true); //force to follow schema
   try {
     await mongoose.connect(DB_URL).then(() => {
-      connected = true;
+      db = true;
       if (!testing) console.log(dbLabel + " Database connected.");
     });
   } catch (error) {
-    connected = false;
+    db = false;
     if (!testing) console.log(dbLabel + chalk.red(" Couldn't connect to database."));
     console.log(error);
   }
 })();
 
 //[Connect to A.I. API]
-connectAI(testing); //will load in background
+const ai = Promise.resolve(connectAI(testing)); //will load in background
 
 //[Initialize Tailwind]
 exec("npm run tailwind:css", (err, stdout, stderr) => {
@@ -97,9 +99,19 @@ if (!testing) {
 
 //[Launch app]
 (async () => {
-  await until((_) => connected != null); //wait for all async functions to finish
+  await until((_) => db != null); //wait for db connection to finish
   app.listen(port);
   if (!testing) console.log(appLabel + " App launched at: " + chalk.yellow(url));
+  //wait for ai connection to finish
+  ai.then(() => {
+    //print deploy time
+    let dtTime = (new Date().getTime() - start.getTime()) / 1000;
+    const threshhold = 7;
+    dtTime = dtTime <= threshhold ? chalk.green(dtTime) : chalk.red(dtTime);
+
+    console.log(chalk.grey("Deployment time: ") + dtTime);
+    if (dtCheck) process.exit(0);
+  });
 })();
 
 module.exports = { app };

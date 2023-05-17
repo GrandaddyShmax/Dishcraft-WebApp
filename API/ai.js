@@ -14,6 +14,7 @@ async function connectAI(testing) {
   else if (access.lib == "2") msg = await loadLib2(access.disabled);
   else msg = " Couldn't load Api, invalid lib selected.";
   if (!testing) console.log(aiLabel + msg);
+  return true;
 }
 
 //Main module
