@@ -155,61 +155,68 @@
             <p class="text-latte font-bold">Protein (kg):</p>
             <input readonly type="text" value="<%= recipe.nutritions.protein %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
           </div>
-          <div class="hidden justify-end items-center gap-2">
-            <div class="items-center flex flex-col">
-              <img src="https://i.imgur.com/mexLqzQ.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
-              <p class="bg-espresso rounded-sm mt-2 px-2 text-latte">0</p>
-            </div>
-            <div class="items-center flex flex-col">
-              <img src="https://i.imgur.com/SrfSREa.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
-              <p class="bg-espresso rounded-sm mt-2 px-2 text-latte">0</p>
-            </div>
-            <div class="items-center flex flex-col">
-              <img src="https://i.imgur.com/nCm57df.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
-              <p class="bg-espresso rounded-sm mt-2 px-2 text-latte">0</p>
-            </div>
-            <div class="items-center flex flex-col">
-              <img src="https://i.imgur.com/GA9iqPB.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
-              <p class="bg-espresso rounded-sm mt-2 px-2 text-latte">0</p>
-            </div>
+          <div class="flex justify-end items-center gap-2">
+            <% if (recipe.badgesCount[0] > 0) { %>
+              <div class="items-center flex flex-col">
+                <img src="https://i.imgur.com/mexLqzQ.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
+                <p class="bg-espresso rounded-sm mt-2 px-2 text-latte"><%= recipe.badgesCount[0] %></p>
+              </div>
+            <% } if (recipe.badgesCount[1] > 0) { %>
+              <div class="items-center flex flex-col">
+                <img src="https://i.imgur.com/SrfSREa.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
+                <p class="bg-espresso rounded-sm mt-2 px-2 text-latte"><%= recipe.badgesCount[1] %></p>
+              </div>
+            <% } if (recipe.badgesCount[2] > 0) { %>
+              <div class="items-center flex flex-col">
+                <img src="https://i.imgur.com/nCm57df.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
+                <p class="bg-espresso rounded-sm mt-2 px-2 text-latte"><%= recipe.badgesCount[2] %></p>
+              </div>
+            <% } if (recipe.badgesCount[3] > 0) { %>
+              <div class="items-center flex flex-col">
+                <img src="https://i.imgur.com/GA9iqPB.png" class="w-16 h-16 aspect-square object-cover hover:animate-wiggle"/>
+                <p class="bg-espresso rounded-sm mt-2 px-2 text-latte"><%= recipe.badgesCount[3] %></p>
+              </div>
+            <% } %>
           </div>
           <div class="pt-4 flex justify-between items-center">
             <p class="text-2xl text-latte font-bold">
               Rating:
             </p>
             <% if (locals.user && user.role > 1) { %>
-              <div class="relative">
-                <button id="badges-button" class="group hover:scale-105 active:scale-90 transition-all border border-latte items-center relative p-2 m-1 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M19 9C19 11.3787 17.8135 13.4804 16 14.7453V22H13.4142L12 20.5858L10.5858 22H8V14.7453C6.18652 13.4804 5 11.3787 5 9C5 5.13401 8.13401 2 12 2C15.866 2 19 5.13401 19 9ZM17 9C17 11.7614 14.7614 14 12 14C9.23858 14 7 11.7614 7 9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9ZM10 19.7573L12 17.7573L14 19.7574V15.7101C13.3663 15.8987 12.695 16 12 16C11.305 16 10.6337 15.8987 10 15.7101V19.7573Z"
-                    fill="currentColor"
-                    />
-                  </svg>
-                </button>
+              <form class="relative" action="/recipe" method="POST">
+                <% if (isBadgeButton) { %>
+                  <button id="badges-button" type="button" class="group hover:scale-105 active:scale-90 transition-all border border-latte items-center relative p-2 m-1 text-latte hover:text-espresso bg-espresso hover:bg-pistachio hover:border-pistachio rounded-full hover:drop-shadow-xl">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M19 9C19 11.3787 17.8135 13.4804 16 14.7453V22H13.4142L12 20.5858L10.5858 22H8V14.7453C6.18652 13.4804 5 11.3787 5 9C5 5.13401 8.13401 2 12 2C15.866 2 19 5.13401 19 9ZM17 9C17 11.7614 14.7614 14 12 14C9.23858 14 7 11.7614 7 9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9ZM10 19.7573L12 17.7573L14 19.7574V15.7101C13.3663 15.8987 12.695 16 12 16C11.305 16 10.6337 15.8987 10 15.7101V19.7573Z"
+                      fill="currentColor"
+                      />
+                    </svg>
+                  </button>
+                <% } %>
                 <div id="badges-menu" class="hidden absolute gap-2 bg-espresso rounded-md border border-latte right-0 p-4 transition-all group hover:scale-105">
-                  <button class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
+                  <button id="badge1Button" type="submit" value="1" name="badges" class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
                     <img src="https://i.imgur.com/mexLqzQ.png" class="w-16 h-16 aspect-square object-cover"/>
                   </button>
-                  <button class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
+                  <button id="badge2Button" type="submit" value="2" name="badges" class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
                     <img src="https://i.imgur.com/SrfSREa.png" class="w-16 h-16 aspect-square object-cover"/>
                   </button>
-                  <button class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
+                  <button id="badge3Button" type="submit" value="3" name="badges" class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
                     <img src="https://i.imgur.com/nCm57df.png" class="w-16 h-16 aspect-square object-cover"/>
                   </button>
-                  <button class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
+                  <button id="badge4Button" type="submit" value="4" name="badges" class="w-16 h-16 block transition-all hover:scale-110 active:scale-90">
                     <img src="https://i.imgur.com/GA9iqPB.png" class="w-16 h-16 aspect-square object-cover"/>
                   </button>
                 </div>
-              </div>
+              </form>
             <% } %>
           </div>
           <div class="flex items-center mt-3 mb-3">

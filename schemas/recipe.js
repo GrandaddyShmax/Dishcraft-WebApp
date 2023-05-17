@@ -27,6 +27,8 @@ module.exports = (schemas) => {
     nutritions: { energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number },
     categories: { spicy: Boolean, sweet: Boolean, salad: Boolean, meat: Boolean, soup: Boolean, dairy: Boolean, 
                   pastry: Boolean, fish: Boolean, grill: Boolean },
+    badgesUsers : [String],
+    badgesCount : [Number]
   });
 
   //[Registers in database]

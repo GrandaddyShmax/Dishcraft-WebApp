@@ -33,7 +33,9 @@ class Recipe {
           "uploadDate",
           "nutritions",
           "allergies",
-          "categories"
+          "categories",
+          "badgesUsers",
+          "badgesCount"
         ],
         this,
         tempV
@@ -65,7 +67,9 @@ class Recipe {
         color: this.color,
         uploadDate: date,
         nutritions: this.nutritions,
-        categories: this.categories
+        categories: this.categories,
+        badgesUsers: [],
+        badgesCount: [0, 0, 0, 0]
       });
       return { success: true, msg: null };
     } catch (error) {
@@ -94,7 +98,7 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions", "categories"],
+        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
         this,
         details
       );
@@ -133,7 +137,7 @@ class Recipe {
       //search term:
       if (this.checkTerm(term, recipe, user)) continue;
       var tempRecipe = offloadFields(
-        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions", "categories"],
+        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
         null,
         recipe
       );
@@ -366,6 +370,23 @@ class Recipe {
       parseFancy(this.rating4),
       parseFancy(this.rating5),
     ];
+  }
+  async addBadgeToRecipe(userID, badgeNum) {
+    if (!this.badgesUsers) this.badgesUsers = [];
+    if (!((this.badgesUsers).includes(userID)))
+    {
+      if (!this.badgesCount || this.badgesCount.length < 4) this.badgesCount = [0, 0, 0, 0];
+      this.badgesUsers.push(userID);
+      this.badgesCount[parseInt(badgeNum) - 1] += 1;
+      try {
+        await schemas.Recipe.updateOne({ _id: this.id }, 
+          { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    } return false;
   }
 }
 /*[ External access ]*/
