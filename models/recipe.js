@@ -35,7 +35,7 @@ class Recipe {
           "allergies",
           "categories",
           "badgesUsers",
-          "badgesCount"
+          "badgesCount",
         ],
         this,
         tempV
@@ -69,8 +69,10 @@ class Recipe {
         nutritions: this.nutritions,
         categories: this.categories,
         badgesUsers: [],
-        badgesCount: [0, 0, 0, 0]
+        badgesCount: [0, 0, 0, 0],
       });
+      //respond to unit test
+      if (this.recipeName == "uniTest") await schemas.Recipe.deleteOne({ recipeName: this.recipeName });
       return { success: true, msg: null };
     } catch (error) {
       console.log(error);
@@ -98,7 +100,19 @@ class Recipe {
     this.user = user;
     if (details) {
       offloadFields(
-        ["recipeName", "report", "aiMade", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
+        [
+          "recipeName",
+          "report",
+          "aiMade",
+          "instructions",
+          "badges",
+          "color",
+          "uploadDate",
+          "nutritions",
+          "categories",
+          "badgesUsers",
+          "badgesCount",
+        ],
         this,
         details
       );
@@ -137,7 +151,21 @@ class Recipe {
       //search term:
       if (this.checkTerm(term, recipe, user)) continue;
       var tempRecipe = offloadFields(
-        ["id", "recipeName", "report", "aiMade", "ingredients", "instructions", "badges", "color", "uploadDate", "nutritions", "categories", "badgesUsers", "badgesCount"],
+        [
+          "id",
+          "recipeName",
+          "report",
+          "aiMade",
+          "ingredients",
+          "instructions",
+          "badges",
+          "color",
+          "uploadDate",
+          "nutritions",
+          "categories",
+          "badgesUsers",
+          "badgesCount",
+        ],
         null,
         recipe
       );
@@ -194,9 +222,12 @@ class Recipe {
     let result = false;
     switch (filter) {
       case "today":
-        if (recipeDate.getFullYear() == currDate.getFullYear() && 
-            recipeDate.getMonth() == currDate.getMonth() &&
-            recipeDate.getDate() == currDate.getDate()) result = true;
+        if (
+          recipeDate.getFullYear() == currDate.getFullYear() &&
+          recipeDate.getMonth() == currDate.getMonth() &&
+          recipeDate.getDate() == currDate.getDate()
+        )
+          result = true;
         break;
       case "week":
         const weekStart = new Date();
@@ -204,8 +235,7 @@ class Recipe {
         if (recipeDate >= weekStart) result = true;
         break;
       case "month":
-        if (recipeDate.getFullYear() == currDate.getFullYear() && 
-            recipeDate.getMonth() == currDate.getMonth()) result = true;
+        if (recipeDate.getFullYear() == currDate.getFullYear() && recipeDate.getMonth() == currDate.getMonth()) result = true;
         break;
       case "year":
         if (recipeDate.getFullYear() == currDate.getFullYear()) result = true;
@@ -240,17 +270,19 @@ class Recipe {
       });
     const { category, dir } = sort;
     const sign = dir == "descend" ? -1 : 1;
-    if (category == "new" ) {
+    if (category == "new") {
       return recipes.sort((a, b) => {
         const dateA = new Date(a.uploadDate);
         const dateB = new Date(b.uploadDate);
         if (dateA > dateB) return sign;
         if (dateA < dateB) return sign * -1;
-        return 0; 
+        return 0;
       });
     }
-    if ( category == "top") {
-      return recipes.sort((a, b) => { return sign * (a.rating.avg - b.rating.avg); });
+    if (category == "top") {
+      return recipes.sort((a, b) => {
+        return sign * (a.rating.avg - b.rating.avg);
+      });
     }
     return recipes.sort((a, b) => {
       const aCat = a.nutritions[category] || -1;
@@ -317,6 +349,7 @@ class Recipe {
         return false;
       }
     }
+    return true;
   }
   async voteRating(userID, num) {
     //remove previous vote
@@ -373,20 +406,19 @@ class Recipe {
   }
   async addBadgeToRecipe(userID, badgeNum) {
     if (!this.badgesUsers) this.badgesUsers = [];
-    if (!((this.badgesUsers).includes(userID)))
-    {
+    if (!this.badgesUsers.includes(userID)) {
       if (!this.badgesCount || this.badgesCount.length < 4) this.badgesCount = [0, 0, 0, 0];
       this.badgesUsers.push(userID);
       this.badgesCount[parseInt(badgeNum) - 1] += 1;
       try {
-        await schemas.Recipe.updateOne({ _id: this.id }, 
-          { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
+        await schemas.Recipe.updateOne({ _id: this.id }, { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
         return true;
       } catch (error) {
         console.log(error);
         return false;
       }
-    } return false;
+    }
+    return false;
   }
 }
 /*[ External access ]*/

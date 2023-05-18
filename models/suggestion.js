@@ -16,6 +16,8 @@ class Suggestion {
         suggestionName: this.suggestionName,
         suggestionDescription: this.suggestionDescription,
       });
+      //respond to unit test
+      if (this.suggestionName == "uniTest") await schemas.Suggestion.deleteOne({ suggestionName: this.suggestionName });
       return { success: true, msg: null };
     } catch (error) {
       console.log(error);

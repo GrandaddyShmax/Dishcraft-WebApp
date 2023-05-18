@@ -20,7 +20,7 @@ const { connectAI } = require("./API/ai");
 const chalk = require("chalk"); //colorful console.logs
 const path = require("path"); //safe path creating
 const bodyParser = require("body-parser"); //better request parsing
-const { until, printAllRoutes } = require("./utils.js");
+const { printAllRoutes } = require("./utils.js");
 //Info:
 const port = 3000;
 const url = `http://localhost:${port}/`;
@@ -28,23 +28,26 @@ const appLabel = chalk.blue("[App]");
 const dbLabel = chalk.magenta("[DB]");
 
 //[Connect to database]
-let db = null;
-(async () => {
+//let db = null;
+const connectDB = async () => {
   mongoose.set("strictQuery", true); //force to follow schema
   try {
     await mongoose.connect(DB_URL).then(() => {
-      db = true;
       if (!testing) console.log(dbLabel + " Database connected.");
     });
+    return true;
   } catch (error) {
-    db = false;
     if (!testing) console.log(dbLabel + chalk.red(" Couldn't connect to database."));
     console.log(error);
+    return false;
   }
-})();
+};
+const db = connectDB(); //will load in background
+module.exports.db = db;
+//console.log(db);
 
 //[Connect to A.I. API]
-const ai = Promise.resolve(connectAI(testing)); //will load in background
+const ai = connectAI(testing); //will load in background
 
 //[Initialize Tailwind]
 exec("npm run tailwind:css", (err, stdout, stderr) => {
@@ -68,8 +71,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/images/temp/"),
   filename: (req, file, cb) => cb(null, file.originalname),
 });
-const uploadImage = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 } });
-module.exports = { uploadImage };
+module.exports.uploadImage = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 } });
 
 //[Prepare routes]
 const controllers = fs.readdirSync(`./controllers`);
@@ -99,22 +101,26 @@ if (!testing) {
 
 //[Launch app]
 (async () => {
-  await until((_) => db != null); //wait for db connection to finish
-  app.listen(port);
-  if (!testing) console.log(appLabel + " App launched at: " + chalk.yellow(url));
-  //wait for ai connection to finish
-  ai.then(() => {
-    //print deploy time
-    let dtTime = (new Date().getTime() - start.getTime()) / 1000;
-    const threshhold = 7;
-    dtTime = dtTime <= threshhold ? chalk.green(dtTime) : chalk.red(dtTime);
+  //wait for db connection to finish
+  db.then(() => {
+    app.listen(port);
+    if (!testing) console.log(appLabel + " App launched at: " + chalk.yellow(url));
 
-    console.log(chalk.grey("Deployment time: ") + dtTime);
-    if (dtCheck) process.exit(0);
+    //wait for ai connection to finish
+    ai.then(() => {
+      //print deploy time
+      let dtTime = (new Date().getTime() - start.getTime()) / 1000;
+      const threshhold = 7;
+      dtTime = dtTime <= threshhold ? chalk.green(dtTime) : chalk.red(dtTime);
+      if (!testing || (testing && dtCheck)) {
+        console.log(chalk.grey("Deployment time: ") + dtTime);
+      }
+      if (dtCheck) process.exit(0);
+    });
   });
 })();
 
-module.exports = { app };
+module.exports.app = app;
 
 //[Process events]
 process.on("SIGINT", (signal, code) => process.exit(128 + signal));

@@ -33,7 +33,7 @@ pipeline {
         sh 'npm install'
       }
     }
-    stage('Run tests') {
+    stage('Run unit tests') {
       steps {
         sh 'npm test'
       }

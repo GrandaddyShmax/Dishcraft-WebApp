@@ -131,6 +131,8 @@ class Ingredient {
         sugar: this.sugar,
         protein: this.protein
       });
+       //respond to unit test
+       if (this.name == "uniTest") await schemas.Recipe.deleteOne({ name: this.name });
       return { success: true, msg: null };
     } catch (error) {
       console.log(error);

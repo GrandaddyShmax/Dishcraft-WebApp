@@ -60,6 +60,8 @@ class User {
         latest: [],
         bookmarks: [],
       });
+      //respond to unit test
+      if (this.userName == "uniTest") await schemas.User.deleteOne({ userName: this.userName });
       return { successful: true, message: "success" };
     } catch (
       verror // "var + error = verror"
