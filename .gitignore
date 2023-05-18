@@ -3,3 +3,4 @@ package-lock.json
 node_modules/
 .vscode/settings.json
 public/styles/style.css
+.nyc_output

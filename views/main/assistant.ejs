@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <%if (user.role > 1 && alert != "") { %>
+      <%if (locals.user && user.role > 1 && alert != "") { %>
         <div class="flex-none w-full h-20 mb-4">
           <div id="backgroundAI" class="bg-coffee flex flex-col flex-1 p-6 font-bold text-latte text-center text-2xl w-full m-2 rounded-md">
             <%=alert%>

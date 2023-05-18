@@ -98,7 +98,7 @@ function handleIngAdding(req, res, buttonPress, index) {
 }
 
 //Prints all registered routes
-function printAllRoutes(app, url) {
+function printAllRoutes(app, url, silent) {
   const table = new AsciiTable().setBorder("|", "=", "0", "0").setAlign(0, AsciiTable.CENTER);
   //add url to table
   function add(path, layer) {
@@ -125,6 +125,7 @@ function printAllRoutes(app, url) {
     }
   }
   app._router.stack.forEach(add.bind(null, []));
+  if (silent) return true;
   console.log(table.toString());
 }
 
