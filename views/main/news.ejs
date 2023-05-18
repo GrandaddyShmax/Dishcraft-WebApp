@@ -3,61 +3,69 @@
       <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
         <div class="flex flex-1 flex-col gap-4">
           <% if (locals.user && user.role==3) {%>
-            <form>
+            <form action="/news" method="POST">
               <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md gap-2">
                 <div class="flex items-center gap-2">
                   <input required name="title" value="" placeholder="Title..." type="text" class="px-4 h-12 w-full font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee">
-                  <button class="bg-latte py-2.5 px-6 font-bold text-espresso rounded-md transition-all hover:bg-pistachio hover:scale-110 active:scale-90 hover:drop-shadow-xl">Post
+                  <button id="add" type="submit" name="submit" value="<%=`add&`+index%>" class="bg-latte py-2.5 px-6 font-bold text-espresso rounded-md transition-all hover:bg-pistachio hover:scale-110 active:scale-90 hover:drop-shadow-xl">Post
                   </button>
                 </div>
-                <textarea required name="theText" placeholder="Some News..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee"></textarea>
+                <textarea required name="description" placeholder="Some News..." class="block px-4 py-3 w-full h-56 font-bold transition-all break-normal rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm placeholder:text-coffee"></textarea>
               </div>
             </form>
           <% } %>
           <!-- Multiply this news template, newest on top -->
-          <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center">
-                <div class="block w-16 mr-2 mb-2 aspect-square text-latte rounded-full border border-latte group-hover:border-espresso overflow-hidden transition-all">
-                  <img src="" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+          <form action="/news" method="POST" >
+            <% 
+              var index = 0;
+              for (const news of allNews) 
+            { %>
+              <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <div class="block w-16 mr-2 mb-2 aspect-square text-latte rounded-full border border-latte group-hover:border-espresso overflow-hidden transition-all">
+                      <img src="<%= news.user.avatar %>" class="rounded-xl w-full aspect-square object-cover pointer-events-none" />
+                    </div>
+                    <p name="userName" class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-pistachio"><%= news.user.userName %></p>
+                    <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-pistachio items-center pl-1 group-hover:text-espresso transition-all"
+                    >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M13 12.8293C14.1652 12.4175 15 11.3062 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.3062 9.83481 12.4175 11 12.8293V16C11 16.5523 11.4477 17 12 17C12.5523 17 13 16.5523 13 16V12.8293ZM11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12Z"
+                      fill="currentColor"
+                    />
+                    </svg>
+                  </div>
+                  <% if (locals.user && user.role==3) {%>
+                    <button id="delete" type="submit" name="submit" value="<%=`delete&`+index%>" class="bg-latte py-2.5 px-6 font-bold text-espresso rounded-md transition-all hover:bg-red-500 hover:text-latte hover:scale-110 active:scale-90 hover:drop-shadow-xl">Remove
+                    </button>
+                  <% } %>
                 </div>
-                <p class="pointer-events-none font-bold leading-tight sm:text-lg block truncate text-pistachio">username</p>
-                <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-pistachio items-center pl-1 group-hover:text-espresso transition-all"
-                >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M13 12.8293C14.1652 12.4175 15 11.3062 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.3062 9.83481 12.4175 11 12.8293V16C11 16.5523 11.4477 17 12 17C12.5523 17 13 16.5523 13 16V12.8293ZM11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44772 12.5523 9 12 9C11.4477 9 11 9.44772 11 10Z"
-                  fill="currentColor"
-                />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12Z"
-                  fill="currentColor"
-                />
-                </svg>
+              
+                <div class="flex">
+                  <p name="title" class="text-3xl font-bold text-latte pb-4"><%= news.title %></p>
+                </div>
+                <div name="description" class="whitespace-pre-line font-bold text-latte px-4 pb-4">
+                  <%= news.description %>
+                </div>
               </div>
-              <% if (locals.user && user.role==3) {%>
-                <button class="bg-latte py-2.5 px-6 font-bold text-espresso rounded-md transition-all hover:bg-red-500 hover:text-latte hover:scale-110 active:scale-90 hover:drop-shadow-xl">Remove
-                </button>
-              <% } %>
-            </div>
-            <div class="flex">
-              <p class="text-3xl font-bold text-latte pb-4">Update 0.01!</p>
-            </div>
-            <div class="whitespace-pre-line font-bold text-latte px-4 pb-4">sadgfdsgadfgadsfgasdgfasdfg
-              dafsd
-              dfadsfasdgafdsg
-              adfsgasdfgsdgfasdg
-            </div>
-          </div>
+            <% 
+                index++;
+            } %>
+          </form>
           <!-- End of news template -->
         </div>
       </div>

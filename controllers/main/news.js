@@ -1,16 +1,41 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+const { News } = require("../../models/news"); 
 //[Clases]
 
 router.get("/news", async (req, res) => {
   var session = req.session;
+  const allNews = await News.fetchAllNews();
   res.render("template", {
     pageTitle: "Dishcraft - News & Updates",
     page: "news",
     user: session.user || null,
+    allNews: allNews,
     hideSearch: true,
   });
+});
+
+router.post("/news", async (req, res) => {
+  var session = req.session;
+  const newsData = req.body;
+  newsData.userId = session.user.id;
+  const [buttonPress, index] = req.body.submit.split("&");
+  const allNews = await News.fetchAllNews();
+  var news;
+
+  if (buttonPress == "add") {
+    news = new News(newsData);
+    const { success, msg } = await news.addNews();
+    if (!success) 
+      return res.redirect(req.get("referer"));
+  } else if (buttonPress == "delete") {
+    news = new News(allNews[index]);
+    success = await news.deleteNews();
+    if (!success)
+      return res.redirect(req.get("referer"));
+  }
+  return res.redirect("/news");
 });
 
 /*[ External access ]*/
