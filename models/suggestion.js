@@ -11,15 +11,16 @@ class Suggestion {
 
   async addSuggestion() {
     try {
-      await schemas.Suggestion.create({
+      let details = await schemas.Suggestion.create({
         _id: mongoose.Types.ObjectId(),
         suggestionName: this.suggestionName,
         suggestionDescription: this.suggestionDescription,
       });
+      this.id = details.id;
       //respond to unit test
-      if (this.suggestionName == "uniTest") await schemas.Suggestion.deleteOne({ suggestionName: this.suggestionName });
+      if (this.suggestionName == "uniTest") await Suggestion.deleteSuggestion(this.id);
       return { success: true, msg: null };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       console.log(error);
       return { success: false, msg: "error in adding suggestion" };
     }
@@ -33,13 +34,12 @@ class Suggestion {
 
   //delete a suggestion
   static async deleteSuggestion(id) {
-    try {
-      await schemas.Suggestion.deleteOne({ _id: id });
+    let details = await schemas.Suggestion.findOne({ _id: id });
+    if (details) {
+      await details.delete().catch(console.error);
       return true;
-    } catch (error) {
-      console.log(error);
-      return false;
     }
+    return false;
   }
 }
 

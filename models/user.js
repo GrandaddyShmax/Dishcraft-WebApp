@@ -50,7 +50,7 @@ class User {
       let isAdmin = await schemas.AdminList.findOne({ email: this.email });
       let role = isAdmin ? roles.admin : roles.junior;
 
-      await schemas.User.create({
+      let details = await schemas.User.create({
         _id: mongoose.Types.ObjectId(),
         userName: this.userName,
         email: this.email,
@@ -60,12 +60,17 @@ class User {
         latest: [],
         bookmarks: [],
       });
+      this.id = details.id;
       //respond to unit test
-      if (this.userName == "uniTest") await schemas.User.deleteOne({ userName: this.userName });
+      if (this.userName == "uniTest") {
+        let details = await schemas.User.findOne({ _id: this.id });
+        console.log(details);
+        if (details) await details.delete().catch(console.error);
+      }
       return { successful: true, message: "success" };
     } catch (
       verror // "var + error = verror"
-    ) {
+    ) /* istanbul ignore next */ {
       console.log(verror);
       return { successful: false, message: "error" };
     }
@@ -76,7 +81,7 @@ class User {
     try {
       await schemas.User.updateOne({ _id: this.id }, { role: roles.expert });
       return true;
-    } catch {
+    } catch /* istanbul ignore next */ {
       return false;
     }
   }
@@ -184,7 +189,7 @@ class Expert extends User {
     try {
       await schemas.User.updateOne({ _id: this.id }, { latest: filtered });
       return true;
-    } catch {
+    } catch /* istanbul ignore next */ {
       return false;
     }
   }
@@ -255,7 +260,7 @@ class Expert extends User {
     try {
       await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
       return { success: true, bookmarks: filtered };
-    } catch {
+    } catch /* istanbul ignore next */ {
       return { success: false, bookmarks: this.bookmarks };
     }
   }

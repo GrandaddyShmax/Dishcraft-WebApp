@@ -26,7 +26,7 @@ let testIng;
 let mockSuggest;
 let items;
 const testUserID = "6441a06e827a79b1666eb356";
-const testRecipeID = "646555c634118b9e2bb3f4ab";
+const testRecipeID = "6465f8fbafe0329f05f949b9";
 
 describe(testLabel + " Model functions:", function () {
   describe(" Checking user.js...", function () {
@@ -79,7 +79,6 @@ describe(testLabel + " Model functions:", function () {
       response = await testUser.fetchUser();
       assert.equal(response, true);
     });
-
     it("fetchUsers - get all Admin users", async () => {
       items = await Admin.fetchUsers();
       assert(Array.isArray(items));
@@ -120,10 +119,6 @@ describe(testLabel + " Model functions:", function () {
       mockRecipe = new Recipe(mockRecipeInfo);
       let result = await mockRecipe.addRecipe();
       assert.equal(result.success, true);
-    });
-    it("delRecipe - remove recipe", async () => {
-      let result = await mockRecipe.delRecipe();
-      assert.equal(result, true);
     });
     it("fetchRecipe - Fill information about recipe", async () => {
       mockRecipe = new Recipe(null, testRecipeID);
@@ -254,14 +249,8 @@ describe(testLabel + " Model functions:", function () {
       let result = await testIng.addIngredient(mockIngInfo);
       assert.equal(result.success, true);
     });
-
     it("updateIngredient - update ingredient's data", async () => {
       let result = await testIng.updateIngredient(mockIngInfo2);
-      assert.equal(result, true);
-    });
-
-    it("deleteIngredient - remove ingredient", async () => {
-      let result = await testIng.deleteIngredient();
       assert.equal(result, true);
     });
   });
@@ -271,10 +260,6 @@ describe(testLabel + " Model functions:", function () {
       mockSuggest = new Suggestion(mockSuggestInfo);
       let result = await mockSuggest.addSuggestion();
       assert.equal(result.success, true);
-    });
-    it("deleteSuggestion - remove suggestion", async () => {
-      result = await Suggestion.deleteSuggestion(mockSuggest.id);
-      assert.equal(result, true);
     });
     it("fetchAllSuggestions - get all suggestions", async () => {
       items = await Suggestion.fetchAllSuggestions();

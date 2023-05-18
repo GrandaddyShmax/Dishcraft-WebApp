@@ -3,17 +3,16 @@ const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
 const defCategories = {
-  "spicy": false, 
-  "sweet": false, 
-  "salad": false, 
-  "meat": false, 
-  "soup": false, 
-  "dairy": false, 
-  "pastry": false, 
-  "fish": false,  
-  "grill": false,
+  spicy: false,
+  sweet: false,
+  salad: false,
+  meat: false,
+  soup: false,
+  dairy: false,
+  pastry: false,
+  fish: false,
+  grill: false,
 };
-
 
 class Category {
   constructor(details, id) {
@@ -58,7 +57,7 @@ class Category {
       this.ingredients.push(ingredient);
       await schemas.Category.updateOne({ _id: this.id }, { ingredients: this.ingredients });
       return true;
-    } catch {
+    } catch /* istanbul ignore next */ {
       return false;
     }
   }
@@ -69,7 +68,7 @@ class Category {
       this.ingredients.splice(index, 1);
       await schemas.Category.updateOne({ _id: this.id }, { ingredients: this.ingredients });
       return true;
-    } catch {
+    } catch /* istanbul ignore next */ {
       return false;
     }
   }

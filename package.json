@@ -12,8 +12,8 @@
     "test": "mocha 'tests/unitTests/**.test.js' --exit",
     "cpd": "jscpd ./",
     "grunt": "grunt jshint",
-    "dt": "node index.js dt",
-    "coverage": "nyc mocha 'tests/unitTests/**.test.js' --exit",
+    "dtime": "node index.js dt",
+    "coverage": "nyc npm test",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css"
   },
   "jscpd": {

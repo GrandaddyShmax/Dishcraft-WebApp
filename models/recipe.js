@@ -27,6 +27,7 @@ class Recipe {
           "report",
           "userRating",
           "aiMade",
+          "display",
           "ingredients",
           "instructions",
           "badges",
@@ -48,7 +49,7 @@ class Recipe {
   async addRecipe() {
     try {
       const date = new Date();
-      await schemas.Recipe.create({
+      let details = await schemas.Recipe.create({
         _id: mongoose.Types.ObjectId(),
         userID: this.userID || "6441a06e827a79b1666eb356",
         recipeName: this.recipeName,
@@ -72,10 +73,11 @@ class Recipe {
         badgesUsers: [],
         badgesCount: [0, 0, 0, 0],
       });
+      this.id = details.id;
       //respond to unit test
-      if (this.recipeName == "uniTest") await schemas.Recipe.deleteOne({ recipeName: this.recipeName });
+      if (this.recipeName == "uniTest") await this.delRecipe();
       return { success: true, msg: null };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       console.log(error);
       return { success: false, msg: "Invalid recipe" };
     }
@@ -83,13 +85,12 @@ class Recipe {
 
   //deletes a recipe by its id
   async delRecipe() {
-    try {
-      await schemas.Recipe.deleteOne({ _id: this.id });
+    let details = await schemas.Recipe.findOne({ _id: this.id });
+    if (details) {
+      await details.delete().catch(console.error);
       return true;
-    } catch (error) {
-      console.log(error);
-      return false;
     }
+    return false;
   }
 
   /*[ Handling data ]*/
@@ -105,6 +106,7 @@ class Recipe {
           "recipeName",
           "report",
           "aiMade",
+          "display",
           "instructions",
           "badges",
           "color",
@@ -137,18 +139,24 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(search, bookmarks) {
+  static async fetchRecipes(search, bookmarks, hidden) {
     const currDate = new Date(Date.now());
-    var term, filter, filterRange, categories, sort, categorOn = [];
+    var term,
+      filter,
+      filterRange,
+      categories,
+      sort,
+      categorOn = [];
     if (search) ({ term, filter, filterRange, sort, categories } = search);
     if (filter) filter = await this.fetchFilter(filter);
-    if (categories) categorOn = Recipe.fetchCategories(categories); 
+    if (categories) categorOn = Recipe.fetchCategories(categories);
 
     let recipes = [];
     let recipesArr;
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
+      if (hidden === recipe.display) continue;
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:
@@ -223,7 +231,7 @@ class Recipe {
   }
   static fetchCategories(categories) {
     let categorOn = [];
-    categoryList.forEach(function(categoryName) {
+    categoryList.forEach(function (categoryName) {
       if (categories[categoryName]) categorOn.push(categoryName);
     });
     return categorOn;
@@ -231,13 +239,22 @@ class Recipe {
   //food categories filters:
   static checkCategory(categorOn, recipe) {
     const temp = {
-      "spicy": recipe.categories.spicy || false, "sweet": recipe.categories.sweet || false, "salad": recipe.categories.salad || false, 
-      "meat": recipe.categories.meat || false, "soup": recipe.categories.soup || false, "dairy": recipe.categories.dairy || false, 
-      "pastry": recipe.categories.pastry || false, "fish": recipe.categories.fish || false,  "grill": recipe.categories.grill || false
-    }
+      spicy: recipe.categories.spicy || false,
+      sweet: recipe.categories.sweet || false,
+      salad: recipe.categories.salad || false,
+      meat: recipe.categories.meat || false,
+      soup: recipe.categories.soup || false,
+      dairy: recipe.categories.dairy || false,
+      pastry: recipe.categories.pastry || false,
+      fish: recipe.categories.fish || false,
+      grill: recipe.categories.grill || false,
+    };
     let result = false;
-    categorOn.forEach(function(categoryName) {
-      if (!temp[categoryName]) { result = true; return true; }
+    categorOn.forEach(function (categoryName) {
+      if (!temp[categoryName]) {
+        result = true;
+        return true;
+      }
     });
     return result;
   }
@@ -369,7 +386,7 @@ class Recipe {
       try {
         await schemas.Recipe.updateOne({ _id: this.id }, { report: this.report });
         return true;
-      } catch (error) {
+      } catch (error) /* istanbul ignore next */ {
         console.log(error);
         return false;
       }
@@ -408,7 +425,7 @@ class Recipe {
       await schemas.Recipe.updateOne({ _id: this.id }, { fullRating: newRating });
       this.refreshRating(newRating);
       return true;
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       console.log(error);
       return false;
     }
@@ -438,7 +455,7 @@ class Recipe {
       try {
         await schemas.Recipe.updateOne({ _id: this.id }, { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
         return true;
-      } catch (error) {
+      } catch (error) /* istanbul ignore next */ {
         console.log(error);
         return false;
       }

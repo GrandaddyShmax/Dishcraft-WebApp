@@ -55,7 +55,7 @@ describe(testLabel + " General:", function () {
     });
 
     it("printAllRoutes - list all registered routes", () => {
-      let result = printAllRoutes(app, "", true)
+      let result = printAllRoutes(app, "", true);
       assert.equal(result, true);
     });
   });

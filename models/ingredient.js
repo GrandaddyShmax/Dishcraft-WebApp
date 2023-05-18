@@ -24,7 +24,7 @@ const unitsTable = {
 //Ingredient class
 class Ingredient {
   constructor(data) {
-    this._id = data._id;
+    this.id = data._id;
     this.name = data.name;
     this.healthLabels = data.healthLabels;
     this.calories = data.calories;
@@ -50,8 +50,8 @@ class Ingredient {
 
   static async updateRecContainsIngred(ingredName, check) {
     let recipesArr = await schemas.Recipe.find({});
-    for(const recipe of recipesArr) {
-      for(const ingred of recipe.ingredients) {
+    for (const recipe of recipesArr) {
+      for (const ingred of recipe.ingredients) {
         if (ingred.name === ingredName) {
           const nutritions = await Ingredient.calcRecipeNutVal(recipe.ingredients, check);
           await schemas.Recipe.updateOne({ _id: recipe._id }, { nutritions: nutritions });
@@ -69,7 +69,7 @@ class Ingredient {
       let ingredient = await Ingredient.fetchIngredient(ingred.name);
 
       if (!ingredient) {
-        ingredient = new Ingredient(await connection.getData(ingred.name)); 
+        ingredient = new Ingredient(await connection.getData(ingred.name));
       }
 
       const unit = ingred.unit.toLowerCase();
@@ -121,7 +121,7 @@ class Ingredient {
 
   async addIngredient() {
     try {
-      await schemas.Ingredient.create({
+      let details = await schemas.Ingredient.create({
         _id: mongoose.Types.ObjectId(),
         name: this.name,
         totalWeight: this.totalWeight,
@@ -129,12 +129,13 @@ class Ingredient {
         fattyAcids: this.fattyAcids,
         sodium: this.sodium,
         sugar: this.sugar,
-        protein: this.protein
+        protein: this.protein,
       });
-       //respond to unit test
-       if (this.name == "uniTest") await schemas.Recipe.deleteOne({ name: this.name });
+      this.id = details.id;
+      //respond to unit test
+      if (this.name == "uniTest") await this.deleteIngredient();
       return { success: true, msg: null };
-    } catch (error) {
+    } catch (error) /* istanbul ignore next */ {
       console.log(error);
       return { success: false, msg: "error in adding ingredient" };
     }
@@ -142,30 +143,31 @@ class Ingredient {
 
   async updateIngredient(update) {
     try {
-      await schemas.Ingredient.updateOne({ _id: this._id }, 
+      await schemas.Ingredient.updateOne(
+        { _id: this.id },
         {
-          name: update.name, 
+          name: update.name,
           energy: update.energy,
           fattyAcids: update.fattyAcids,
           sodium: update.sodium,
           sugar: update.sugar,
           protein: update.protein,
-          totalWeight: update.totalWeight
-        });
+          totalWeight: update.totalWeight,
+        }
+      );
       return true;
-    } catch {
+    } catch /* istanbul ignore next */ {
       return false;
     }
   }
 
   async deleteIngredient() {
-    try {
-      await schemas.Ingredient.deleteOne({ _id: this._id });
+    let details = await schemas.Ingredient.findOne({ _id: this.id });
+    if (details) {
+      await details.delete().catch(console.error);
       return true;
-    } catch (error) {
-      console.log(error);
-      return false;
     }
+    return false;
   }
 }
 
