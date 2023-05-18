@@ -33,9 +33,9 @@ pipeline {
         sh 'npm install'
       }
     }
-    stage('Run unit tests') {
+    stage('Run unit tests & & Check coverage') {
       steps {
-        sh 'npm test'
+        sh 'npm run coverage'
       }
     }
     stage('Check for code duplicates') {
@@ -50,7 +50,7 @@ pipeline {
     }
     stage('Check deployment time') {
       steps {
-        sh 'npm run dt'
+        sh 'npm run dtime'
       }
     }
   }

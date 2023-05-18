@@ -26,6 +26,7 @@ let testIng;
 let mockSuggest;
 let items;
 const testUserID = "6441a06e827a79b1666eb356";
+const testBannedUserID = "646605e4d96084bc90cca22c";
 const testRecipeID = "6465f8fbafe0329f05f949b9";
 
 describe(testLabel + " Model functions:", function () {
@@ -62,23 +63,31 @@ describe(testLabel + " Model functions:", function () {
       assert.equal(response.message, "success");
     });
     it("upgrade - upgrades Junior cook to Expert", async () => {
-      response = await mockUser.upgradeUser();
+      let response = await mockUser.upgradeUser();
       assert.equal(response, true);
     });
     it("fetchUser - Fill information about user", async () => {
       testUser = new User(null, testUserID);
-      response = await testUser.fetchUser();
+      let response = await testUser.fetchUser();
       assert.equal(response, true);
       assert.notEqual(testUser.userName, undefined);
     });
     it("verify - check valid login information", async () => {
       //incorrect login
-      response = await mockUser.fetchUser();
-      assert.equal(response, false);
+      await mockUser.fetchUser();
+      let response = await mockUser.verify();
+      assert.equal(response.successful, false);
+      //banned user
+      mockUser = new User(null, testBannedUserID);
+      mockUser.fetchUser();
+      response = await mockUser.verify();
+      assert.equal(response.successful, false);
       //correct login
-      response = await testUser.fetchUser();
-      assert.equal(response, true);
+      testUser = new User({ userName: "No User", password: "123456" });
+      response = await testUser.verify();
+      assert.equal(response.successful, true);
     });
+
     it("fetchUsers - get all Admin users", async () => {
       items = await Admin.fetchUsers();
       assert(Array.isArray(items));
@@ -101,6 +110,7 @@ describe(testLabel + " Model functions:", function () {
     });
     it("bookmark - bookmark a recipe", async () => {
       testExpert = new Expert(testUser);
+      await testExpert.fetchUser();
       let response = await testExpert.bookmark(testRecipeID);
       assert.equal(response.success, true);
     });
@@ -122,7 +132,7 @@ describe(testLabel + " Model functions:", function () {
     });
     it("fetchRecipe - Fill information about recipe", async () => {
       mockRecipe = new Recipe(null, testRecipeID);
-      response = await mockRecipe.fetchRecipe(testUserID);
+      let response = await mockRecipe.fetchRecipe(testUserID);
       assert.equal(response, true);
       assert.notEqual(mockRecipe.recipeName, undefined);
     });

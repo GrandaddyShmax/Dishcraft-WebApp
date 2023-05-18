@@ -64,7 +64,6 @@ class User {
       //respond to unit test
       if (this.userName == "uniTest") {
         let details = await schemas.User.findOne({ _id: this.id });
-        console.log(details);
         if (details) await details.delete().catch(console.error);
       }
       return { successful: true, message: "success" };
@@ -105,7 +104,6 @@ class User {
     let account = await schemas.User.findOne({ userName: this.userName });
     if (!account) return { successful: false, message: "User not found" };
     let result = await bcrypt.compare(this.password, account.password);
-
     if (result) {
       if (account.banned) return { successful: false, message: "User is banned" };
       return {
@@ -201,7 +199,7 @@ class Expert extends User {
     let low = "",
       high = "",
       flagMin = true;
-
+    if (!this.latest) this.latest = [];
     if (this.latest.length < 3) {
       flagMin = false;
     }
@@ -246,20 +244,22 @@ class Expert extends User {
   }
 
   async bookmark(recipe) {
-    let filtered = this.bookmarks;
-    filtered.push(recipe);
-    return await this.updateBookmarks(filtered);
+    //let filtered = this.bookmarks;
+    if (!this.bookmarks) this.bookmarks = [];
+    this.bookmarks.push(recipe);
+    return await this.updateBookmarks();
   }
 
   async unBookmark(recipe) {
-    const filtered = this.bookmarks.filter((item) => item !== recipe);
-    return await this.updateBookmarks(filtered);
+    this.bookmarks = this.bookmarks.filter((item) => item !== recipe);
+    return await this.updateBookmarks();
   }
 
-  async updateBookmarks(filtered) {
+  async updateBookmarks() {
     try {
-      await schemas.User.updateOne({ _id: this.id }, { bookmarks: filtered });
-      return { success: true, bookmarks: filtered };
+      //this.bookmarks = filtered;
+      await schemas.User.updateOne({ _id: this.id }, { bookmarks: this.bookmarks });
+      return { success: true, bookmarks: this.bookmarks };
     } catch /* istanbul ignore next */ {
       return { success: false, bookmarks: this.bookmarks };
     }

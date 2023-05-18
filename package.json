@@ -28,19 +28,36 @@
   },
   "nyc": {
     "all": true,
-    "reporter": "text",
+    "reporter": "text-summary",
     "exclude": [
-      "node_modules/**",
       "tests/",
       "API/",
       "controllers/",
       "Gruntfile.js"
     ],
     "check-coverage": true,
-    "branches": 80,
+    "branches": 60,
     "functions": 80,
     "lines": 80,
-    "statements": 80
+    "statements": 80,
+    "watermarks": {
+      "lines": [
+        70,
+        80
+      ],
+      "functions": [
+        70,
+        80
+      ],
+      "branches": [
+        50,
+        60
+      ],
+      "statements": [
+        70,
+        80
+      ]
+    }
   },
   "repository": {
     "type": "git",

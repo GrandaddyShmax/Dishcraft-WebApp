@@ -111,11 +111,12 @@ if (!testing) {
       //print deploy time
       let dtTime = (new Date().getTime() - start.getTime()) / 1000;
       const threshhold = 7;
-      dtTime = dtTime <= threshhold ? chalk.green(dtTime) : chalk.red(dtTime);
+      const pass = dtTime <= threshhold;
+      dtTime = pass ? chalk.green(dtTime) : chalk.red(dtTime);
       if (!testing || (testing && dtCheck)) {
         console.log(chalk.grey("Deployment time: ") + dtTime);
       }
-      if (dtCheck) process.exit(0);
+      if (dtCheck) process.exit(pass ? 0 : 1);
     });
   });
 })();
