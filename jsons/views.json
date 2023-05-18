@@ -31,5 +31,17 @@
       { "name": "Descending", "value": "descend" },
       { "name": "Ascending", "value": "ascend" }
     ]
-  }
+  },
+  "categoryList": [ 
+    "spicy", 
+    "sweet", 
+    "salad", 
+    "meat", 
+    "soup", 
+    "dairy", 
+    "pastry", 
+    "fish",  
+    "grill" 
+  ]
+  
 }

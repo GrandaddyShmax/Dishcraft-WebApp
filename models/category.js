@@ -2,6 +2,18 @@
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { capitalize, offloadFields } = require("../utils");
+const defCategories = {
+  "spicy": false, 
+  "sweet": false, 
+  "salad": false, 
+  "meat": false, 
+  "soup": false, 
+  "dairy": false, 
+  "pastry": false, 
+  "fish": false,  
+  "grill": false,
+};
+
 
 class Category {
   constructor(details, id) {
@@ -100,4 +112,4 @@ class Category {
 }
 
 /*[ External access ]*/
-module.exports = { Category };
+module.exports = { Category, defCategories };

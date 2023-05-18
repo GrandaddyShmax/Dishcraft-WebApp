@@ -4,6 +4,7 @@ const { schemas } = require("../schemas/paths");
 const { Junior } = require("./user");
 const { Category } = require("./category");
 const { offloadFields, capitalize } = require("../utils");
+const { categoryList } = require("../jsons/views.json");
 
 //Recipe class
 class Recipe {
@@ -138,9 +139,11 @@ class Recipe {
   //get all/filtered recipes from db
   static async fetchRecipes(search, bookmarks) {
     const currDate = new Date(Date.now());
-    var term, filter, filterRange, sort;
-    if (search) ({ term, filter, filterRange, sort } = search);
+    var term, filter, filterRange, categories, sort, categorOn = [];
+    if (search) ({ term, filter, filterRange, sort, categories } = search);
     if (filter) filter = await this.fetchFilter(filter);
+    if (categories) categorOn = Recipe.fetchCategories(categories); 
+
     let recipes = [];
     let recipesArr;
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
@@ -177,6 +180,8 @@ class Recipe {
       };
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
+      //food categories:
+      if (Recipe.checkCategory(categorOn, tempRecipe)) continue;
       //time range filter:
       if (filterRange && !Recipe.checkFilterRange(filterRange, tempRecipe, currDate)) continue;
       //category filters:
@@ -215,6 +220,26 @@ class Recipe {
     badIngs = Array.from(new Set(badIngs)); //remove duplicates
     if (badIngs.length == 0) return null;
     return badIngs;
+  }
+  static fetchCategories(categories) {
+    let categorOn = [];
+    categoryList.forEach(function(categoryName) {
+      if (categories[categoryName]) categorOn.push(categoryName);
+    });
+    return categorOn;
+  }
+  //food categories filters:
+  static checkCategory(categorOn, recipe) {
+    const temp = {
+      "spicy": recipe.categories.spicy || false, "sweet": recipe.categories.sweet || false, "salad": recipe.categories.salad || false, 
+      "meat": recipe.categories.meat || false, "soup": recipe.categories.soup || false, "dairy": recipe.categories.dairy || false, 
+      "pastry": recipe.categories.pastry || false, "fish": recipe.categories.fish || false,  "grill": recipe.categories.grill || false
+    }
+    let result = false;
+    categorOn.forEach(function(categoryName) {
+      if (!temp[categoryName]) { result = true; return true; }
+    });
+    return result;
   }
   //time range filter:
   static checkFilterRange(filter, recipe, currDate) {

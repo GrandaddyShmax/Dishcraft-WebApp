@@ -3,11 +3,12 @@ const express = require("express");
 const router = express.Router();
 //[Clases]
 const { Recipe } = require("../../models/recipe");
-const { Category } = require("../../models/category");
+const { Category, defCategories } = require("../../models/category");
 //[Aid]
 const { offloadFields } = require("../../utils");
 const { defSearch, sorts } = require("../../jsons/views.json");
 var filters;
+defSearch.categories = defCategories;
 
 router.get("/home", async (req, res) => {
   const session = req.session;
@@ -75,6 +76,15 @@ router.post("/search", async (req, res) => {
     default:
       return res.redirect(req.get("referer"));
   }
+  return res.redirect("/home");
+});
+
+router.post("/updateCategories", async (req, res) => {
+  const session = req.session;
+  if (!session.search) session.search = defSearch;
+  const categories = session.search.categories;
+  const checkbox = req.body.categories;
+  categories[checkbox] = !categories[checkbox];
   return res.redirect("/home");
 });
 
