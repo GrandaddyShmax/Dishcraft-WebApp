@@ -29,7 +29,7 @@ module.exports = (schemas) => {
                   pastry: Boolean, fish: Boolean, grill: Boolean },
     badgesUsers: [String],
     badgesCount: [Number],
-    hideRating: [Boolean]
+    showRating: Boolean
   });
 
   //[Registers in database]

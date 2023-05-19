@@ -38,7 +38,7 @@ class Recipe {
           "categories",
           "badgesUsers",
           "badgesCount",
-          "hideRating",
+          "showRating",
         ],
         this,
         tempV
@@ -74,7 +74,7 @@ class Recipe {
         categories: this.categories,
         badgesUsers: [],
         badgesCount: [0, 0, 0, 0],
-        hideRating: this.hideRating || false,
+        showRating: this.showRating || true,
       });
       this.id = details.id;
       //respond to unit test
@@ -118,7 +118,7 @@ class Recipe {
           "categories",
           "badgesUsers",
           "badgesCount",
-          "hideRating",
+          "showRating",
         ],
         this,
         details
@@ -181,7 +181,7 @@ class Recipe {
           "categories",
           "badgesUsers",
           "badgesCount",
-          "hideRating",
+          "showRating",
         ],
         null,
         recipe
