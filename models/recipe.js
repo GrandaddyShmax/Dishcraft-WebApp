@@ -63,7 +63,7 @@ class Recipe {
         },
         report: [],
         aiMade: this.aiMade || false,
-        display: this.display || false,
+        display: this.display || true,
         ingredients: this.ingredients,
         instructions: this.instructions,
         badges: this.badge || [],
@@ -157,7 +157,7 @@ class Recipe {
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
-      if (hidden === recipe.display) continue;
+      if (!!hidden === !!recipe.display) continue;
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:

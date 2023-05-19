@@ -62,34 +62,32 @@ function parseAssToRecipeTest() {
   recipe = {
     ai: true,
     ingredients: [
-      { amount: "0.1", unit: "Cups", name: "milk" },
-      { amount: 8, unit: "Ounces", name: "linguine pasta" },
-      { amount: 2, unit: "Tablespoon", name: "unsalted butter" },
+      { amount: "3", unit: "Tablespoon", name: "peanut butter" },
+      { amount: "1", unit: "Cups", name: "flour" },
+      { amount: "1", unit: "Pieces", name: "egg" },
+      { amount: "2", unit: "Tablespoon", name: "sugar" },
+      { amount: "1", unit: "Teaspoon", name: "salt" },
     ],
   };
   response =
     "$Recipe name\n" +
-    "Creamy Garlic Parmesan Pasta\n" +
+    "Peanut Butter Cookies\n" +
     "$Ingredients\n" +
-    "0.1@Cups@milk\n" +
-    "8@Ounces@linguine pasta\n" +
-    "2@Tablespoons@unsalted butter\n" +
-    "4@Cloves@garlic, minced\n" +
-    "1@Cup@heavy cream\n" +
-    "1/2@Cup@grated Parmesan cheese\n" +
-    "1/2@Teaspoon@salt\n" +
-    "1/4@Teaspoon@black pepper\n" +
-    "1/4@Cup@chopped fresh parsley leaves\n" +
+    "3@Tablespoon@peanut butter\n" +
+    "1@Cup@all-purpose flour\n" +
+    "1@Piece@egg\n" +
+    "2@Tablespoon@granulated sugar\n" +
+    "1@Teaspoon@salt\n" +
     "$Instructions\n" +
-    "In a large pot, bring water to a boil and cook the linguine pasta according to the package instructions. Drain and set aside.\n" +
-    "In a separate skillet, melt the butter over medium heat. Add the minced garlic and cook for about 2 minutes until fragrant and lightly golden.\n" +
-    "Reduce the heat to low and pour in the milk. Stir well to combine with the garlic and butter.\n" +
-    "Slowly pour in the heavy cream while continuously stirring. Allow the mixture to simmer gently for about 5 minutes, until it thickens slightly.\n" +
-    "Add the grated Parmesan cheese, salt, and black pepper to the sauce. Stir until the cheese has melted and the sauce is smooth and creamy.\n" +
-    "Add the cooked linguine pasta to the skillet and toss it in the sauce until well coated.\n" +
-    "Remove the skillet from the heat and sprinkle the chopped parsley over the pasta. Toss again to incorporate the parsley.\n" +
-    "Serve the creamy garlic Parmesan pasta immediately and enjoy!\n" +
-    "Note: Feel free to adjust the seasoning according to your taste preferences. You can also add cooked chicken, shrimp, or vegetables to make it a heartier dish.";
+    "Preheat the oven to 375°F (190°C). Line a baking sheet with parchment paper.\n" +
+    "In a mixing bowl, cream together the peanut butter and sugar until light and fluffy. \n" +
+    "Add in the egg and mix until well combined.\n" +
+    "Sift in the flour and salt, then fold the mixture with a spatula until just combined.\n" +
+    "Using a spoon, scoop out dough and roll into balls. Place them on the prepared baking sheet, leaving at least 2 inches (5 cm) of space between cookies.\n" +
+    "Use a fork to gently flatten the balls, making a crisscross pattern on the top.\n" +
+    "Bake for 10-12 minutes, or until the edges are lightly golden.\n" +
+    "Let the cookies cool on the pan for 5 minutes before transferring to a wire rack to cool completely.\n" +
+    "Serve and enjoy!";
   return parseRecipe(response, recipe);
 }
 
