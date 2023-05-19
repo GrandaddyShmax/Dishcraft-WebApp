@@ -63,6 +63,7 @@ class Recipe {
         },
         report: [],
         aiMade: this.aiMade || false,
+        display: this.display || false,
         ingredients: this.ingredients,
         instructions: this.instructions,
         badges: this.badge || [],
