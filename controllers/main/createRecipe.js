@@ -68,7 +68,7 @@ router.post("/createRecipe", async (req, res) => {
           return res.redirect(req.get("referer"));
         }
       }
-      var recipeData = offloadFields(["recipeName", "instructions", "color"], null, req.body);
+      var recipeData = offloadFields(["recipeName", "instructions", "color", "hideRating"], null, req.body);
       recipeData.userID = sess.user ? sess.user.id : null;
       var images = [];
       if (recipe.imagesData) {
@@ -81,6 +81,7 @@ router.post("/createRecipe", async (req, res) => {
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
       recipeData.categories = recipe.categories;
+      recipeData.hideRating = recipeData.hideRating === 'on' ? true : false;
       sess.recipe = null;
       recipe = new Recipe(recipeData);
       let { success, msg } = await recipe.addRecipe();
