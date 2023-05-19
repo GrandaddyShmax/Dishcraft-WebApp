@@ -52,6 +52,15 @@ function endPlural(number, string) {
   return string + "s";
 }
 
+//check if string is in array, singular&plural
+function smartInclude(arr, string, strict) {
+  let s = string.toLowerCase();
+  if (s.charAt(s.length - 1) == "s") s = s.slice(0 - 1);
+  /* jshint -W083 */
+  if (strict) return arr.some((word) => word == s || word == s + "s" || s + "s" == word);
+  return arr.some((word) => word.includes(s) || word.includes(s + "s") || s.includes(word) || (s + "s").includes(word));
+}
+
 //Update fields in object
 function offloadFields(fields, object1, object2) {
   if (!object1) object1 = {};
@@ -130,4 +139,4 @@ function printAllRoutes(app, url, silent) {
 }
 
 /*[ External access ]*/
-module.exports = { until, capitalize, endPlural, offloadFields, handleIngAdding, printAllRoutes };
+module.exports = { until, capitalize, endPlural, smartInclude, offloadFields, handleIngAdding, printAllRoutes };

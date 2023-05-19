@@ -9,9 +9,10 @@ const { Expert } = require("../../models/user");
 router.get("/recipe", async (req, res) => {
   var session = req.session;
   let isMarked = false;
-  let isBadgeButton = (session.user.role > 1 && !((session.recipe.badgesUsers).includes(session.user.id)));
+  let isBadgeButton = false;
   if (session.user && session.user.role > 1) {
     isMarked = session.user.bookmarks.includes(session.recipe.id);
+    isBadgeButton = !session.recipe.badgesUsers.includes(session.user.id);
   }
   res.render("template", {
     pageTitle: "Dishcraft - Recipe View",
@@ -20,7 +21,7 @@ router.get("/recipe", async (req, res) => {
     recipe: session.recipe,
     returnPage: session.returnPage || "/home",
     isMarked: isMarked,
-    isBadgeButton: isBadgeButton
+    isBadgeButton: isBadgeButton,
   });
 });
 

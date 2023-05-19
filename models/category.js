@@ -1,7 +1,7 @@
 //[Import]
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
-const { capitalize, offloadFields } = require("../utils");
+const { capitalize, offloadFields, smartInclude } = require("../utils");
 const defCategories = {
   spicy: false,
   sweet: false,
@@ -29,13 +29,7 @@ class Category {
     for (const ing of ingredients) {
       for (const category of categories) {
         let catIngs = category.ingredients;
-        let name = ing.name.toLowerCase();
-        if (name.charAt(name.length - 1) == "s") name = name.slice(0, -1);
-        /* jshint -W083 */
-        let result = catIngs.some((cat) => {
-          return cat.includes(name) || cat.includes(name + "s") || name.includes(cat) || (name + "s").includes(cat);
-        });
-        if (result) {
+        if (smartInclude(catIngs, ing.name, true)) {
           if (lowerCase) alg.push(category.categoryName.toLowerCase());
           else alg.push(category.categoryName);
         }

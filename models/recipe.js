@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
 const { Junior } = require("./user");
 const { Category } = require("./category");
-const { offloadFields, capitalize } = require("../utils");
+const { offloadFields, smartInclude } = require("../utils");
 const { categoryList } = require("../jsons/views.json");
 
 //Recipe class
@@ -74,7 +74,7 @@ class Recipe {
         categories: this.categories,
         badgesUsers: [],
         badgesCount: [0, 0, 0, 0],
-        hideRating: this.hideRating || false
+        hideRating: this.hideRating || false,
       });
       this.id = details.id;
       //respond to unit test
@@ -160,6 +160,7 @@ class Recipe {
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
+      /*jshint -W018 */
       if (!!hidden === !!recipe.display) continue;
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
@@ -215,11 +216,10 @@ class Recipe {
       //check usernames
       !user.userName.toLowerCase().includes(term) &&
       //check ingredients (check plural&singular)
-      !recipe.ingredients.some((ing) => {
-        let name = ing.name.toLowerCase();
-        if (name.charAt(name.length - 1) == "s") name = name.slice(0 - 1);
-        return name === term || name + "s" === term;
-      })
+      !smartInclude(
+        recipe.ingredients.map((ing) => ing.name.toLowerCase()),
+        term
+      )
     )
       return true;
     return false;
@@ -297,13 +297,7 @@ class Recipe {
   static checkFilter(filter, recipe) {
     if (!filter) return false;
     for (const ing of recipe.ingredients) {
-      let name = ing.name.toLowerCase();
-      if (name.charAt(name.length - 1) == "s") name = name.slice(0 - 1);
-      /* jshint -W083 */
-      let result = filter.some((cat) => {
-        return cat.includes(name) || cat.includes(name + "s") || name.includes(cat) || (name + "s").includes(cat);
-      });
-      if (result) return true;
+      if (smartInclude(filter, ing.name)) return true;
     }
     return false;
   }

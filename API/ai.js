@@ -1,6 +1,6 @@
 //[Import stuff]
 const chalk = require("chalk"); //needed for colorful console messages
-const { until, endPlural } = require("../utils");
+const { until, endPlural, smartInclude } = require("../utils");
 const { units } = require("../jsons/views.json");
 const { schemas } = require("../schemas/paths");
 var assistant;
@@ -118,7 +118,7 @@ function parseRecipe(response, recipe) {
             else if (units.includes(unit.slice(0, -1))) unit = unit.slice(0, -1);
             else unit = "Pieces";
           }
-          if (!ings.includes(name.toLowerCase())) {
+          if (!smartInclude(ings, name)) {
             recipe.extra += `${amount} ${endPlural(amount, unit)} of ${name}\n`;
             recipe.ingredients2.push({ amount: amount, unit: unit, name: name });
           }
@@ -131,6 +131,7 @@ function parseRecipe(response, recipe) {
       }
     }
   }
+  if (!recipe.extra) recipe.extra = "No extra ingredients!";
   console.log(recipe);
   return recipe;
 }
