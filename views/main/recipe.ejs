@@ -179,7 +179,7 @@
             <% } %>
           </div>
 
-          <% if (recipe.hideRating == false) { %>
+          <% if (recipe.showRating) { %>
             <div class="pt-4 flex justify-between items-center">
               <p class="text-2xl text-latte font-bold">
                 Rating:
@@ -267,7 +267,7 @@
             </div> 
           <% } %>
         </div>
-        <% if (recipe.hideRating == false) { %>
+        <% if (recipe.showRating) { %>
           <form class="flex justify-between px-2 pt-2 pb-12" action="/recipe" method="POST">
             <div class="flex items-center flex-row-reverse">
               <button onclick="rememberScroll();" value="5" name="rating" id="rating-5" type="submit" class="peer cursor-pointer peer-hover:text-latte hover:text-latte hover:scale-110 active:scale-95 transition-all">
