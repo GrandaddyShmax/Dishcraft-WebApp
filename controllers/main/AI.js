@@ -109,8 +109,8 @@ router.post("/assistant", async (req, res) => {
       }
 
       //calculate nutritional value & check allergies:
-      req.session.allergies = await Category.findCategory(req.session.recipe.ingredients, "allergy", true);
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
+      req.session.allergies = await Category.findCategory(ings, "allergy", true);
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       sess.recipe.categories = {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 

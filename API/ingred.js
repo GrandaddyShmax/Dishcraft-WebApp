@@ -19,6 +19,7 @@ async function getData(ingredient) {
   const nutJson = await getJsonNutritionDB(ingredient);
   if (!nutJson) return false;
   const nutrients = nutJson.totalNutrients;
+
   return {
     //[Health Labels(Array)]
     healthLabels: nutJson.healthLabels,
@@ -27,11 +28,11 @@ async function getData(ingredient) {
     calories: nutJson.calories,
     totalWeight: nutJson.totalWeight,
     //[Nutrients]//
-    energy: nutrients.ENERC_KCAL.quantity,  //(unit: kcal)
-    fattyAcids: nutrients.FASAT.quantity,   //(unit: g)
-    sodium: nutrients.NA.quantity,          //(unit: g)
-    sugar: nutrients.SUGAR.quantity,        //(unit: g)
-    protein: nutrients.PROCNT.quantity,     //(unit: g)
+    energy: nutrients.ENERC_KCAL ? nutrients.ENERC_KCAL.quantity : 0, //(unit: kcal)
+    fattyAcids: nutrients.FASAT ? nutrients.FASAT.quantity : 0,       //(unit: g)
+    sodium: nutrients.NA ? nutrients.NA.quantity : 0,                 //(unit: g)
+    sugar: nutrients.SUGAR ? nutrients.SUGAR.quantity : 0,            //(unit: g)
+    protein: nutrients.PROCNT ? nutrients.PROCNT.quantity : 0,        //(unit: g)
   };
 }
 
