@@ -99,6 +99,7 @@ function parseRecipe(response, recipe) {
   const fields = ["$recipe name", "$ingredients", "$instructions"];
   var index;
   for (const line of response.split("\n")) {
+    if (!line || !line.replaceAll(" ", "")) continue;
     if (line.includes("$")) index = fields.indexOf(line.toLowerCase());
     else {
       switch (index) {
@@ -109,7 +110,7 @@ function parseRecipe(response, recipe) {
           var [amount, unit, name] = line.split("@");
           if (!parseInt(amount) && !parseFloat(amount)) amount = 0;
           else amount = parseFloat(amount);
-          if (!name && !units.includes(unit)) {
+          if (!name && !smartInclude(units, unit)) {
             name = unit;
             unit = "Pieces";
           }

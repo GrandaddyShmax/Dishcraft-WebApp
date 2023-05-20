@@ -54,6 +54,7 @@ function endPlural(number, string) {
 
 //check if string is in array, singular&plural
 function smartInclude(arr, string, strict) {
+  if (!string || arr.length == 0) return false;
   let s = string.toLowerCase();
   if (s.charAt(s.length - 1) == "s") s = s.slice(0 - 1);
   /* jshint -W083 */
