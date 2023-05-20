@@ -13,7 +13,7 @@ const multer = require("multer"); //save files
 require("./schemas/paths");
 const mongoose = require("mongoose"); //database access
 require("dotenv").config(); //enables environment variables
-const { DB_URL } = process.env; //load db password from environment variables
+const { DB_URL, APP_ID, APP_KEYS, APP_ID2, APP_KEYS2 } = process.env; //load db password from environment variables
 //API access:
 const { connectAI } = require("./API/ai");
 //Aid:
@@ -24,8 +24,9 @@ const { printAllRoutes } = require("./utils.js");
 //Info:
 const port = 3000;
 const url = `http://localhost:${port}/`;
-const appLabel = chalk.blue("[App]");
+const appLabel = chalk.green("[App]");
 const dbLabel = chalk.magenta("[DB]");
+const apiLabel = chalk.blue("[API]");
 
 //[Connect to database]
 //let db = null;
@@ -104,8 +105,12 @@ if (!testing) {
   //wait for db connection to finish
   db.then(() => {
     app.listen(port);
-    if (!testing) console.log(appLabel + " App launched at: " + chalk.yellow(url));
+    if (!testing) {
+      console.log(appLabel + " App launched at: " + chalk.yellow(url));
 
+      if (!APP_ID || !APP_KEYS || !APP_ID2 || !APP_KEYS2) console.log(apiLabel + chalk.red(" Missing secrets to use Food API."));
+      else console.log(apiLabel + " Food API is ready to use.");
+    }
     //wait for ai connection to finish
     ai.then(() => {
       //print deploy time

@@ -7,12 +7,12 @@ var assistant;
 
 //connect to A.I. API
 async function connectAI(testing) {
-  var aiLabel = chalk.green("[AI]");
+  var aiLabel = chalk.cyan("[AI]");
   const access = await schemas.AIAccess.findOne({});
   var msg;
   if (access.lib == "1") msg = await loadLib1(access.accessToken);
   else if (access.lib == "2") msg = await loadLib2(access.disabled);
-  else msg = " Couldn't load Api, invalid lib selected.";
+  else msg = chalk.red(" Couldn't load Api, invalid lib selected.");
   if (!testing) console.log(aiLabel + msg);
   return true;
 }
@@ -30,7 +30,7 @@ async function loadLib1(accessToken) {
     return " Api loaded using main module.";
   } catch (error) {
     console.log(error);
-    return " Couldn't load Api.";
+    return chalk.red(" Couldn't load Api.");
   }
 }
 //Backup module
@@ -44,7 +44,7 @@ async function loadLib2(disabled) {
     return " Api loaded using backup module.";
   } catch (error) {
     console.log(error);
-    return " Couldn't load Api.";
+    return chalk.red(" Couldn't load Api.");
   }
 }
 
