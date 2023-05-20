@@ -53,6 +53,11 @@ pipeline {
         sh 'npm run dtime'
       }
     }
+    stage('Run integration tests') {
+      steps {
+        sh 'npm run integration'
+      }
+    }
   }
   post {
     failure {

@@ -9,15 +9,15 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha",
+    "test": "mocha 'tests/unitTests/**.test.js'",
     "cpd": "jscpd ./",
     "grunt": "grunt jshint",
     "dtime": "node index.js dt",
-    "coverage": "nyc mocha",
+    "coverage": "nyc npm test",
+    "integration": "mocha 'tests/integration.test.js'",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css"
   },
   "mocha": {
-    "spec": "tests/unitTests/**.test.js",
     "slow": 1500,
     "exit": true
   },

@@ -6,63 +6,54 @@ const { Recipe } = require("../../models/recipe");
 const { Suggestion } = require("../../models/suggestion");
 const { Category } = require("../../models/category");
 const { Ingredient } = require("../../models/ingredient");
+const { News } = require("../../models/news");
 const testLabel = chalk.red("[Test]");
-const mockUserName = { userName: "No User", email: "", password: "", passwordRep: "" };
-const mockUserName2 = { userName: "u", email: "", password: "", passwordRep: "" };
-const mockUserEmail = { userName: "uniTest", email: "nouser@gmail.com", password: "", passwordRep: "" };
-const mockUserPass = { userName: "uniTest", email: "unit@gmail.com", password: "1", passwordRep: "1" };
-const mockUserPass2 = { userName: "uniTest", email: "unit@gmail.com", password: "000000", passwordRep: "111111" };
-const mockUserValid = { userName: "uniTest", email: "unit@gmail.com", password: "000000", passwordRep: "000000" };
-const mockRecipeInfo = { recipeName: "uniTest", instructions: "temp", display: false };
-const mockIngInfo = { name: "uniTest" };
-const mockIngInfo2 = { name: "uniTest", energy: 0, fattyAcids: 0, sodium: 0, sugar: 0, protein: 0, totalWeight: 0 };
-const mockSuggestInfo = { suggestionName: "uniTest" };
+const testUserID = "6441a06e827a79b1666eb356";
+const testBannedUserID = "646605e4d96084bc90cca22c";
+const testRecipeID = "6465f8fbafe0329f05f949b9";
 let mockUser;
 let testUser;
 let testExpert;
 let mockRecipe;
 let testCat;
 let testIng;
-let mockSuggest;
 let items;
-const testUserID = "6441a06e827a79b1666eb356";
-const testBannedUserID = "646605e4d96084bc90cca22c";
-const testRecipeID = "6465f8fbafe0329f05f949b9";
 
 describe(testLabel + " Model functions:", function () {
   describe(" Checking user.js...", function () {
     this.timeout(10000);
     it("register - handling errors correctly", async () => {
       //invalid username
-      mockUser = new User(mockUserName);
+      mockUser = new User({ userName: "No User", email: "", password: "", passwordRep: "" });
       let response = await mockUser.register();
       assert.equal(response.successful, false);
       assert.equal(response.error, "username");
-      mockUser = new User(mockUserName2);
+      mockUser = new User({ userName: "u", email: "", password: "", passwordRep: "" });
       response = await mockUser.register();
       assert.equal(response.successful, false);
       assert.equal(response.error, "username");
       //invalid email
-      mockUser = new User(mockUserEmail);
+      mockUser = new User({ userName: "uniTest", email: "nouser@gmail.com", password: "", passwordRep: "" });
       response = await mockUser.register();
       assert.equal(response.successful, false);
       assert.equal(response.error, "email");
       //invalid password
-      mockUser = new User(mockUserPass);
+      mockUser = new User({ userName: "uniTest", email: "unit@gmail.com", password: "1", passwordRep: "1" });
       response = await mockUser.register();
       assert.equal(response.successful, false);
       assert.equal(response.error, "password");
-      mockUser = new User(mockUserPass2);
+      mockUser = new User({ userName: "uniTest", email: "unit@gmail.com", password: "000000", passwordRep: "111111" });
       response = await mockUser.register();
       assert.equal(response.successful, false);
       assert.equal(response.error, "password");
       //mock valid registeration (doesn't actually save in DB)
-      mockUser = new User(mockUserValid);
+      mockUser = new User({ userName: "uniTest", email: "unit@gmail.com", password: "000000", passwordRep: "000000" });
       response = await mockUser.register();
       assert.equal(response.successful, true);
       assert.equal(response.message, "success");
     });
     it("upgrade - upgrades Junior cook to Expert", async () => {
+      mockUser = new Junior(mockUser);
       let response = await mockUser.upgradeUser();
       assert.equal(response, true);
     });
@@ -126,7 +117,7 @@ describe(testLabel + " Model functions:", function () {
   describe(" Checking recipe.js...", function () {
     this.timeout(10000);
     it("addRecipes - create new recipe", async () => {
-      mockRecipe = new Recipe(mockRecipeInfo);
+      mockRecipe = new Recipe({ recipeName: "uniTest", instructions: "temp", display: false });
       let result = await mockRecipe.addRecipe();
       assert.equal(result.success, true);
     });
@@ -255,19 +246,27 @@ describe(testLabel + " Model functions:", function () {
       assert.equal(result, false);
     });
     it("addIngredient - add new ingredient", async () => {
-      testIng = new Ingredient(mockIngInfo);
-      let result = await testIng.addIngredient(mockIngInfo);
+      testIng = new Ingredient({ name: "uniTest" });
+      let result = await testIng.addIngredient({ name: "uniTest" });
       assert.equal(result.success, true);
     });
     it("updateIngredient - update ingredient's data", async () => {
-      let result = await testIng.updateIngredient(mockIngInfo2);
+      let result = await testIng.updateIngredient({
+        name: "uniTest",
+        energy: 0,
+        fattyAcids: 0,
+        sodium: 0,
+        sugar: 0,
+        protein: 0,
+        totalWeight: 0,
+      });
       assert.equal(result, true);
     });
   });
   describe(" Checking suggestion.js...", function () {
     this.timeout(10000);
     it("addSuggestion - create new suggestion", async () => {
-      mockSuggest = new Suggestion(mockSuggestInfo);
+      let mockSuggest = new Suggestion({ suggestionName: "uniTest" });
       let result = await mockSuggest.addSuggestion();
       assert.equal(result.success, true);
     });
@@ -275,6 +274,18 @@ describe(testLabel + " Model functions:", function () {
       items = await Suggestion.fetchAllSuggestions();
       assert(Array.isArray(items));
       assert.notEqual(items.length, 0);
+    });
+  });
+  describe(" Checking news.js...", function () {
+    this.timeout(10000);
+    it("addNews - create new news", async () => {
+      let mockNews = new News({ userId: testUserID, title: "uniTest", description: "test only" });
+      let result = await mockNews.addNews();
+      assert.equal(result.success, true);
+    });
+    it("fetchAllNews - get all news", async () => {
+      items = await News.fetchAllNews();
+      assert(Array.isArray(items));
     });
   });
   after(() => console.log("  " + testLabel + " Done model tests."));

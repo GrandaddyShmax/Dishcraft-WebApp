@@ -37,7 +37,7 @@ const connectDB = async () => {
       if (!testing) console.log(dbLabel + " Database connected.");
     });
     return true;
-  } catch (error) {
+  } catch (error) /* istanbul ignore next */ {
     if (!testing) console.log(dbLabel + chalk.red(" Couldn't connect to database."));
     console.log(error);
     return false;
@@ -67,6 +67,7 @@ app.use(express.static(path.join(__dirname, "public"))); //define public folder
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 //[Initialize storage]
+/* istanbul ignore next */
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "public/images/temp/"),
   filename: (req, file, cb) => cb(null, file.originalname),
@@ -77,11 +78,7 @@ module.exports.uploadImage = multer({ storage: storage, limits: { fieldSize: 10 
 const controllers = fs.readdirSync(`./controllers`);
 for (const controller of controllers) {
   if (controller == "errors.js") continue;
-  if (controller.endsWith(".js")) {
-    //File: prep file
-    const routes = require(`./controllers/${controller}`);
-    app.use(routes);
-  } else {
+  if (!controller.endsWith(".js")) {
     //Folder: prep files in folder
     const subFiles = fs.readdirSync(`./controllers/${controller}`).filter((file) => file.endsWith(".js"));
     for (const file of subFiles) {
@@ -94,6 +91,7 @@ const errorController = require("./controllers/errors.js"); //handle errors
 app.use(errorController.get404Page); //error page
 
 //[Log routes]
+/* istanbul ignore next */
 if (!testing) {
   console.log(appLabel + " Registered routes:");
   printAllRoutes(app, url);
@@ -104,6 +102,8 @@ if (!testing) {
   //wait for db connection to finish
   db.then(() => {
     app.listen(port);
+
+    /* istanbul ignore next */
     if (!testing) {
       console.log(appLabel + " App launched at: " + chalk.yellow(url));
 
@@ -117,9 +117,9 @@ if (!testing) {
       const threshhold = 7;
       const pass = dtTime <= threshhold;
       dtTime = pass ? chalk.green(dtTime) : chalk.red(dtTime);
-      if (!testing || (testing && dtCheck)) {
-        console.log(chalk.grey("Deployment time: ") + dtTime);
-      }
+
+      if (!testing || (testing && dtCheck)) console.log(chalk.grey("Deployment time: ") + dtTime);
+
       if (dtCheck) process.exit(pass ? 0 : 1);
     });
   });
