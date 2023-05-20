@@ -39,11 +39,12 @@ class News {
 
     //get all the categories from db
     static async fetchAllNews() {
-        let news = await schemas.News.find({});
-        for (const item of news) {
+        let oldNews = await schemas.News.find({}), news = [];
+        for (const item of oldNews) {
             const user = new User(null, item.userId);
             await user.fetchUser();
             item.user = user;
+            news.unshift(item);
         }
         return news || [];
     }

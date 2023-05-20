@@ -81,7 +81,7 @@ router.post("/createRecipe", async (req, res) => {
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
       recipeData.categories = recipe.categories;
-      recipeData.showRating = recipeData.hideRating === 'on' ? false : true;
+      recipeData.hideRating = recipeData.hideRating === 'on' ? true : false;
       sess.recipe = null;
       recipe = new Recipe(recipeData);
       let { success, msg } = await recipe.addRecipe();
