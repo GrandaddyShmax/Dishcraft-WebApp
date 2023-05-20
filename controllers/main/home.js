@@ -6,14 +6,17 @@ const { Recipe } = require("../../models/recipe");
 const { Category, defCategories } = require("../../models/category");
 //[Aid]
 const { offloadFields } = require("../../utils");
-const { defSearch, sorts } = require("../../jsons/views.json");
+const { sorts } = require("../../jsons/views.json");
+var temp = require("../../jsons/views.json").defSearch;
+temp.categories = defCategories;
+const defSearch = Object.freeze(temp);
 var filters;
-defSearch.categories = defCategories;
 
 router.get("/home", async (req, res) => {
   const session = req.session;
   session.clearAiFlag = true;
-  const recipes = await Recipe.fetchRecipes(session.search || defSearch);
+  if (!session.search) session.search = defSearch;
+  const recipes = await Recipe.fetchRecipes(session.search);
   session.recipe = null;
   if (!filters)
     filters = {
@@ -21,11 +24,12 @@ router.get("/home", async (req, res) => {
       allergy: await Category.fetchCategories("allergy", true),
       diet: await Category.fetchCategories("diet", true),
     };
+
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
     page: "home",
     recipes: recipes,
-    search: session.search || defSearch,
+    search: session.search,
     sorts: sorts,
     filters: filters,
     user: session.user,

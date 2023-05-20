@@ -7,11 +7,14 @@ const { checkIgredientAPI } = require("../../API/ingred");
 router.get("/admin/managecategories", async (req, res) => {
   const session = req.session;
   const categories = await Category.fetchAllCategories();
+  delete session.currIngred;
+  delete session.indexIngred;
   let error = "";
   if (session.errorIngred != "") {
     error = session.errorIngred;
     session.errorIngred = "";
   }
+
   res.render("template", {
     pageTitle: "Dishcraft - Manage Categories",
     page: "A_manageCategories",

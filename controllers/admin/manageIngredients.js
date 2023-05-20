@@ -6,6 +6,8 @@ const { Ingredient } = require("../../models/ingredient");
 router.get("/admin/manageingredients", async (req, res) => {
   const sess = req.session;
   const ingredients = await Ingredient.fetchAllIngredients();
+  delete sess.categoryIndex;
+  delete sess.errorIngred;
   var currIngred,
     index = -1,
     error = "";

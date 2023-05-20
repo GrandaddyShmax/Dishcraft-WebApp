@@ -20,9 +20,8 @@ router.post("/", async (req, res) => {
   var tempUser = new User(req.body);
   let { successful, message, user } = await tempUser.verify();
   if (successful) {
-    session.user = user;
-    session.message = null;
-    session.error = null;
+    for (const field in req.session) if (field != "cookie") delete req.session[field];
+    req.session.user = user;
     return res.redirect("/home");
   }
   session.message = message;

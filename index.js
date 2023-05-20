@@ -45,7 +45,6 @@ const connectDB = async () => {
 };
 const db = connectDB(); //will load in background
 module.exports.db = db;
-//console.log(db);
 
 //[Connect to A.I. API]
 const ai = connectAI(testing); //will load in background

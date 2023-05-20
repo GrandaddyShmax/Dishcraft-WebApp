@@ -7,6 +7,10 @@ const { Recipe } = require("../../models/recipe");
 router.get("/admin/managerecipes", async (req, res) => {
   const session = req.session;
   const recipes = await Recipe.fetchRecipes(session.filter || null, session.sort || null);
+  delete session.currIngred;
+  delete session.indexIngred;
+  delete session.categoryIndex;
+  delete session.errorIngred;
   res.render("template", {
     pageTitle: "Dishcraft - Manage Recipes",
     page: "A_manageRecipes",
