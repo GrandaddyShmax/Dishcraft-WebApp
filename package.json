@@ -9,12 +9,17 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "mocha 'tests/unitTests/**.test.js' --exit",
+    "test": "mocha",
     "cpd": "jscpd ./",
     "grunt": "grunt jshint",
     "dtime": "node index.js dt",
-    "coverage": "nyc npm test",
+    "coverage": "nyc mocha",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css"
+  },
+  "mocha": {
+    "spec": "tests/unitTests/**.test.js",
+    "slow": 1500,
+    "exit": true
   },
   "jscpd": {
     "threshold": 1,

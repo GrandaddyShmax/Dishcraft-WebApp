@@ -1,7 +1,7 @@
 //[Import]
 const chalk = require("chalk"); //needed for colorful console messages
 var assert = require("assert");
-const { capitalize, endPlural, offloadFields, handleIngAdding, printAllRoutes } = require("../../utils");
+const { capitalize, endPlural, offloadFields, handleIngAdding, printAllRoutes, smartInclude } = require("../../utils");
 const { app } = require("../../index.js");
 const testLabel = chalk.red("[Test]");
 const dbLabel = "MongoDB access: ";
@@ -34,6 +34,14 @@ describe(testLabel + " General:", function () {
       assert.notEqual(result.charAt(result.length - 1), "s");
       result = endPlural(1, "test");
       assert.notEqual(result.charAt(result.length - 1), "s");
+    });
+    it("smartInclude - check if string is in array", () => {
+      let result = smartInclude(["one1", "two2", "three3"], "1");
+      assert.equal(result, true);
+      result = smartInclude(["apple", "tomato", "fish"], "apples");
+      assert.equal(result, true);
+      result = smartInclude(["one1", "two2", "three3"], "1", true);
+      assert.equal(result, false);
     });
     it("offloadFields - copy fields of object to another", () => {
       let result = offloadFields(["test"], null, [true]);
