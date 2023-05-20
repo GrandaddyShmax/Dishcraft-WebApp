@@ -8,8 +8,9 @@ const { Expert } = require("../../models/user");
 //get
 router.get("/recipe", async (req, res) => {
   var session = req.session;
-  let isMarked = false;
-  let isBadgeButton = false;
+  let isMarked = false, 
+      isBadgeButton = false, 
+      isReported = session.recipe.report.includes(session.user.id);
   if (session.user && session.user.role > 1) {
     isMarked = session.user.bookmarks.includes(session.recipe.id);
     isBadgeButton = !session.recipe.badgesUsers.includes(session.user.id);
@@ -22,6 +23,7 @@ router.get("/recipe", async (req, res) => {
     returnPage: session.returnPage || "/home",
     isMarked: isMarked,
     isBadgeButton: isBadgeButton,
+    isReported: isReported,
   });
 });
 
