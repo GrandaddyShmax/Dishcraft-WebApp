@@ -145,6 +145,7 @@ router.post("/assistant", async (req, res) => {
     }
     for (var i = images.length; i < 3; i++) images.push({ url: "" });
     recipe.recipeImages = images;
+    recipe.hideRating = req.body.hideRating === 'on' ? true : false;
     let AiRecipe = new Recipe(recipe);
     // add the recipe to the db
     let { success, msg } = await AiRecipe.addRecipe();
