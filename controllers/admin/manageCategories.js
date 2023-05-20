@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const { Category } = require("../../models/category");
-const { checkIgredient } = require("../../API/ingred");
+const { checkIgredientAPI } = require("../../API/ingred");
 
 router.get("/admin/managecategories", async (req, res) => {
   const session = req.session;
@@ -33,7 +33,7 @@ router.post("/admin/managecategories", async (req, res) => {
   } else if (buttonPress === "add") {
     let category = new Category(null, id);
     await category.fetchCategory();
-    if (!(await checkIgredient(req.body.addInput))) {
+    if (!(await checkIgredientAPI(req.body.addInput))) {
       session.errorIngred = "Ingredient " + req.body.addInput + " not found.";
       return res.redirect(req.get("referer"));
     }

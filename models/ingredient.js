@@ -54,7 +54,8 @@ class Ingredient {
       for (const ingred of recipe.ingredients) {
         if (ingred.name === ingredName) {
           const nutritions = await Ingredient.calcRecipeNutVal(recipe.ingredients, check);
-          await schemas.Recipe.updateOne({ _id: recipe._id }, { nutritions: nutritions });
+          let details = await schemas.Recipe.findOne({ _id: recipe._id });
+          if (details) await details.updateOne({ nutritions: nutritions }).catch(console.error);
         }
       }
     }
@@ -143,18 +144,20 @@ class Ingredient {
 
   async updateIngredient(update) {
     try {
-      await schemas.Ingredient.updateOne(
-        { _id: this.id },
-        {
-          name: update.name,
-          energy: update.energy,
-          fattyAcids: update.fattyAcids,
-          sodium: update.sodium,
-          sugar: update.sugar,
-          protein: update.protein,
-          totalWeight: update.totalWeight,
-        }
-      );
+      let details = await schemas.Ingredient.findOne({ _id: this.id });
+      if (details)
+        await details.updateOne(
+          { _id: this.id },
+          {
+            name: update.name,
+            energy: update.energy,
+            fattyAcids: update.fattyAcids,
+            sodium: update.sodium,
+            sugar: update.sugar,
+            protein: update.protein,
+            totalWeight: update.totalWeight,
+          }
+        );
       return true;
     } catch /* istanbul ignore next */ {
       return false;

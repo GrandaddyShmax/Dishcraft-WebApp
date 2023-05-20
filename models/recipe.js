@@ -383,7 +383,8 @@ class Recipe {
       this.report.push(userID);
 
       try {
-        await schemas.Recipe.updateOne({ _id: this.id }, { report: this.report });
+        let details = await schemas.Recipe.findOne({ _id: this.id });
+        if (details) await details.updateOne({ report: this.report  }).catch(console.error);
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);
@@ -421,7 +422,8 @@ class Recipe {
       rating5: this.rating5,
     };
     try {
-      await schemas.Recipe.updateOne({ _id: this.id }, { fullRating: newRating });
+      let details = await schemas.Recipe.findOne({ _id: this.id });
+      if (details) await details.updateOne({ fullRating: newRating }).catch(console.error);
       this.refreshRating(newRating);
       return true;
     } catch (error) /* istanbul ignore next */ {
@@ -452,7 +454,8 @@ class Recipe {
       this.badgesUsers.push(userID);
       this.badgesCount[parseInt(badgeNum) - 1] += 1;
       try {
-        await schemas.Recipe.updateOne({ _id: this.id }, { badgesUsers: this.badgesUsers, badgesCount: this.badgesCount });
+        let details = await schemas.Recipe.findOne({ _id: this.id });
+        if (details) await details.updateOne({ badgesUsers: this.badgesUsers, badgesCount: this.badgesCount }).catch(console.error);
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);

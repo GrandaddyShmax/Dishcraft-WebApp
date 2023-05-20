@@ -49,7 +49,8 @@ class Category {
     try {
       await this.fetchCategory();
       this.ingredients.push(ingredient);
-      await schemas.Category.updateOne({ _id: this.id }, { ingredients: this.ingredients });
+      let details = await schemas.Category.findOne({ _id: this.id });
+      if (details) await details.updateOne({ ingredients: this.ingredients }).catch(console.error);
       return true;
     } catch /* istanbul ignore next */ {
       return false;
@@ -60,7 +61,8 @@ class Category {
     try {
       await this.fetchCategory();
       this.ingredients.splice(index, 1);
-      await schemas.Category.updateOne({ _id: this.id }, { ingredients: this.ingredients });
+      let details = await schemas.Category.findOne({ _id: this.id });
+      if (details) await details.updateOne({ ingredients: this.ingredients }).catch(console.error);
       return true;
     } catch /* istanbul ignore next */ {
       return false;

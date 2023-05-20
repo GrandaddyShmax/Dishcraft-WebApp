@@ -76,9 +76,21 @@ class User {
   }
 
   /*[ Modifying data ]*/
-  async upgradeUser() {
+  //ban user
+  async banUser() {
     try {
-      await schemas.User.updateOne({ _id: this.id }, { role: roles.expert });
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ banned: true }).catch(console.error);
+      return true;
+    } catch /* istanbul ignore next */ {
+      return false;
+    }
+  }
+  //unban user
+  async unbanUser() {
+    try {
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ banned: false }).catch(console.error);
       return true;
     } catch /* istanbul ignore next */ {
       return false;
@@ -155,6 +167,18 @@ class Junior extends User {
   constructor(details, id) {
     super(details, id);
   }
+  /*[ Modifying data ]*/
+  //upgrade Junior cook to Expert cook
+  async upgradeUser() {
+    try {
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ role: roles.expert }).catch(console.error);
+      return true;
+    } catch /* istanbul ignore next */ {
+      return false;
+    }
+  }
+  /*[ Handling data ]*/
   //get all Junior Cook users from db
   static async fetchUsers() {
     let accounts = await schemas.User.find({ role: roles.junior });
@@ -167,6 +191,17 @@ class Expert extends User {
   constructor(details, id) {
     super(details, id);
   }
+  /*[ Modifying data ]*/
+  async downgradeUser() {
+    try {
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ role: roles.junior }).catch(console.error);
+      return true;
+    } catch /* istanbul ignore next */ {
+      return false;
+    }
+  }
+  /*[ Handling data ]*/
   //get all Expert Cook users from db
   static async fetchUsers() {
     let accounts = await schemas.User.find({ role: roles.expert });
@@ -185,7 +220,8 @@ class Expert extends User {
     nutritions.date = today;
     filtered.push(nutritions);
     try {
-      await schemas.User.updateOne({ _id: this.id }, { latest: filtered });
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ latest: filtered }).catch(console.error);
       return true;
     } catch /* istanbul ignore next */ {
       return false;
@@ -257,8 +293,8 @@ class Expert extends User {
 
   async updateBookmarks() {
     try {
-      //this.bookmarks = filtered;
-      await schemas.User.updateOne({ _id: this.id }, { bookmarks: this.bookmarks });
+      let details = await schemas.User.findOne({ _id: this.id });
+      if (details) await details.updateOne({ bookmarks: this.bookmarks }).catch(console.error);
       return { success: true, bookmarks: this.bookmarks };
     } catch /* istanbul ignore next */ {
       return { success: false, bookmarks: this.bookmarks };

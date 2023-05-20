@@ -79,7 +79,7 @@ router.post("/assistant", async (req, res) => {
       dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
       grill: req.body.grill != null};
   }
-  offloadFields(["extra", "instructions"], sess.recipe, req.body);
+  offloadFields(["extra", "instructions", "color"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
   if (handleIngAdding(req, res, buttonPress, index)) { return res.redirect(req.get("referer")); }
   //Generate recipe
