@@ -17,13 +17,13 @@
       </div>
       <%if (locals.user && user.role > 1 && alert != "") { %>
         <div class="flex-none w-full h-20 mb-4">
-          <div id="backgroundAI" class="bg-coffee flex flex-col flex-1 p-6 font-bold text-latte text-center text-2xl w-full m-2 rounded-md">
+          <div class="bg-coffee flex flex-col flex-1 p-6 font-bold text-latte text-center text-2xl w-full m-2 rounded-md">
             <%=alert%>
           </div>
         </div>
       <%}%>
       <form action="/assistant" method="POST" id="form" class="flex flex-1 flex-col">
-        <div class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
+        <div id="backgroundAI" class="bg-coffee flex flex-col flex-1 p-6 font-normal text-lg w-full m-2 rounded-md">
           <p class="text-latte text-3xl font-bold">
             <%=recipe.recipeName%>
           </p>
