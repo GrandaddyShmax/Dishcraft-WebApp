@@ -22,7 +22,7 @@ const path = require("path"); //safe path creating
 const bodyParser = require("body-parser"); //better request parsing
 const { printAllRoutes } = require("./utils.js");
 //Info:
-const port = 3000;
+const port = 8080;
 const url = `http://localhost:${port}/`;
 const appLabel = chalk.green("[App]");
 const dbLabel = chalk.magenta("[DB]");
