@@ -16,7 +16,7 @@ router.get("/home", async (req, res) => {
   const session = req.session;
   session.clearAiFlag = true;
   if (!session.search) session.search = defSearch;
-  const recipes = await Recipe.fetchRecipes(session.search);
+  session.recipes = await Recipe.fetchRecipes(session.search);
   session.recipe = null;
   if (!filters)
     filters = {
@@ -28,7 +28,7 @@ router.get("/home", async (req, res) => {
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
     page: "home",
-    recipes: recipes,
+    recipes: session.recipes,
     search: session.search,
     sorts: sorts,
     filters: filters,
@@ -38,7 +38,12 @@ router.get("/home", async (req, res) => {
 
 router.post("/home", async (req, res) => {
   const session = req.session;
-  const smt = req.body.submit;
+  var smt = req.body.submit;
+  if (smt == "random") {
+    if (session.recipes.length == 0) return res.redirect(req.get("referer")); //ignore request
+    let index = Math.floor(Math.random() * session.recipes.length);
+    smt = session.recipes[index].id;
+  }
   const recipe = new Recipe(null, smt);
   //find recipe
   let successful = await recipe.fetchRecipe(session.user ? session.user.id : null);

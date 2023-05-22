@@ -119,6 +119,7 @@ function parseRecipe(response, recipe) {
             else if (units.includes(unit.slice(0, -1))) unit = unit.slice(0, -1);
             else unit = "Pieces";
           }
+          if (!amount || !unit || !name) continue;
           if (!smartInclude(ings, name)) {
             recipe.extra += `${amount} ${endPlural(amount, unit)} of ${name}\n`;
             recipe.ingredients2.push({ amount: amount, unit: unit, name: name });

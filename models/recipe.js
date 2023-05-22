@@ -210,19 +210,13 @@ class Recipe {
   static checkTerm(term, recipe, user) {
     if (!term) return false;
     term = term.toLowerCase();
-    if (
-      //check recipe names
-      !recipe.recipeName.toLowerCase().includes(term) &&
-      //check usernames
-      !user.userName.toLowerCase().includes(term) &&
+    const ings = recipe.ingredients.map((ing) => (ing.name ? ing.name.toLowerCase() : "")).filter((ing) => ing);
+    return !(
+      (recipe.recipeName && recipe.recipeName.toLowerCase().includes(term)) || //check recipe names
+      (user.userName && user.userName.toLowerCase().includes(term)) || //check usernames
       //check ingredients (check plural&singular)
-      !smartInclude(
-        recipe.ingredients.map((ing) => ing.name.toLowerCase()),
-        term
-      )
-    )
-      return true;
-    return false;
+      smartInclude(ings, term)
+    );
   }
   static async fetchFilter(filter) {
     if (!filter) return null;
@@ -353,7 +347,7 @@ class Recipe {
     if ("url" in img) return img.url ? img.url : null;
     return img;
   }
-
+  //handle rating
   static updateRatingNum(rating) {
     if (!rating.rating1) rating.rating1 = [];
     if (!rating.rating2) rating.rating2 = [];
@@ -384,7 +378,7 @@ class Recipe {
 
       try {
         let details = await schemas.Recipe.findOne({ _id: this.id });
-        if (details) await details.updateOne({ report: this.report  }).catch(console.error);
+        if (details) await details.updateOne({ report: this.report }).catch(console.error);
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);
@@ -438,7 +432,7 @@ class Recipe {
       total: rating.total,
       star: rating.star,
     };
-    const parseFancy = (rating) => (rating.length / (this.rating.total || 1)) * 100;
+    const parseFancy = (rating) => ((rating.length / (this.rating.total || 1)) * 100).toFixed(2);
     this.ratingFancy = [
       parseFancy(this.rating1),
       parseFancy(this.rating2),
@@ -447,6 +441,7 @@ class Recipe {
       parseFancy(this.rating5),
     ];
   }
+  //handle badges
   async addBadgeToRecipe(userID, badgeNum) {
     if (!this.badgesUsers) this.badgesUsers = [];
     if (!this.badgesUsers.includes(userID)) {
@@ -455,7 +450,8 @@ class Recipe {
       this.badgesCount[parseInt(badgeNum) - 1] += 1;
       try {
         let details = await schemas.Recipe.findOne({ _id: this.id });
-        if (details) await details.updateOne({ badgesUsers: this.badgesUsers, badgesCount: this.badgesCount }).catch(console.error);
+        if (details)
+          await details.updateOne({ badgesUsers: this.badgesUsers, badgesCount: this.badgesCount }).catch(console.error);
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);
