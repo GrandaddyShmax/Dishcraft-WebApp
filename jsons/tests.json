@@ -1,0 +1,12 @@
+{
+  "actions": {
+    "s1t1": ["Suggest new ingredients to add", "See all A.I. made recipes", "Get random recipe"],
+    "s1t2": [
+      "Sort/filter recipes by time",
+      "Filter recipes by ingredient category",
+      "Give badges to recipes",
+      "Bookmark recipes"
+    ],
+    "s1t3": ["Upload recipe", "Custom background"]
+  }
+}
