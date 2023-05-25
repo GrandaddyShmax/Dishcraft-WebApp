@@ -15,6 +15,7 @@ const msg = "A.I. is currently disabled!";
 const { offloadFields, handleIngAdding } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
+const session = require("express-session");
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
@@ -107,7 +108,6 @@ router.post("/assistant", async (req, res) => {
         //console.log(response);
         req.session.recipe = parseAssToRecipe(response, recipe);
       }
-
       //calculate nutritional value & check allergies:
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
       req.session.allergies = await Category.findCategory(ings, "allergy", true);
@@ -124,19 +124,29 @@ router.post("/assistant", async (req, res) => {
         user.updateLatest(req.session.nutritions);
         sess.alert = user.checkWarnings();
       }
+
+      //add AI recipe to DB after generate 
+      let ing2 = recipe.ingredients2;
+      let ing1 = recipe.ingredients.concat(ing2);
+      recipe.aiMade = true; //made by AI
+      recipe.display=false; //hide the recipe until publish
+      recipe.userID = sess.user.id; //userID
+      recipe.ingredients = ing1;
+      let AiRecipe = new Recipe(recipe);
+      // add the recipe to the db
+      let { success, msg, id } = await AiRecipe.addRecipe();
+      recipe.id=id;
+      console.log(recipe.id);
+
     } catch (error) {
       console.log(error);
       sess.recipe.extra = "Failed to generate recipe, please try again later.";
       sess.recipe.instructions = "Failed to generate recipe, please try again later.";
     }
+
   }
   if (buttonPress == "publish") {
-    //publish the recipe
-    let ing2 = recipe.ingredients2;
-    let ing1 = recipe.ingredients.concat(ing2);
-    recipe.aiMade = true; //made by AI
-    recipe.userID = sess.user.id; //userID
-    recipe.ingredients = ing1;
+    //publish the recipe with the updates
     var images = [];
     if (recipe.imagesData) {
       if (recipe.imagesData.img1) images.push(recipe.imagesData.img1);
@@ -146,9 +156,10 @@ router.post("/assistant", async (req, res) => {
     for (var i = images.length; i < 3; i++) images.push({ url: "" });
     recipe.recipeImages = images;
     recipe.hideRating = req.body.hideRating === 'on' ? true : false;
+
     let AiRecipe = new Recipe(recipe);
     // add the recipe to the db
-    let { success, msg } = await AiRecipe.addRecipe();
+    let success = await AiRecipe.updateRecipe();
     sess.recipeTrue = false;
     if (success) return res.redirect("/home");
   }

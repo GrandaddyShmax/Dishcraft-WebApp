@@ -64,7 +64,7 @@ class Recipe {
         },
         report: [],
         aiMade: this.aiMade || false,
-        display: this.display || true,
+        display: this.display ,
         ingredients: this.ingredients,
         instructions: this.instructions,
         badges: this.badge || [],
@@ -79,10 +79,10 @@ class Recipe {
       this.id = details.id;
       //respond to unit test
       if (this.recipeName == "uniTest") await this.delRecipe();
-      return { success: true, msg: null };
+      return { success: true, msg: null ,id: this.id};
     } catch (error) /* istanbul ignore next */ {
       console.log(error);
-      return { success: false, msg: "Invalid recipe" };
+      return { success: false, msg: "Invalid recipe" , id: this.id };
     }
   }
 
@@ -460,6 +460,21 @@ class Recipe {
     }
     return false;
   }
+
+async updateRecipe(){ //updates the AI recipe on publish
+  try {
+    let details = await schemas.Recipe.findOne({ _id: this.id })
+    console.log(this);
+    if (details)
+      await details.updateOne({ display: true, categories: this.categories, recipeImages:this.recipeImages, hideRating:this.hideRating }).catch(console.error);
+    return true;
+  } 
+  catch (error) {
+    onsole.log(error);
+        return false;
+  }
+}
+
 }
 /*[ External access ]*/
 module.exports = { Recipe };
