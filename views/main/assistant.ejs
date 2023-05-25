@@ -124,8 +124,10 @@
             <% } %>
             <!-- duplicate the new ingredient object here -->
             <div class="pt-2 flex">
+              <%if (!recipeTrue) { %>
               <button value="addmore" onclick="forceSubmit();" type="submit" name="submit" class="bg-espresso w-32 rounded-md font-bold text-latte py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90 border border-latte hover:border-pistachio">Add More
               </button>
+              <%}%>
             </div>
           </div>
           <p class="pt-8 text-2xl text-latte font-bold">
