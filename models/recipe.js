@@ -169,6 +169,7 @@ class Recipe {
       var tempRecipe = offloadFields(
         [
           "id",
+          "userID",
           "recipeName",
           "report",
           "aiMade",
@@ -192,6 +193,7 @@ class Recipe {
         total: rating.total,
         star: rating.star,
       };
+      tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
       //food categories:
@@ -201,6 +203,7 @@ class Recipe {
       //category filters:
       if (this.checkFilter(filter, tempRecipe)) continue;
       recipes.push(tempRecipe);
+      
     }
     //sort by nutritional value:
     recipes = this.checkSort(sort, recipes);
