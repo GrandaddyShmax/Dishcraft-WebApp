@@ -17,13 +17,11 @@
       "Rank/report recipes"
     ],
     "s3t1": [
-      "View registered users amount",
-      "View existing users and their recipe count",
       "Upgrade Junior Cook to Expert Cook",
       "Ability to ban users"
     ],
     "s3t2": ["View requested ingredients", "Add requested ingredients", "Ability to categorize ingredients"],
-    "s3t3": ["View reports made by users", "Remove recipes", "News/updates page"]
+    "s3t3": ["Remove recipes", "News/updates page"]
   },
   "expert": { "userName": "Mordechai", "password": "scenario1" },
   "junior": { "userName": "Maor", "password": "scenario2" },
