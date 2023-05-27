@@ -1,10 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-//[Clases]
+//[Classes]
 const { Suggestion } = require("../../models/suggestion");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/suggest", async (req, res) => {
+  if (!checkPerms(req, res, 2)) return;
   var session = req.session;
   res.render("template", {
     pageTitle: "Dishcraft - Suggest Ingredient",
@@ -16,7 +19,7 @@ router.get("/suggest", async (req, res) => {
 
 //post
 router.post("/suggest", async (req, res) => {
-  var session = req.session;
+  if (!checkPerms(req, res, 2)) return;
   const suggestionData = req.body;
   var suggestion = new Suggestion(suggestionData);
   let { success, msg } = await suggestion.addSuggestion();
@@ -28,5 +31,5 @@ router.post("/suggest", async (req, res) => {
   }
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

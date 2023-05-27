@@ -1,10 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-const { News } = require("../../models/news"); 
-//[Clases]
+//[Classes]
+const { News } = require("../../models/news");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/news", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   var session = req.session;
   const allNews = await News.fetchAllNews();
   res.render("template", {
@@ -17,6 +20,7 @@ router.get("/news", async (req, res) => {
 });
 
 router.post("/news", async (req, res) => {
+  if (!checkPerms(req, res, 2)) return;
   var session = req.session;
   const newsData = req.body;
   newsData.userId = session.user.id;
@@ -27,16 +31,14 @@ router.post("/news", async (req, res) => {
   if (buttonPress == "add") {
     news = new News(newsData);
     const { success, msg } = await news.addNews();
-    if (!success) 
-      return res.redirect(req.get("referer"));
+    if (!success) return res.redirect(req.get("referer"));
   } else if (buttonPress == "delete") {
     news = new News(allNews[index]);
     success = await news.deleteNews();
-    if (!success)
-      return res.redirect(req.get("referer"));
+    if (!success) return res.redirect(req.get("referer"));
   }
   return res.redirect("/news");
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

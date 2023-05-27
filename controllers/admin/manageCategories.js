@@ -1,10 +1,15 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { Category } = require("../../models/category");
+//[API]
 const { checkIgredientAPI } = require("../../API/ingred");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/admin/managecategories", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const session = req.session;
   const categories = await Category.fetchAllCategories();
   delete session.currIngred;
@@ -27,6 +32,7 @@ router.get("/admin/managecategories", async (req, res) => {
 });
 
 router.post("/admin/managecategories", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const session = req.session;
   const [buttonPress, index, id] = req.body.submit.split("&");
   session.errorIngred = "";
@@ -57,5 +63,5 @@ router.post("/admin/managecategories", async (req, res) => {
   return res.redirect("/admin/managecategories");
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

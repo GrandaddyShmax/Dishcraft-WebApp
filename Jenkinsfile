@@ -33,7 +33,7 @@ pipeline {
         sh 'npm install'
       }
     }
-    stage('Run unit tests & & Check coverage') {
+    stage('Run unit tests & Check coverage') {
       steps {
         sh 'npm run coverage'
       }

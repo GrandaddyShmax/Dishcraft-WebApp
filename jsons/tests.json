@@ -7,6 +7,29 @@
       "Give badges to recipes",
       "Bookmark recipes"
     ],
-    "s1t3": ["Upload recipe", "Custom background"]
-  }
+    "s1t3": ["Upload recipe", "Custom background"],
+    "s2t1": ["Use A.I. to get recipes", "\"Publish\" A.I. recipes"],
+    "s2t2": [
+      "Ability to search recipes",
+      "Category menu",
+      "Sort recipes by nutritional value",
+      "View recipes and nutritional value",
+      "Rank/report recipes"
+    ],
+    "s3t1": [
+      "View registered users amount",
+      "View existing users and their recipe count",
+      "Upgrade Junior Cook to Expert Cook",
+      "Ability to ban users"
+    ],
+    "s3t2": ["View requested ingredients", "Add requested ingredients", "Ability to categorize ingredients"],
+    "s3t3": ["View reports made by users", "Remove recipes", "News/updates page"]
+  },
+  "expert": { "userName": "Mordechai", "password": "scenario1" },
+  "junior": { "userName": "Maor", "password": "scenario2" },
+  "admin": { "userName": "Genia", "password": "scenario3", "id": "646f81338e318dde927a18b6" },
+  "testUserID": "6441a06e827a79b1666eb356",
+  "testBannedUserID": "646605e4d96084bc90cca22c",
+  "testRecipeID": "6465f8fbafe0329f05f949b9",
+  "testCatID": "64428268f57d32fe4690a538"
 }

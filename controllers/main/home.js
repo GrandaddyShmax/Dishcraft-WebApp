@@ -1,11 +1,11 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-//[Clases]
+//[Classes]
 const { Recipe } = require("../../models/recipe");
 const { Category, defCategories } = require("../../models/category");
 //[Aid]
-const { offloadFields } = require("../../utils");
+const { checkPerms, offloadFields } = require("../../utils");
 const { sorts } = require("../../jsons/views.json");
 var temp = require("../../jsons/views.json").defSearch;
 temp.categories = defCategories;
@@ -13,6 +13,7 @@ const defSearch = Object.freeze(temp);
 var filters;
 
 router.get("/home", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const session = req.session;
   session.clearAiFlag = true;
   if (!session.search) session.search = defSearch;
@@ -37,6 +38,7 @@ router.get("/home", async (req, res) => {
 });
 
 router.post("/home", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const session = req.session;
   var smt = req.body.submit;
   if (smt == "random") {
@@ -56,6 +58,7 @@ router.post("/home", async (req, res) => {
 });
 //look up recipe by name, author, or ingredient
 router.post("/search", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const session = req.session;
   const buttonPress = req.body.submit;
   if (!session.search) session.search = defSearch;
@@ -89,6 +92,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.post("/updateCategories", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const session = req.session;
   if (!session.search) session.search = defSearch;
   const categories = session.search.categories;
@@ -97,5 +101,5 @@ router.post("/updateCategories", async (req, res) => {
   return res.redirect("/home");
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

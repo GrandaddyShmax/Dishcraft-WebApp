@@ -106,5 +106,5 @@ class Category {
   }
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = { Category, defCategories };

@@ -174,5 +174,5 @@ class Ingredient {
   }
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = { Ingredient };

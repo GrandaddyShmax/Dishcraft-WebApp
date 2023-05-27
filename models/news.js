@@ -52,5 +52,5 @@ class News {
   }
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = { News };

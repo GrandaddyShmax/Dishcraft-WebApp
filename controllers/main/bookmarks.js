@@ -1,13 +1,14 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-//[Clases]
+//[Classes]
 const { Recipe } = require("../../models/recipe");
-//[API]
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/bookmarks", async (req, res) => {
+  if (!checkPerms(req, res, 2)) return;
   var session = req.session;
-  if (!session.user) return res.redirect("/");
   const recipes = await Recipe.fetchRecipes(null, session.user.bookmarks);
   session.recipe = null;
   res.render("template", {
@@ -20,6 +21,7 @@ router.get("/bookmarks", async (req, res) => {
 });
 
 router.post("/bookmarks", async (req, res) => {
+  if (!checkPerms(req, res, 2)) return;
   var session = req.session;
   const smt = req.body.submit;
   const recipe = new Recipe(null, smt);
@@ -33,5 +35,5 @@ router.post("/bookmarks", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

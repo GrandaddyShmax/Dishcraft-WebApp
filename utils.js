@@ -86,6 +86,25 @@ function offloadFields(fields, object1, object2) {
   });
   return object1;
 }
+
+//Check user has the right permissions for the page
+function checkPerms(req, res, perms) {
+  const sess = req.session;
+  if (perms != 0) {
+    if (!sess.user) {
+      res.redirect("/");
+      return false;
+    }
+    if (!sess.currentPage) sess.currentPage = "/home";
+    if (perms && sess.user.role < perms) {
+      res.redirect(sess.currentPage);
+      return false;
+    }
+  }
+  sess.currentPage = req.originalUrl;
+  return true;
+}
+
 //Update ingredients & "addmore" & "remove"
 function handleIngAdding(req, res, buttonPress, index) {
   var recipe = req.session.recipe;
@@ -105,6 +124,34 @@ function handleIngAdding(req, res, buttonPress, index) {
     return true;
   }
   return false;
+}
+
+//Reset recipe categories
+function resetCategories(recipe, req) {
+  if (req)
+    recipe.categories = {
+      spicy: req.body.spicy != null,
+      sweet: req.body.sweet != null,
+      salad: req.body.salad != null,
+      meat: req.body.meat != null,
+      soup: req.body.soup != null,
+      dairy: req.body.dairy != null,
+      pastry: req.body.pastry != null,
+      fish: req.body.fish != null,
+      grill: req.body.grill != null,
+    };
+  else
+    recipe.categories = {
+      spicy: false,
+      sweet: false,
+      salad: false,
+      meat: false,
+      soup: false,
+      dairy: false,
+      pastry: false,
+      fish: false,
+      grill: false,
+    };
 }
 
 //Prints all registered routes
@@ -139,5 +186,15 @@ function printAllRoutes(app, url, silent) {
   console.log(table.toString());
 }
 
-/*[ External access ]*/
-module.exports = { until, capitalize, endPlural, smartInclude, offloadFields, handleIngAdding, printAllRoutes };
+//[External access]
+module.exports = {
+  until,
+  capitalize,
+  endPlural,
+  smartInclude,
+  offloadFields,
+  checkPerms,
+  handleIngAdding,
+  resetCategories,
+  printAllRoutes,
+};

@@ -1,16 +1,19 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-//[Clases]
+//[Classes]
 const { Recipe } = require("../../models/recipe");
 const { Expert } = require("../../models/user");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 //get
 router.get("/recipe", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   var session = req.session;
-  let isMarked = false, 
-      isBadgeButton = false, 
-      isReported = session.recipe.report.includes(session.user.id);
+  let isMarked = false,
+    isBadgeButton = false,
+    isReported = session.recipe.report.includes(session.user.id);
   if (session.user && session.user.role > 1) {
     isMarked = session.user.bookmarks.includes(session.recipe.id);
     isBadgeButton = !session.recipe.badgesUsers.includes(session.user.id);
@@ -29,8 +32,8 @@ router.get("/recipe", async (req, res) => {
 
 //post
 router.post("/recipe", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   var session = req.session;
-  if (!session.user) return res.redirect("/");
   const buttonType = req.body.submit;
   const rating = req.body.rating;
   const badges = req.body.badges;
@@ -64,5 +67,5 @@ router.post("/recipe", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

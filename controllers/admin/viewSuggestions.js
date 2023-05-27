@@ -1,9 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { Suggestion } = require("../../models/suggestion");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/admin/viewsuggestions", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
   const suggestions = await Suggestion.fetchAllSuggestions();
   delete sess.currIngred;
@@ -20,9 +24,10 @@ router.get("/admin/viewsuggestions", async (req, res) => {
 });
 
 router.post("/admin/viewsuggestions", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   await Suggestion.deleteSuggestion(req.body.submit);
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

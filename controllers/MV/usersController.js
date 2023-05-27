@@ -1,9 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { User } = require("../../models/user");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/", async (req, res) => {
+  if (!checkPerms(req, res, 0)) return;
   var session = req.session;
   res.render("template", {
     page: "login",
@@ -14,6 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  if (!checkPerms(req, res, 0)) return;
   var session = req.session;
   const buttonPress = await req.body.submit;
   if (buttonPress != "login") return res.redirect(req.get("referer"));
@@ -29,6 +34,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/register", (req, res) => {
+  if (!checkPerms(req, res, 0)) return;
   var session = req.session;
   res.render("template", {
     page: "register",
@@ -41,6 +47,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
+  if (!checkPerms(req, res, 0)) return;
   var session = req.session;
   var tempUser = new User(req.body);
   let { successful, error, message } = await tempUser.register();
@@ -56,9 +63,10 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/logOut", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   delete req.session.user;
   return res.redirect("/");
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

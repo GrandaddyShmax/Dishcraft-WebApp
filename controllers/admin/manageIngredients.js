@@ -1,9 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { Ingredient } = require("../../models/ingredient");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/admin/manageingredients", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
   const ingredients = await Ingredient.fetchAllIngredients();
   delete sess.categoryIndex;
@@ -37,6 +41,7 @@ router.get("/admin/manageingredients", async (req, res) => {
 });
 
 router.post("/admin/manageingredients", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
   const [buttonPress, index] = req.body.submit.split("&");
 
@@ -86,5 +91,5 @@ router.post("/admin/manageingredients", async (req, res) => {
   return res.redirect("/admin/manageingredients");
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

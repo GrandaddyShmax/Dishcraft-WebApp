@@ -1,9 +1,13 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { User, Junior, Expert } = require("../../models/user");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 router.get("/admin/manageusers", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
   const users = await User.fetchAllUsers();
   delete sess.currIngred;
@@ -22,6 +26,7 @@ router.get("/admin/manageusers", async (req, res) => {
 
 //upgrade selected user
 router.post("/admin/manageusers", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
   const [buttonPress, userID] = req.body.submit.split("&");
   if (buttonPress == "update") {
@@ -49,5 +54,5 @@ router.post("/admin/manageusers", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

@@ -5,6 +5,7 @@ const { Junior } = require("./user");
 const { Category } = require("./category");
 const { offloadFields, smartInclude } = require("../utils");
 const { categoryList } = require("../jsons/views.json");
+const { testUserID, testRecipeID } = require("../jsons/tests.json");
 
 //Recipe class
 class Recipe {
@@ -30,7 +31,6 @@ class Recipe {
           "display",
           "ingredients",
           "instructions",
-          "badges",
           "color",
           "uploadDate",
           "nutritions",
@@ -52,7 +52,7 @@ class Recipe {
       const date = new Date();
       let details = await schemas.Recipe.create({
         _id: mongoose.Types.ObjectId(),
-        userID: this.userID || "6441a06e827a79b1666eb356",
+        userID: this.userID || testUserID,
         recipeName: this.recipeName,
         recipeImages: this.recipeImages,
         fullRating: {
@@ -64,10 +64,9 @@ class Recipe {
         },
         report: [],
         aiMade: this.aiMade || false,
-        display: this.display ,
+        display: this.display,
         ingredients: this.ingredients,
         instructions: this.instructions,
-        badges: this.badge || [],
         color: this.color,
         uploadDate: date,
         nutritions: this.nutritions,
@@ -79,10 +78,10 @@ class Recipe {
       this.id = details.id;
       //respond to unit test
       if (this.recipeName == "uniTest") await this.delRecipe();
-      return { success: true, msg: null ,id: this.id};
+      return { success: true, msg: null, id: this.id };
     } catch (error) /* istanbul ignore next */ {
       console.log(error);
-      return { success: false, msg: "Invalid recipe" , id: this.id };
+      return { success: false, msg: "Invalid recipe", id: this.id };
     }
   }
 
@@ -111,7 +110,6 @@ class Recipe {
           "aiMade",
           "display",
           "instructions",
-          "badges",
           "color",
           "uploadDate",
           "nutritions",
@@ -143,7 +141,7 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(search, bookmarks, hidden) {
+  static async fetchRecipes(search, list, hidden) {
     const currDate = new Date(Date.now());
     var term,
       filter,
@@ -154,10 +152,9 @@ class Recipe {
     if (search) ({ term, filter, filterRange, sort, categories } = search);
     if (filter) filter = await this.fetchFilter(filter);
     if (categories) categorOn = Recipe.fetchCategories(categories);
-
     let recipes = [];
     let recipesArr;
-    if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
+    if (list) recipesArr = await schemas.Recipe.find({ _id: list });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
       /*jshint -W018 */
@@ -175,7 +172,6 @@ class Recipe {
           "aiMade",
           "ingredients",
           "instructions",
-          "badges",
           "color",
           "uploadDate",
           "nutritions",
@@ -187,6 +183,7 @@ class Recipe {
         null,
         recipe
       );
+      if (hidden) tempRecipe.ingredients = Recipe.parseIngredients(recipe.ingredients);
       var rating = Recipe.updateRatingNum(recipe.fullRating);
       tempRecipe.rating = {
         avg: rating.avg,
@@ -461,23 +458,30 @@ class Recipe {
         return false;
       }
     }
+    if (this.id == testRecipeID && userID == testUserID) {
+      try {
+        let details = await schemas.Recipe.findOne({ _id: this.id });
+        if (details) await details.updateOne({ badgesUsers: [], badgesCount: [0, 0, 0, 0] }).catch(console.error);
+      } catch /* istanbul ignore next */ {}
+    }
     return false;
   }
 
-async updateRecipe(){ //updates the AI recipe on publish
-  try {
-    let details = await schemas.Recipe.findOne({ _id: this.id })
-    console.log(this);
-    if (details)
-      await details.updateOne({ display: true, categories: this.categories, recipeImages:this.recipeImages, hideRating:this.hideRating }).catch(console.error);
-    return true;
-  } 
-  catch (error) {
-    onsole.log(error);
-        return false;
+  async updateRecipe() {
+    //updates the AI recipe on publish
+    try {
+      let details = await schemas.Recipe.findOne({ _id: this.id });
+      console.log(this);
+      if (details)
+        await details
+          .updateOne({ display: true, categories: this.categories, recipeImages: this.recipeImages, hideRating: this.hideRating })
+          .catch(console.error);
+      return true;
+    } catch (error) {
+      onsole.log(error);
+      return false;
+    }
   }
 }
-
-}
-/*[ External access ]*/
+//[External access]
 module.exports = { Recipe };

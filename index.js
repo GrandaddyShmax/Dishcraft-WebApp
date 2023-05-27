@@ -128,7 +128,12 @@ if (!testing) {
 module.exports.app = app;
 
 //[Process events]
-process.on("SIGINT", (signal, code) => process.exit(128 + signal));
+process.on("SIGINT", (signal, code) => {
+  mongoose.connection.close(function () {
+    if (!testing) console.log(dbLabel + " Database closed.");
+    process.exit(128 + signal);
+  });
+});
 process.on("exit", (code) => {
   if (!testing) console.log(appLabel + " App closed.");
 });

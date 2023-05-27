@@ -4,15 +4,16 @@ const router = express.Router();
 const fs = require("fs"); //accessing other folders & files
 const path = require("path"); //safe path creating
 const { uploadImage } = require("../../index");
-//[Clases]
+//[Classes]
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
 //[Aid]
-const { offloadFields, handleIngAdding } = require("../../utils");
+const { checkPerms, offloadFields, handleIngAdding, resetCategories } = require("../../utils");
 const { defIngs, units } = require("../../jsons/views.json");
 
 //get
 router.get("/createRecipe", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const sess = req.session;
   sess.clearAiFlag = true;
   let error = "";
@@ -29,8 +30,17 @@ router.get("/createRecipe", async (req, res) => {
       ingredients: [defIngs],
       instructions: "",
       color: "original",
-      categories: {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
-        pastry: false, fish: false, grill: false}
+      categories: {
+        spicy: false,
+        sweet: false,
+        salad: false,
+        meat: false,
+        soup: false,
+        dairy: false,
+        pastry: false,
+        fish: false,
+        grill: false,
+      },
     };
   }
   if (sess.recipe.ingredients.length == 0) sess.recipe.ingredients = [defIngs];
@@ -46,12 +56,21 @@ router.get("/createRecipe", async (req, res) => {
 
 //post
 router.post("/createRecipe", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   var sess = req.session;
   var recipe = sess.recipe;
-  sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
-    salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
-    dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
-    grill: req.body.grill != null};
+  resetCategories(sess.recipe, req);
+  /*sess.recipe.categories = {
+    spicy: req.body.spicy != null,
+    sweet: req.body.sweet != null,
+    salad: req.body.salad != null,
+    meat: req.body.meat != null,
+    soup: req.body.soup != null,
+    dairy: req.body.dairy != null,
+    pastry: req.body.pastry != null,
+    fish: req.body.fish != null,
+    grill: req.body.grill != null,
+  };*/
   offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
   //sess.recipe.recipeImages = Recipe.parseImages(sess.recipe.imagesData);
   if (req.body.submit) {
@@ -81,7 +100,7 @@ router.post("/createRecipe", async (req, res) => {
       recipeData.ingredients = recipe.ingredients;
       recipeData.nutritions = await Ingredient.calcRecipeNutVal(recipeData.ingredients, false);
       recipeData.categories = recipe.categories;
-      recipeData.hideRating = recipeData.hideRating === 'on' ? true : false;
+      recipeData.hideRating = recipeData.hideRating === "on" ? true : false;
       recipeData.display = true;
       sess.recipe = null;
       recipe = new Recipe(recipeData);
@@ -103,10 +122,18 @@ function handleImage(req, res, index) {
     //Update ingredients & "addmore" & "remove"
     handleIngAdding(req, res);
   }
-  sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
-    salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
-    dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
-    grill: req.body.grill != null};
+  resetCategories(sess.recipe, req);
+  /*sess.recipe.categories = {
+    spicy: req.body.spicy != null,
+    sweet: req.body.sweet != null,
+    salad: req.body.salad != null,
+    meat: req.body.meat != null,
+    soup: req.body.soup != null,
+    dairy: req.body.dairy != null,
+    pastry: req.body.pastry != null,
+    fish: req.body.fish != null,
+    grill: req.body.grill != null,
+  };*/
   if (req.file) {
     if (!sess.recipe.imagesData) sess.recipe.imagesData = {};
     const url = path.resolve("./public/images/temp/" + req.file.filename);
@@ -121,5 +148,5 @@ function handleImage(req, res, index) {
   return res.redirect(req.get("referer"));
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

@@ -43,5 +43,5 @@ class Suggestion {
   }
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = { Suggestion };

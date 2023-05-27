@@ -21,7 +21,6 @@ module.exports = (schemas) => {
     display: Boolean,
     ingredients: [{ amount: Number, unit: String, name: String }],
     instructions: String,
-    badges: [String],
     color: String,
     uploadDate: Date,
     nutritions: { energy: Number, fattyAcids: Number, sodium: Number, sugar: Number, protein: Number },

@@ -301,5 +301,5 @@ class Expert extends User {
     }
   }
 }
-/*[ External access ]*/
+//[External access]
 module.exports = { User, Admin, Junior, Expert };

@@ -1,10 +1,14 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
+//[Classes]
 const { Recipe } = require("../../models/recipe");
+//[Aid]
+const { checkPerms } = require("../../utils");
 
 //get
 router.get("/admin/managerecipes", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const session = req.session;
   const recipes = await Recipe.fetchRecipes(session.filter || null, session.sort || null);
   delete session.currIngred;
@@ -22,6 +26,7 @@ router.get("/admin/managerecipes", async (req, res) => {
 
 //post
 router.post("/admin/managerecipes", async (req, res) => {
+  if (!checkPerms(req, res, 3)) return;
   const delRec = req.body.submit;
   const fetchRec = new Recipe(null, delRec);
   const result = await fetchRec.delRecipe();
@@ -29,5 +34,5 @@ router.post("/admin/managerecipes", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

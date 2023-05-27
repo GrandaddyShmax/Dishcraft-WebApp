@@ -1,16 +1,16 @@
 //[Import]
 const chalk = require("chalk"); //needed for colorful console messages
 var assert = require("assert");
+//[Classes]
 const { User, Admin, Junior, Expert } = require("../../models/user");
 const { Recipe } = require("../../models/recipe");
 const { Suggestion } = require("../../models/suggestion");
 const { Category } = require("../../models/category");
 const { Ingredient } = require("../../models/ingredient");
 const { News } = require("../../models/news");
+//[Variables]
 const testLabel = chalk.red("[Test]");
-const testUserID = "6441a06e827a79b1666eb356";
-const testBannedUserID = "646605e4d96084bc90cca22c";
-const testRecipeID = "6465f8fbafe0329f05f949b9";
+const { testRecipeID, testUserID, testBannedUserID } = require("../../jsons/tests.json");
 let mockUser;
 let testUser;
 let testExpert;
@@ -177,6 +177,12 @@ describe(testLabel + " Model functions:", function () {
       assert.equal(result, true);
       result = await mockRecipe.voteRating(testUserID, 5);
       assert.equal(result, true);
+    });
+    it("addBadgeToRecipe - add a badge to recipe", async () => {
+      let result = await mockRecipe.addBadgeToRecipe(testUserID, 1);
+      assert.equal(result, true);
+      result = await mockRecipe.addBadgeToRecipe(testUserID, 1);
+      assert.equal(result, false);
     });
   });
   describe(" Checking category.js...", function () {

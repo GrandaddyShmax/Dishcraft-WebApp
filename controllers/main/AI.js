@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const { schemas } = require("../../schemas/paths");
-//[Clases]
+//[Classes]
 const { Recipe } = require("../../models/recipe");
 const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
@@ -12,18 +12,17 @@ const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../
 //disable AI *in database* to avoid accidental exceeding request limits during testing
 const msg = "A.I. is currently disabled!";
 //[Aid]
-const { offloadFields, handleIngAdding } = require("../../utils");
+const { checkPerms, offloadFields, handleIngAdding, resetCategories } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
-const session = require("express-session");
 
 //display assistant page
 router.get("/assistant", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const sess = req.session;
   const access = await schemas.AIAccess.findOne({});
 
   //premium plus cleanup service
-  //let nutritions = defNutritions; //default values in jsons/views.json
   let error = "";
   if (sess.clearAiFlag) {
     sess.nutritions = "";
@@ -44,8 +43,17 @@ router.get("/assistant", async (req, res) => {
       ingredients: [defIngs],
       extra: "",
       instructions: "",
-      categories: {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
-        pastry: false, fish: false, grill: false}
+      categories: {
+        spicy: false,
+        sweet: false,
+        salad: false,
+        meat: false,
+        soup: false,
+        dairy: false,
+        pastry: false,
+        fish: false,
+        grill: false,
+      },
     };
     if (access.disabled) {
       sess.recipe.extra = msg;
@@ -69,20 +77,30 @@ router.get("/assistant", async (req, res) => {
 
 //get ingredients from assistant page
 router.post("/assistant", async (req, res) => {
+  if (!checkPerms(req, res)) return;
   const sess = req.session;
-  if (!sess.user) return res.redirect("/");
   var recipe = sess.recipe;
   const access = await schemas.AIAccess.findOne({});
   const [buttonPress, index] = req.body.submit.split("&");
   if (buttonPress != "generate") {
-    sess.recipe.categories = { spicy: req.body.spicy != null, sweet: req.body.sweet != null, 
-      salad: req.body.salad != null, meat: req.body.meat != null, soup: req.body.soup != null, 
-      dairy: req.body.dairy != null, pastry: req.body.pastry != null, fish: req.body.fish != null, 
-      grill: req.body.grill != null};
+    resetCategories(sess.recipe, req);
+    /*sess.recipe.categories = {
+      spicy: req.body.spicy != null,
+      sweet: req.body.sweet != null,
+      salad: req.body.salad != null,
+      meat: req.body.meat != null,
+      soup: req.body.soup != null,
+      dairy: req.body.dairy != null,
+      pastry: req.body.pastry != null,
+      fish: req.body.fish != null,
+      grill: req.body.grill != null,
+    };*/
   }
   offloadFields(["extra", "instructions", "color"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
-  if (handleIngAdding(req, res, buttonPress, index)) { return res.redirect(req.get("referer")); }
+  if (handleIngAdding(req, res, buttonPress, index)) {
+    return res.redirect(req.get("referer"));
+  }
   //Generate recipe
   if (buttonPress == "generate") {
     //check ingredients exist in foodAPI:
@@ -113,8 +131,18 @@ router.post("/assistant", async (req, res) => {
       req.session.allergies = await Category.findCategory(ings, "allergy", true);
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
-      sess.recipe.categories = {spicy: false, sweet: false, salad: false, meat: false, soup: false, dairy: false, 
-        pastry: false, fish: false, grill: false};
+      resetCategories(sess.recipe);
+      /*sess.recipe.categories = {
+        spicy: false,
+        sweet: false,
+        salad: false,
+        meat: false,
+        soup: false,
+        dairy: false,
+        pastry: false,
+        fish: false,
+        grill: false,
+      };*/
       sess.clearAiFlag = false;
       sess.recipeTrue = true;
       //alert the unaware expert user about his unhealthy way of life
@@ -125,25 +153,23 @@ router.post("/assistant", async (req, res) => {
         sess.alert = user.checkWarnings();
       }
 
-      //add AI recipe to DB after generate 
+      //add AI recipe to DB after generate
       let ing2 = recipe.ingredients2;
       let ing1 = recipe.ingredients.concat(ing2);
       recipe.aiMade = true; //made by AI
-      recipe.display=false; //hide the recipe until publish
+      recipe.display = false; //hide the recipe until publish
       recipe.userID = sess.user.id; //userID
       recipe.ingredients = ing1;
       let AiRecipe = new Recipe(recipe);
       // add the recipe to the db
       let { success, msg, id } = await AiRecipe.addRecipe();
-      recipe.id=id;
+      recipe.id = id;
       console.log(recipe.id);
-
     } catch (error) {
       console.log(error);
       sess.recipe.extra = "Failed to generate recipe, please try again later.";
       sess.recipe.instructions = "Failed to generate recipe, please try again later.";
     }
-
   }
   if (buttonPress == "publish") {
     //publish the recipe with the updates
@@ -155,7 +181,7 @@ router.post("/assistant", async (req, res) => {
     }
     for (var i = images.length; i < 3; i++) images.push({ url: "" });
     recipe.recipeImages = images;
-    recipe.hideRating = req.body.hideRating === 'on' ? true : false;
+    recipe.hideRating = req.body.hideRating === "on" ? true : false;
 
     let AiRecipe = new Recipe(recipe);
     // add the recipe to the db
@@ -166,5 +192,5 @@ router.post("/assistant", async (req, res) => {
   return res.redirect(req.get("referer"));
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;
