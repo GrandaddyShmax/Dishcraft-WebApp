@@ -1,10 +1,9 @@
 <div onload="changeColor()" class="flex flex-1 justify-center">
     <div class="flex flex-1 lg:max-w-4xl xl:max-w-6xl py-4">
-      <div class="flex-none w-full h-24 bg-red-latte">
+      <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
         <div class="flex justify-between items-center w-full h-full">
           <p class="flex justify-center text-pistachio text-2xl font-bold w-full">Your AI Recipe Book</p>
         </div>
-      <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
         <div class="flex flex-1 flex-col gap-4">
           <!-- Multiply this recipe template, newest on top -->
           <% for (const recipe of recipes) {%>
