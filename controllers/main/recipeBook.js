@@ -10,13 +10,12 @@ const { Recipe } = require("../../models/recipe");
 router.get("/recipebook", async (req, res) => {
   var session = req.session;
   if (!session.user) return res.redirect("/");
-  var recipes = await Recipe.fetchRecipes(null, session.user.recipes, true);
-  const filtered = recipes.filter((item) => item.aiMade && item.userID == session.user.id);
+  var recipes = await Recipe.fetchAiRecipes(session.user.id);
   session.recipe = null;
   res.render("template", {
     pageTitle: "Dishcraft - AI Recipe Book",
     page: "recipeBook",
-    recipes: filtered,
+    recipes: recipes,
     user: session.user,
     hideSearch: true,
   });

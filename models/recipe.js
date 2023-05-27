@@ -190,7 +190,6 @@ class Recipe {
         total: rating.total,
         star: rating.star,
       };
-      tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
       tempRecipe.user = user;
       tempRecipe.recipeImages = this.parseImages(recipe.recipeImages);
       //food categories:
@@ -481,6 +480,33 @@ class Recipe {
       onsole.log(error);
       return false;
     }
+  }
+
+  //get all ai recipes from db
+  static async fetchAiRecipes(userID) {
+    let recipes = [];
+    var recipesArr = await schemas.Recipe.find({userID: userID, aiMade: true});
+    for (const recipe of recipesArr) {
+      var tempRecipe = offloadFields(
+        [
+          "id",
+          "userID",
+          "recipeName",
+          "instructions",
+          "nutritions",
+        ],
+        null,
+        recipe
+      );
+      let ingeredientList = "";
+      recipe.ingredients.forEach(ingredient => {
+        ingeredientList += (ingredient.amount + " " + ingredient.unit + " " + ingredient.name + "\n");
+      }); 
+      tempRecipe.ingredients = ingeredientList;
+      tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
+      recipes.push(tempRecipe);
+    }
+    return recipes;
   }
 }
 //[External access]
