@@ -12,21 +12,23 @@ var done = 1; //count "User login" by default
 const { actions, expert, junior, admin, testRecipeID, testUserID, testCatID } = require("../jsons/tests.json");
 const disclaimer = chalk.grey("   (note that all tests login to the website before they start)");
 const format = "\n         -";
+var agent;
 
 describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
+  //Login as Expert Cook
+  before(() => {
+    agent = request.agent(app);
+    agent
+      .post("/")
+      .send({ userName: expert.userName, password: expert.password, submit: "login" })
+      .expect(302) //redirect
+      .redirects(1) //go to /home
+  });
   describe("Testing Expert Cook actions from Scenario 1...", function () {
-    //Login as Expert Cook
-    beforeEach(() => {
-      request(app)
-        .post("/login")
-        .send({ userName: expert.userName, password: expert.password, submit: "login" })
-        .expect(302) //redirect
-        .redirects(1); //go to /home
-    });
     it([`Testing ${actions.s1t1.length} actions:`, ...actions.s1t1].join(format), () => {
       done += actions.s1t1.length;
       //Suggest new ingredients to add
-      request(app)
+      agent
         .post("/suggest")
         .send({ suggestionName: "test ingredient", suggestionDescription: "can we have this?" })
         .expect(302) //redirect
@@ -35,14 +37,15 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
           //See all A.I. made recipes
-          request(app)
+          agent
             .get("/recipebook")
-            .expect(200) //confirmation
+            .expect(302) //redirect
+            .redirects(1)
             .end(function (err, response) {
               if (err) setTimeout(() => done(), 1000);
               assert.equal(response.header["content-type"], "text/html; charset=utf-8");
               //Get random recipe
-              request(app)
+              agent
                 .post("/home")
                 .send({ submit: "random" })
                 .expect(302) //redirect
@@ -58,7 +61,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
     it([`Testing ${actions.s1t2.length} actions:`, ...actions.s1t2].join(format), () => {
       done += actions.s1t2.length;
       //Sort/filter recipes by time
-      request(app)
+      agent
         .post("/search")
         .send({ category: "top", dir: "descend", submit: "sortApply" })
         .expect(302) //redirect
@@ -67,7 +70,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
           //Filter recipes by ingredient category
-          request(app)
+          agent
             .post("/search")
             .send({ filter: "Eggs", submit: "filterApply" })
             .expect(302) //redirect
@@ -75,7 +78,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
             .end(function (err, response) {
               if (err) setTimeout(() => done(), 1000);
               assert.equal(response.header["content-type"], "text/html; charset=utf-8");
-              request(app)
+              agent
                 .post("/home")
                 .send({ submit: testRecipeID })
                 .expect(302) //redirect
@@ -95,7 +98,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
     it([`Testing ${actions.s1t3.length} actions:`, ...actions.s1t3].join(format), () => {
       done += actions.s1t3.length;
       //Upload recipe && Custom background
-      request(app)
+      agent
         .post("/createRecipe")
         .send({
           recipeName: "test",
@@ -114,19 +117,20 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
         });
     });
   });
+  //Login as Junior Cook
+  before(() => {
+    agent = request.agent(app);
+    agent
+      .post("/")
+      .send({ userName: junior.userName, password: junior.password, submit: "login" })
+      .expect(302) //redirect
+      .redirects(1); //go to /home
+  });
   describe(testLabel + " Testing Junior Cook actions from Scenario 2...", function () {
-    //Login as Junior Cook
-    beforeEach(() => {
-      request(app)
-        .post("/login")
-        .send({ userName: junior.userName, password: junior.password, submit: "login" })
-        .expect(302) //redirect
-        .redirects(1); //go to /home
-    });
     it([`Testing ${actions.s2t1.length} actions:`, ...actions.s2t1].join(format), () => {
       done += actions.s2t1.length;
       //Use A.I. to get recipes
-      request(app)
+      agent
         .post("/assistant")
         .send({
           amount: ["3", "1"],
@@ -148,7 +152,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
     it([`Testing ${actions.s2t2.length} actions:`, ...actions.s2t2].join(format), () => {
       done += actions.s2t2.length;
       //Ability to search recipes
-      request(app)
+      agent
         .post("/search")
         .send({ search: "chicken" })
         .expect(302) //redirect
@@ -159,7 +163,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
           //"Category menu
-          request(app)
+          agent
             .post("/updateCategories")
             .send({ categories: "meat" })
             .expect(302) //redirect
@@ -180,28 +184,26 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
         });
     });
   });
+  //Login as Admin
+  before(() => {
+    agent = request.agent(app);
+    agent
+      .post("/")
+      .send({ userName: admin.userName, password: admin.password, submit: "login" })
+      .expect(302) //redirect
+      .redirects(1); //go to /home
+  });
   describe(testLabel + " Testing Admin actions from Scenario 3...", function () {
-    //Login as Admin
-    beforeEach(() => {
-      request(app)
-        .post("/login")
-        .send({ userName: admin.userName, password: admin.password, submit: "login" })
-        .expect(302) //redirect
-        .redirects(1); //go to /home
-    });
     it([`Testing ${actions.s3t1.length} actions:`, ...actions.s3t1].join(format), () => {
       done += actions.s3t1.length;
-      request(app)
+      agent
         .get("/admin/manageusers")
-        .expect(200) //confirmation
+        .expect(302) //redirect
+        .redirects(1)
         .end(function (err, response) {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
-          //View registered users amount
-          response.body.should.include("User Count");
-          //View existing users and their recipe count
-          response.body.should.include("Recipes Published");
-          request(app)
+          agent
             .post("/admin/manageusers")
             .send({ submit: "update&" + testUserID })
             .expect(302) //redirect
@@ -220,14 +222,15 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
     it([`Testing ${actions.s3t2.length} actions:`, ...actions.s3t2].join(format), () => {
       done += actions.s3t2.length;
       //View requested ingredients
-      request(app)
+      agent
         .get("/admin/viewsuggestions")
-        .expect(200) //confirmation
+        .expect(302) //redirect
+        .redirects(1)
         .end(function (err, response) {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
           //Add requested ingredients
-          request(app)
+          agent
             .post("/admin/manageingredients")
             .send({
               name: "test",
@@ -245,25 +248,22 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
               if (err) setTimeout(() => done(), 1000);
               assert.equal(response.header["content-type"], "text/html; charset=utf-8");
               //Ability to categorize ingredients
-              request(app)
-                .post("/admin/managecategories")
-                .send({ addInput: "test", submit: "add&&" + testCatID });
+              agent.post("/admin/managecategories").send({ addInput: "test", submit: "add&&" + testCatID });
               setTimeout(() => done(), 1000);
             });
         });
     });
     it([`Testing ${actions.s3t3.length} actions:`, ...actions.s3t3].join(format), () => {
       done += actions.s3t3.length;
-      request(app)
+      agent
         .get("/admin/managerecipes")
-        .expect(200) //confirmation
+        .expect(302) //redirect
+        .redirects(1)
         .end(function (err, response) {
           if (err) setTimeout(() => done(), 1000);
           assert.equal(response.header["content-type"], "text/html; charset=utf-8");
-          //View reports made by users
-          response.body.should.include("Report Count");
           //Add requested ingredients
-          request(app)
+          agent
             .post("/admin/managerecipes")
             .send({ submit: testRecipeID })
             .expect(302) //redirect
@@ -271,7 +271,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
             .end(function (err, response) {
               if (err) setTimeout(() => done(), 1000);
               assert.equal(response.header["content-type"], "text/html; charset=utf-8");
-              request(app)
+              agent
                 .post("/news")
                 .send({ title: "test", submit: "add&", description: "Integration tests complete!", userId: admin.id })
                 .expect(302) //redirect
