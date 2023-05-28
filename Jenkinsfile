@@ -33,29 +33,34 @@ pipeline {
         sh 'npm install'
       }
     }
-    stage('Run unit tests & Check coverage') {
+    stage('Run unit tests') {
       steps {
-        sh 'npm run coverage'
-      }
-    }
-    stage('Check for code duplicates') {
-      steps {
-        sh 'npm run cpd'
-      }
-    }
-    stage('Check for complience with coding rules') {
-      steps {
-        sh 'npm run grunt'
-      }
-    }
-    stage('Check deployment time') {
-      steps {
-        sh 'npm run dtime'
+        sh 'npm test'
       }
     }
     stage('Run integration tests') {
       steps {
         sh 'npm run integration'
+      }
+    }
+    stage('Metric: code duplicates') {
+      steps {
+        sh 'npm run cpd'
+      }
+    }
+    stage('Metric: complience with coding rules') {
+      steps {
+        sh 'npm run grunt'
+      }
+    }
+    stage('Metric: Check deployment time') {
+      steps {
+        sh 'npm run dtime'
+      }
+    }
+    stage('Metric: unit test coverage') {
+      steps {
+        sh 'npm run coverage'
       }
     }
   }

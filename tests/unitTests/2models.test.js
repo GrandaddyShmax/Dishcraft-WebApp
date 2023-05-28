@@ -136,6 +136,13 @@ describe(testLabel + " Model functions:", function () {
       };
       items = await Recipe.fetchRecipes(search);
       assert(Array.isArray(items));
+      let bookmarks = [testRecipeID];
+      items = await Recipe.fetchRecipes(null, bookmarks);
+      assert(Array.isArray(items));
+      items = await Recipe.fetchRecipes(null, null, testUserID);
+      assert(Array.isArray(items));
+      items = await Recipe.fetchRecipes();
+      assert(Array.isArray(items));
       assert.notEqual(items.length, 0);
     });
     it("checkSort - sort recipes", async () => {

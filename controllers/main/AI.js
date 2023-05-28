@@ -84,17 +84,6 @@ router.post("/assistant", async (req, res) => {
   const [buttonPress, index] = req.body.submit.split("&");
   if (buttonPress != "generate") {
     resetCategories(sess.recipe, req);
-    /*sess.recipe.categories = {
-      spicy: req.body.spicy != null,
-      sweet: req.body.sweet != null,
-      salad: req.body.salad != null,
-      meat: req.body.meat != null,
-      soup: req.body.soup != null,
-      dairy: req.body.dairy != null,
-      pastry: req.body.pastry != null,
-      fish: req.body.fish != null,
-      grill: req.body.grill != null,
-    };*/
   }
   offloadFields(["extra", "instructions", "color"], sess.recipe, req.body);
   //Update ingredients & "addmore" & "remove"
@@ -132,17 +121,6 @@ router.post("/assistant", async (req, res) => {
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
       req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       resetCategories(sess.recipe);
-      /*sess.recipe.categories = {
-        spicy: false,
-        sweet: false,
-        salad: false,
-        meat: false,
-        soup: false,
-        dairy: false,
-        pastry: false,
-        fish: false,
-        grill: false,
-      };*/
       sess.clearAiFlag = false;
       sess.recipeTrue = true;
       //alert the unaware expert user about his unhealthy way of life

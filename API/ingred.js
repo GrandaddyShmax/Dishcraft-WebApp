@@ -45,5 +45,5 @@ async function checkIgredientAPI(ingredient) {
   return true;
 }
 
-/*[ External access ]*/
+//[External access]
 module.exports = { getData, checkIgredientAPI };

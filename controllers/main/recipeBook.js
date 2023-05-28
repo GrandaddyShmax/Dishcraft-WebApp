@@ -1,8 +1,6 @@
 //[Import]
 const express = require("express");
 const router = express.Router();
-//[API]
-//const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
 //[Clases]
 const { Recipe } = require("../../models/recipe");
 //[API]
@@ -10,7 +8,7 @@ const { Recipe } = require("../../models/recipe");
 router.get("/recipebook", async (req, res) => {
   var session = req.session;
   if (!session.user) return res.redirect("/");
-  var recipes = await Recipe.fetchAiRecipes(session.user.id);
+  const recipes = await Recipe.fetchRecipes(null, null, session.user.id);
   session.recipe = null;
   res.render("template", {
     pageTitle: "Dishcraft - AI Recipe Book",
@@ -21,5 +19,5 @@ router.get("/recipebook", async (req, res) => {
   });
 });
 
-/*[ External access ]*/
+//[External access]
 module.exports = router;

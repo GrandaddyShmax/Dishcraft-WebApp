@@ -22,7 +22,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
       .post("/")
       .send({ userName: expert.userName, password: expert.password, submit: "login" })
       .expect(302) //redirect
-      .redirects(1) //go to /home
+      .redirects(1); //go to /home
   });
   describe("Testing Expert Cook actions from Scenario 1...", function () {
     it([`Testing ${actions.s1t1.length} actions:`, ...actions.s1t1].join(format), () => {
@@ -97,7 +97,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
     });
     it([`Testing ${actions.s1t3.length} actions:`, ...actions.s1t3].join(format), () => {
       done += actions.s1t3.length;
-      //Upload recipe && Custom background
+      //Upload recipe && Custom background && Hide rating
       agent
         .post("/createRecipe")
         .send({
@@ -107,6 +107,7 @@ describe(testLabel + " Running integration tests:\n" + disclaimer, function () {
           amount: ["3", "1"],
           unit: ["Tablespoon", "Cups"],
           name: ["peanut butter", "flour"],
+          hideRating: "on",
         })
         .expect(302) //redirect
         .redirects(1) //go to /home

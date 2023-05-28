@@ -141,7 +141,7 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(search, list, hidden) {
+  static async fetchRecipes(search, bookmarks, aiBook) {
     const currDate = new Date(Date.now());
     var term,
       filter,
@@ -154,11 +154,12 @@ class Recipe {
     if (categories) categorOn = Recipe.fetchCategories(categories);
     let recipes = [];
     let recipesArr;
-    if (list) recipesArr = await schemas.Recipe.find({ _id: list });
+    if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
+    else if (aiBook) recipesArr = await schemas.Recipe.find({ userID: aiBook, aiMade: true });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
       /*jshint -W018 */
-      if (!!hidden === !!recipe.display) continue;
+      if (!aiBook && !recipe.display) continue;
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:
@@ -183,7 +184,10 @@ class Recipe {
         null,
         recipe
       );
-      if (hidden) tempRecipe.ingredients = Recipe.parseIngredients(recipe.ingredients);
+      if (aiBook) {
+        tempRecipe.ingredients = Recipe.parseIngredients(recipe.ingredients);
+        tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
+      }
       var rating = Recipe.updateRatingNum(recipe.fullRating);
       tempRecipe.rating = {
         avg: rating.avg,
@@ -199,7 +203,6 @@ class Recipe {
       //category filters:
       if (this.checkFilter(filter, tempRecipe)) continue;
       recipes.push(tempRecipe);
-      
     }
     //sort by nutritional value:
     recipes = this.checkSort(sort, recipes);
@@ -480,33 +483,6 @@ class Recipe {
       onsole.log(error);
       return false;
     }
-  }
-
-  //get all ai recipes from db
-  static async fetchAiRecipes(userID) {
-    let recipes = [];
-    var recipesArr = await schemas.Recipe.find({userID: userID, aiMade: true});
-    for (const recipe of recipesArr) {
-      var tempRecipe = offloadFields(
-        [
-          "id",
-          "userID",
-          "recipeName",
-          "instructions",
-          "nutritions",
-        ],
-        null,
-        recipe
-      );
-      let ingeredientList = "";
-      recipe.ingredients.forEach(ingredient => {
-        ingeredientList += (ingredient.amount + " " + ingredient.unit + " " + ingredient.name + "\n");
-      }); 
-      tempRecipe.ingredients = ingeredientList;
-      tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
-      recipes.push(tempRecipe);
-    }
-    return recipes;
   }
 }
 //[External access]

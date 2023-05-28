@@ -60,17 +60,6 @@ router.post("/createRecipe", async (req, res) => {
   var sess = req.session;
   var recipe = sess.recipe;
   resetCategories(sess.recipe, req);
-  /*sess.recipe.categories = {
-    spicy: req.body.spicy != null,
-    sweet: req.body.sweet != null,
-    salad: req.body.salad != null,
-    meat: req.body.meat != null,
-    soup: req.body.soup != null,
-    dairy: req.body.dairy != null,
-    pastry: req.body.pastry != null,
-    fish: req.body.fish != null,
-    grill: req.body.grill != null,
-  };*/
   offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
   //sess.recipe.recipeImages = Recipe.parseImages(sess.recipe.imagesData);
   if (req.body.submit) {
@@ -123,17 +112,6 @@ function handleImage(req, res, index) {
     handleIngAdding(req, res);
   }
   resetCategories(sess.recipe, req);
-  /*sess.recipe.categories = {
-    spicy: req.body.spicy != null,
-    sweet: req.body.sweet != null,
-    salad: req.body.salad != null,
-    meat: req.body.meat != null,
-    soup: req.body.soup != null,
-    dairy: req.body.dairy != null,
-    pastry: req.body.pastry != null,
-    fish: req.body.fish != null,
-    grill: req.body.grill != null,
-  };*/
   if (req.file) {
     if (!sess.recipe.imagesData) sess.recipe.imagesData = {};
     const url = path.resolve("./public/images/temp/" + req.file.filename);
