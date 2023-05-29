@@ -324,8 +324,8 @@ class Recipe {
     return recipes.sort((a, b) => {
       const aCat = a.nutritions[category] || -1;
       const bCat = b.nutritions[category] || -1;
-      if (aCat < bCat) return sign;
-      if (aCat > bCat) return sign * -1;
+      if (aCat > bCat) return sign;
+      if (aCat < bCat) return sign * -1;
       return 0;
     });
   }
