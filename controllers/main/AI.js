@@ -126,11 +126,10 @@ router.post("/assistant", async (req, res) => {
       //alert the unaware expert user about his unhealthy way of life
       if (sess.user.role > 1) {
         const user = new Expert(null, sess.user.id);
-        user.latest = sess.user.latest;
-        user.updateLatest(req.session.nutritions);
+        await user.fetchUser();
+        await user.updateLatest(req.session.nutritions);
         sess.alert = user.checkWarnings();
       }
-
       //add AI recipe to DB after generate
       let ing2 = recipe.ingredients2;
       let ing1 = recipe.ingredients.concat(ing2);

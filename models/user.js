@@ -59,6 +59,7 @@ class User {
         banned: false,
         latest: [],
         bookmarks: [],
+        avatar: this.avatar || "https://cdn.discordapp.com/attachments/1109501812718977034/1109537490810966217/22.jpg"
       });
       this.id = details.id;
       //respond to unit test
@@ -222,6 +223,7 @@ class Expert extends User {
     try {
       let details = await schemas.User.findOne({ _id: this.id });
       if (details) await details.updateOne({ latest: filtered }).catch(console.error);
+      this.latest = filtered;
       return true;
     } catch /* istanbul ignore next */ {
       return false;
