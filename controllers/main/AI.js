@@ -139,8 +139,8 @@ router.post("/assistant", async (req, res) => {
       recipe.aiMade = true; //made by AI
       recipe.display = false; //hide the recipe until publish
       recipe.userID = sess.user.id; //userID
-      recipe.ingredients = ing1;
-      let AiRecipe = new Recipe(recipe);
+      const tempRecipe = { userID: sess.user.id, ingredients: ings, aiMade: true, display: false };
+      let AiRecipe = new Recipe(tempRecipe);
       // add the recipe to the db
       let { success, msg, id } = await AiRecipe.addRecipe();
       recipe.id = id;
