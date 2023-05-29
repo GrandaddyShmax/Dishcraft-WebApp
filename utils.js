@@ -56,7 +56,7 @@ function endPlural(number, string) {
 function smartInclude(arr, string, strict) {
   if (!string || arr.length == 0) return false;
   let s = string.toLowerCase();
-  if (s.charAt(s.length - 1) == "s") s = s.slice(0 - 1);
+  if (s.charAt(s.length - 1) == "s") s = s.slice(0, -1);
   /* jshint -W083 */
   if (strict) return arr.some((word) => word == s || word == s + "s" || s + "s" == word);
   return arr.some((word) => word.includes(s) || word.includes(s + "s") || s.includes(word) || (s + "s").includes(word));

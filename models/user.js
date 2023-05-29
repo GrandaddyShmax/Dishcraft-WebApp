@@ -59,7 +59,7 @@ class User {
         banned: false,
         latest: [],
         bookmarks: [],
-        avatar: this.avatar || "https://cdn.discordapp.com/attachments/1109501812718977034/1109537490810966217/22.jpg"
+        avatar: this.avatar || "https://cdn.discordapp.com/attachments/1109501812718977034/1109537490810966217/22.jpg",
       });
       this.id = details.id;
       //respond to unit test
@@ -138,7 +138,7 @@ class User {
     let accounts = [...(await Junior.fetchUsers()), ...(await Expert.fetchUsers()), ...(await Admin.fetchUsers())];
     let recipes = await schemas.Recipe.find({});
     for await (const account of accounts) {
-      const userRecipes = recipes.filter((recipe) => recipe.userID == account.id);
+      const userRecipes = recipes.filter((recipe) => recipe.userID == account.id && recipe.display);
       account.recipeCount = userRecipes.length;
     }
     return accounts.sort((a, b) => {
