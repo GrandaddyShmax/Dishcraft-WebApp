@@ -3,15 +3,18 @@ const chalk = require("chalk"); //needed for colorful console messages
 const { until, endPlural, smartInclude } = require("../utils");
 const { units } = require("../jsons/views.json");
 const { schemas } = require("../schemas/paths");
+const prompt = require("../jsons/prompt.json");
 var assistant;
 
 //connect to A.I. API
 async function connectAI(testing) {
+  const { DEPLOYED } = process.env;
   var aiLabel = chalk.cyan("[AI]");
   const access = await schemas.AIAccess.findOne({});
   var msg;
   if (access.lib == "1") msg = await loadLib1(access.accessToken);
   else if (access.lib == "2") msg = await loadLib2(access.disabled);
+  else if (access.lib == "3") msg = await loadLib3(DEPLOYED ? access.apiKeyDeploy : access.apiKeyLocal);
   else msg = chalk.red(" Couldn't load Api, invalid lib selected.");
   if (!testing) console.log(aiLabel + msg);
   return true;
@@ -47,9 +50,40 @@ async function loadLib2(disabled) {
     return chalk.red(" Couldn't load Api.");
   }
 }
+//New module
+async function loadLib3(apiKey) {
+  try {
+    if (!apiKey) return " Couldn't find apiKey.";
+    const Configuration = (await import("openai")).Configuration;
+    const OpenAIApi = (await import("openai")).OpenAIApi;
+    const rProxy = "https://api.pawan.krd/v1";
+    const configuration = new Configuration({ apiKey: apiKey, basePath: rProxy });
+    assistant = new OpenAIApi(configuration);
 
+    await until((_) => assistant);
+    return " Api loaded using new module.";
+  } catch (error) {
+    console.log(error);
+    return chalk.red(" Couldn't load Api.");
+  }
+}
 //get API endpoint
 const getAssistant = () => assistant;
+
+//request A.I. to give a recipe
+async function sendMessage(testMsg, recipe) {
+  const response = await assistant.createCompletion({
+    model: "gpt-3.5-turbo",
+    prompt: `Human: ${testMsg}\nAI:`,
+    temperature: 0.7,
+    max_tokens: 512,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    stop: ["Human: ", "AI: "],
+  });
+  return parseAssToRecipe(response.data.choices[0].text, recipe);
+}
 
 //parse A.I. response
 function parseAssToRecipe(response, recipe) {
@@ -138,4 +172,4 @@ function parseRecipe(response, recipe) {
   return recipe;
 }
 //[External access]
-module.exports = { connectAI, getAssistant, parseAssToRecipe, parseAssToRecipeTest };
+module.exports = { connectAI, getAssistant, sendMessage, parseAssToRecipe, parseAssToRecipeTest };

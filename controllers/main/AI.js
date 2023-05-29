@@ -8,7 +8,7 @@ const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
 const { Expert } = require("../../models/user");
 //[API]
-const { getAssistant, parseAssToRecipe, parseAssToRecipeTest } = require("../../API/ai");
+const { getAssistant, parseAssToRecipe, parseAssToRecipeTest, sendMessage } = require("../../API/ai");
 //disable AI *in database* to avoid accidental exceeding request limits during testing
 const msg = "A.I. is currently disabled!";
 //[Aid]
@@ -105,15 +105,18 @@ router.post("/assistant", async (req, res) => {
     }
     try {
       //parse prompt:
-      const testMsg = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
+      const promptText = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
       //code to talk with ai (can be disabled to avoid exceeding request limits)
       if (access.disabled) {
         req.session.recipe = parseAssToRecipeTest();
       } else {
-        const assistant = getAssistant();
-        const response = await assistant.sendMessage(testMsg);
-        //console.log(response);
-        req.session.recipe = parseAssToRecipe(response, recipe);
+        if (access.lib == "3") {
+          req.session.recipe = await sendMessage(promptText, recipe);
+        } else {
+          const assistant = getAssistant();
+          const response = await assistant.sendMessage(promptText);
+          req.session.recipe = parseAssToRecipe(response, recipe);
+        }
       }
       //calculate nutritional value & check allergies:
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
@@ -141,7 +144,6 @@ router.post("/assistant", async (req, res) => {
       // add the recipe to the db
       let { success, msg, id } = await AiRecipe.addRecipe();
       recipe.id = id;
-      console.log(recipe.id);
     } catch (error) {
       console.log(error);
       sess.recipe.extra = "Failed to generate recipe, please try again later.";
