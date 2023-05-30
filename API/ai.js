@@ -3,18 +3,21 @@ const chalk = require("chalk"); //needed for colorful console messages
 const { until, endPlural, smartInclude } = require("../utils");
 const { units } = require("../jsons/views.json");
 const { schemas } = require("../schemas/paths");
-const prompt = require("../jsons/prompt.json");
+var lib;
 var assistant;
 
 //connect to A.I. API
 async function connectAI(testing) {
-  const { DEPLOYED } = process.env;
+  const { DEPLOYED, API_KEY_LOCAL } = process.env;
   var aiLabel = chalk.cyan("[AI]");
   const access = await schemas.AIAccess.findOne({});
+  const apiKey = DEPLOYED ? access.apiKeyDeploy : API_KEY_LOCAL;
+  lib = access.lib;
+  lib = "3";
   var msg;
-  if (access.lib == "1") msg = await loadLib1(access.accessToken);
-  else if (access.lib == "2") msg = await loadLib2(access.disabled);
-  else if (access.lib == "3") msg = await loadLib3(DEPLOYED ? access.apiKeyDeploy : access.apiKeyLocal);
+  if (lib == "1") msg = await loadLib1(access.accessToken);
+  else if (lib == "2" || !apiKey) msg = await loadLib2(access.disabled);
+  else if (lib == "3") msg = await loadLib3(apiKey);
   else msg = chalk.red(" Couldn't load Api, invalid lib selected.");
   if (!testing) console.log(aiLabel + msg);
   return true;
@@ -67,8 +70,19 @@ async function loadLib3(apiKey) {
     return chalk.red(" Couldn't load Api.");
   }
 }
+
 //get API endpoint
-const getAssistant = () => assistant;
+async function handleAssistant(promptText, recipe) {
+  const access = await schemas.AIAccess.findOne({});
+  if (access.disabled) return parseAssToRecipeTest();
+  else {
+    var response;
+    if (lib == "3") response = await sendMessage(promptText, recipe);
+    else response = await assistant.sendMessage(promptText);
+    console.log(response);
+    return parseAssToRecipe(response, recipe);
+  }
+}
 
 //request A.I. to give a recipe
 async function sendMessage(testMsg, recipe) {
@@ -82,7 +96,7 @@ async function sendMessage(testMsg, recipe) {
     presence_penalty: 0,
     stop: ["Human: ", "AI: "],
   });
-  return parseAssToRecipe(response.data.choices[0].text, recipe);
+  return response.data.choices[0].text;
 }
 
 //parse A.I. response
@@ -171,5 +185,6 @@ function parseRecipe(response, recipe) {
   console.log(recipe);
   return recipe;
 }
+
 //[External access]
-module.exports = { connectAI, getAssistant, sendMessage, parseAssToRecipe, parseAssToRecipeTest };
+module.exports = { connectAI, handleAssistant, sendMessage, parseAssToRecipe, parseAssToRecipeTest };

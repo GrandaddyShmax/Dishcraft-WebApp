@@ -8,7 +8,7 @@ const { Ingredient } = require("../../models/ingredient");
 const { Category } = require("../../models/category");
 const { Expert } = require("../../models/user");
 //[API]
-const { getAssistant, parseAssToRecipe, parseAssToRecipeTest, sendMessage } = require("../../API/ai");
+const { handleAssistant } = require("../../API/ai");
 //disable AI *in database* to avoid accidental exceeding request limits during testing
 const msg = "A.I. is currently disabled!";
 //[Aid]
@@ -107,16 +107,11 @@ router.post("/assistant", async (req, res) => {
       //parse prompt:
       const promptText = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
       //code to talk with ai (can be disabled to avoid exceeding request limits)
-      if (access.disabled) {
-        req.session.recipe = parseAssToRecipeTest();
-      } else {
-        if (access.lib == "3") {
-          req.session.recipe = await sendMessage(promptText, recipe);
-        } else {
-          const assistant = getAssistant();
-          const response = await assistant.sendMessage(promptText);
-          req.session.recipe = parseAssToRecipe(response, recipe);
-        }
+      req.session.recipe = await handleAssistant(promptText, recipe);
+      if (!req.session.recipe) {
+        sess.recipe.extra = "Failed to generate recipe, please try again later.";
+        sess.recipe.instructions = "Failed to generate recipe, please try again later.";
+        return res.redirect(req.get("referer"));
       }
       //calculate nutritional value & check allergies:
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
@@ -134,8 +129,6 @@ router.post("/assistant", async (req, res) => {
         sess.alert = user.checkWarnings();
       }
       //add AI recipe to DB after generate
-      let ing2 = recipe.ingredients2;
-      let ing1 = recipe.ingredients.concat(ing2);
       recipe.aiMade = true; //made by AI
       recipe.display = false; //hide the recipe until publish
       recipe.userID = sess.user.id; //userID

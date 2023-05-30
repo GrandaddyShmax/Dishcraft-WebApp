@@ -8,7 +8,6 @@ module.exports = (schemas) => {
     lib: String,
     accessToken: String,
     disabled: Boolean,
-    apiKeyLocal: String,
     apiKeyDeploy: String,
   });
 
