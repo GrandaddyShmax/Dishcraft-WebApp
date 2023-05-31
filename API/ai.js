@@ -79,7 +79,6 @@ async function handleAssistant(promptText, recipe) {
     var response;
     if (lib == "3") response = await sendMessage(promptText, recipe);
     else response = await assistant.sendMessage(promptText);
-    console.log(response);
     return parseAssToRecipe(response, recipe);
   }
 }
@@ -145,10 +144,16 @@ function parseRecipe(response, recipe) {
   recipe.instructions = "";
   const ings = recipe.ingredients.map((ing) => ing.name.toLowerCase());
   const fields = ["$recipe name", "$ingredients", "$instructions"];
+  const fields2 = ["recipe name", "ingredients", "instructions"];
+  const check = response.toLowerCase();
+  if (!check.includes(fields[0]) && !check.includes(fields2[0])) return null;
+  if (!check.includes(fields[1]) && !check.includes(fields2[1])) return null;
+  if (!check.includes(fields[2]) && !check.includes(fields2[2])) return null;
   var index;
   for (const line of response.split("\n")) {
     if (!line || !line.replaceAll(" ", "")) continue;
     if (line.includes("$")) index = fields.indexOf(line.toLowerCase());
+    else if (fields2.includes(line)) index = fields2.indexOf(line.toLowerCase());
     else {
       switch (index) {
         case 0: //recipe name
@@ -181,6 +186,7 @@ function parseRecipe(response, recipe) {
       }
     }
   }
+  //if (!recipe.recipeName || !recipe.instructions) return null;
   if (!recipe.extra) recipe.extra = "No extra ingredients!";
   console.log(recipe);
   return recipe;

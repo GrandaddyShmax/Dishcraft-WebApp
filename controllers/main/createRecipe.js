@@ -110,6 +110,8 @@ function handleImage(req, res, index) {
     offloadFields(["recipeName", "instructions", "color"], sess.recipe, req.body);
     //Update ingredients & "addmore" & "remove"
     handleIngAdding(req, res);
+  } else if (sess.recipeTrue) {
+    offloadFields(["extra", "instructions", "color"], sess.recipe, req.body);
   }
   resetCategories(sess.recipe, req);
   if (req.file) {

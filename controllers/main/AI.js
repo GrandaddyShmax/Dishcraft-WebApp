@@ -41,6 +41,7 @@ router.get("/assistant", async (req, res) => {
       recipeImages: {},
       imagesData: {},
       ingredients: [defIngs],
+      color: "original",
       extra: "",
       instructions: "",
       categories: {
@@ -86,6 +87,7 @@ router.post("/assistant", async (req, res) => {
     resetCategories(sess.recipe, req);
   }
   offloadFields(["extra", "instructions", "color"], sess.recipe, req.body);
+
   //Update ingredients & "addmore" & "remove"
   if (handleIngAdding(req, res, buttonPress, index)) {
     return res.redirect(req.get("referer"));
@@ -107,17 +109,18 @@ router.post("/assistant", async (req, res) => {
       //parse prompt:
       const promptText = prompt.text.join("\n") + "\n" + Recipe.parseIngredients(recipe.ingredients, true);
       //code to talk with ai (can be disabled to avoid exceeding request limits)
-      req.session.recipe = await handleAssistant(promptText, recipe);
-      if (!req.session.recipe) {
+      const result = await handleAssistant(promptText, recipe);
+      if (!result) {
         sess.recipe.extra = "Failed to generate recipe, please try again later.";
         sess.recipe.instructions = "Failed to generate recipe, please try again later.";
         return res.redirect(req.get("referer"));
       }
+      req.session.recipe = result;
       //calculate nutritional value & check allergies:
       const ings = [...req.session.recipe.ingredients, ...req.session.recipe.ingredients2];
       req.session.allergies = await Category.findCategory(ings, "allergy", true);
       req.session.nutritions = await Ingredient.calcRecipeNutVal(ings, true);
-      req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
+      //req.session.recipe.nutritions = req.session.nutritions; //taking the nutritions into the recipe
       resetCategories(sess.recipe);
       sess.clearAiFlag = false;
       sess.recipeTrue = true;
@@ -129,10 +132,12 @@ router.post("/assistant", async (req, res) => {
         sess.alert = user.checkWarnings();
       }
       //add AI recipe to DB after generate
-      recipe.aiMade = true; //made by AI
-      recipe.display = false; //hide the recipe until publish
-      recipe.userID = sess.user.id; //userID
-      const tempRecipe = { userID: sess.user.id, ingredients: ings, aiMade: true, display: false };
+      var tempRecipe = offloadFields(["recipeName", "instructions"], null, recipe);
+      tempRecipe.nutritions = req.session.nutritions;
+      tempRecipe.aiMade = true; //made by AI
+      tempRecipe.display = false; //hide the recipe until publish
+      tempRecipe.userID = sess.user.id; //userID
+      tempRecipe.ingredients = ings;
       let AiRecipe = new Recipe(tempRecipe);
       // add the recipe to the db
       let { success, msg, id } = await AiRecipe.addRecipe();

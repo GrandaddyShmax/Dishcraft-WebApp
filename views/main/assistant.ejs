@@ -402,7 +402,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", loadScroll);
   const select = document.querySelector("#colorPickerAI");
-  select.value = "original";
+  select.value = "<%= recipe.color %>" || "original";
   const bg = document.querySelector("#backgroundAI");
   document.addEventListener("DOMContentLoaded", loadColor);
   select.addEventListener("change", loadColor);

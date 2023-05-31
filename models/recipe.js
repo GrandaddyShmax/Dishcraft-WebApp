@@ -473,10 +473,9 @@ class Recipe {
     //updates the AI recipe on publish
     try {
       let details = await schemas.Recipe.findOne({ _id: this.id });
-      console.log(this);
       if (details)
         await details
-          .updateOne({ display: true, categories: this.categories, recipeImages: this.recipeImages, hideRating: this.hideRating })
+          .updateOne({ display: true, categories: this.categories, recipeImages: this.recipeImages, color:this.color, hideRating: this.hideRating })
           .catch(console.error);
       return true;
     } catch (error) {
