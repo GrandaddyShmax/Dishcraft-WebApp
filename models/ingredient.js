@@ -63,7 +63,6 @@ class Ingredient {
 
   static async calcRecipeNutVal(ingredArr, check) {
     var { energy = 0, fattyAcids = 0, sodium = 0, sugar = 0, protein = 0 } = {};
-    let calcPerGrams = (unit, amount) => unitsTable[unit] * amount;
 
     for (let ingred of ingredArr) {
       if (check && !(await Ingredient.checkIngredient(ingred.name))) continue;
@@ -72,23 +71,22 @@ class Ingredient {
       if (!ingredient) {
         ingredient = new Ingredient(await connection.getData(ingred.name));
       }
-
       const unit = ingred.unit.toLowerCase();
       const amount = parseFloat(ingred.amount);
       let valueByUnit;
 
       if (unit === "pieces") {
-        valueByUnit = ingredient.totalWeight * amount;
+        valueByUnit = ingredient.totalWeight;
       } else {
-        valueByUnit = calcPerGrams(ingred.unit.toLowerCase(), parseFloat(ingred.amount));
+        valueByUnit = unitsTable[unit];
       }
-      energy += (valueByUnit * ingredient.energy) / 100;
-      fattyAcids += (valueByUnit * ingredient.fattyAcids) / 1000;
-      sodium += (valueByUnit * ingredient.sodium) / 1000;
-      sugar += (valueByUnit * ingredient.sugar) / 1000;
-      protein += (valueByUnit * ingredient.protein) / 1000;
-    }
-    return {
+      const calcByUnitAndAmount = (valueByUnit / ingredient.totalWeight) * amount;
+      energy += ingredient.energy * calcByUnitAndAmount;
+      fattyAcids += ingredient.fattyAcids * calcByUnitAndAmount;
+      sodium += ingredient.sodium * calcByUnitAndAmount;
+      sugar += ingredient.sugar * calcByUnitAndAmount;
+      protein += ingredient.protein * calcByUnitAndAmount;
+    } return {
       energy: energy.toFixed(2),
       fattyAcids: fattyAcids.toFixed(2),
       sodium: sodium.toFixed(2),

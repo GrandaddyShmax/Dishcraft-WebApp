@@ -30,7 +30,7 @@ async function getData(ingredient) {
     //[Nutrients]//
     energy: nutrients.ENERC_KCAL ? nutrients.ENERC_KCAL.quantity : 0, //(unit: kcal)
     fattyAcids: nutrients.FASAT ? nutrients.FASAT.quantity : 0,       //(unit: g)
-    sodium: nutrients.NA ? nutrients.NA.quantity : 0,                 //(unit: g)
+    sodium: nutrients.NA ? nutrients.NA.quantity : 0,                 //(unit: mg)
     sugar: nutrients.SUGAR ? nutrients.SUGAR.quantity : 0,            //(unit: g)
     protein: nutrients.PROCNT ? nutrients.PROCNT.quantity : 0,        //(unit: g)
   };

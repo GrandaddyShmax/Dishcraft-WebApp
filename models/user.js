@@ -8,11 +8,11 @@ const saltRounds = 10;
 
 //[advised nutrional daily]//
 const nutAvgVals = {
-  energy: { min: 1500, max: 3600 },
-  fattyAcids: { min: 0.5, max: 13 },
-  sodium: { min: 0.1, max: 2.3 },
-  sugar: { min: 3, max: 36 },
-  protein: { min: 0.8, max: 1.6 },
+  energy: { min: 1500, max: 3600 }, //kcal
+  fattyAcids: { min: 16, max: 22 }, //g
+  sodium: { min: 1450, max: 2300 },  //mg
+  sugar: { min: 25, max: 50 },      //g
+  protein: { min: 30, max: 70 },    //g
 };
 //[nutritional units]//
 const nutUnits = ["energy", "fattyAcids", "sodium", "sugar", "protein"];
