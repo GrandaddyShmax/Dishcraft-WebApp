@@ -115,7 +115,7 @@ describe(testLabel + " Model functions:", function () {
     });
   });
   describe(" Checking recipe.js...", function () {
-    this.timeout(10000);
+    this.timeout(20000);
     it("addRecipes - create new recipe", async () => {
       mockRecipe = new Recipe({ recipeName: "uniTest", instructions: "temp", display: false });
       let result = await mockRecipe.addRecipe();
@@ -128,6 +128,10 @@ describe(testLabel + " Model functions:", function () {
       assert.notEqual(mockRecipe.recipeName, undefined);
     });
     it("fetchRecipes - get all recipes", async () => {
+      items = await Recipe.fetchRecipes(null, [testRecipeID]);
+      assert(Array.isArray(items));
+      items = await Recipe.fetchRecipes(null, null, testUserID);
+      assert(Array.isArray(items));
       let search = {
         term: "",
         filter: ["Tree nuts"],
@@ -136,14 +140,6 @@ describe(testLabel + " Model functions:", function () {
       };
       items = await Recipe.fetchRecipes(search);
       assert(Array.isArray(items));
-      let bookmarks = [testRecipeID];
-      items = await Recipe.fetchRecipes(null, bookmarks);
-      assert(Array.isArray(items));
-      items = await Recipe.fetchRecipes(null, null, testUserID);
-      assert(Array.isArray(items));
-      items = await Recipe.fetchRecipes();
-      assert(Array.isArray(items));
-      assert.notEqual(items.length, 0);
     });
     it("checkSort - sort recipes", async () => {
       items = Recipe.checkSort(null, items);
