@@ -1,65 +1,67 @@
-<div onload="changeColor()" class="flex flex-1 justify-center">
-    <div class="flex flex-1 lg:max-w-4xl xl:max-w-6xl py-4">
-      <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
-        <div class="flex justify-between items-center w-full h-full">
-          <p class="flex justify-center text-pistachio text-2xl font-bold w-full">Your AI Recipe Book</p>
-        </div>
-        <div class="flex flex-1 flex-col gap-4">
-          <!-- Multiply this recipe template, newest on top -->
-          <% for (const recipe of recipes) {%>
-          <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
-            <div class="flex">
-              <p class="text-3xl font-bold text-latte"> <%=recipe.recipeName %></p>
-              <div class="relative">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-10 w-10 text-latte items-center pl-1 mt-0.5 top-1 right-1"
-                >  
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M 4.836 16.011 L 12 20 L 19.2 16 L 19.2 8 L 12 4 L 4.8 8 L 4.836 16.011 Z M 12 2 L 3 7 L 3 17 L 12 22 L 21 17 L 21 7 L 12 2 Z" fill="currentColor"></path>
-                </svg>
-                <svg width="7.93" height="7.09" viewBox="-1 0 9 9" xmlns="http://www.w3.org/2000/svg" class="absolute h-5 w-5 text-latte items-center pl-1 mt-0.5 top-3 right-3"><g id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="9pt"><path d="M 1.4 7.09 L 0 7.09 L 2.95 0 L 3.05 0 L 6.01 7.09 L 4.65 7.09 L 4.26 6.08 L 1.77 6.08 L 1.4 7.09 Z M 7.93 7.09 L 6.65 7.09 L 6.65 0.12 L 7.93 0.12 L 7.93 7.09 Z M 2.99 2.65 L 2.83 3.21 L 2.13 5.11 L 3.89 5.11 L 3.16 3.21 L 2.99 2.65 Z" vector-effect="non-scaling-stroke" fill="currentColor"/></g></svg>
-              </div>
-            </div>
-            <p class="pt-8 text-2xl text-latte font-bold">
-              Ingredients:
-            </p>
-            <div class="pt-2 flex">
-              <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.ingredients %></textarea>
-            </div>
-            <p class="pt-8 text-2xl text-latte font-bold">
-              Instructions:
-            </p>
-            <div class="pt-2 flex">
-              <textarea readonly class="block px-4 py-3 w-full h-56 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
-            </div>
-            <p class="pt-8 text-2xl pb-2 text-latte font-bold">
-              Allergies:
-            </p>
-            <input readonly value="<%= recipe.allergies %>" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-            </input>
-            <p class="pt-8 text-2xl text-latte font-bold">
-              Nutritions:
-            </p>
-            <div class="grid grid-cols-6 pt-4 gap-4 pb-4 items-center">
-              <p class="text-latte font-bold">Energy (kcal):</p>
-              <input readonly type="text" value="<%= recipe.nutritions.energy %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-              <p class="text-latte font-bold">Fatty acids (g):</p>
-              <input readonly type="text" value="<%= recipe.nutritions.fattyAcids %>" placeholder="0" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-              <p class="text-latte font-bold">Sodium (mg):</p>
-              <input readonly type="text" value="<%= recipe.nutritions.sodium %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-              <p class="text-latte font-bold">Sugar (g):</p>
-              <input readonly type="text" value="<%= recipe.nutritions.sugar %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
-              <p class="text-latte font-bold">Protein (g):</p>
-              <input readonly type="text" value="<%= recipe.nutritions.protein %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+<div class="flex flex-1 justify-center">
+  <div class="flex flex-1 flex-col lg:max-w-4xl xl:max-w-6xl py-4">
+    <div class="flex-none w-full h-24 bg-red-latte">
+      <div class="flex justify-between items-center w-full h-full">
+        <p class="flex justify-center text-pistachio text-2xl font-bold w-full">Your AI Recipe Book</p>
+      </div>
+    </div>
+    <div class="flex flex-col flex-1 justify-center"> <!-- Vertical Slice -->
+      <div class="flex flex-1 flex-col gap-4">
+        <!-- Multiply this recipe template, newest on top -->
+        <% for (const recipe of recipes) {%>
+        <div id="background" class="bg-coffee flex flex-col p-6 font-normal text-lg w-full m-2 rounded-md">
+          <div class="flex">
+            <p class="text-3xl font-bold text-latte"> <%=recipe.recipeName %></p>
+            <div class="relative">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-10 w-10 text-latte items-center pl-1 mt-0.5 top-1 right-1"
+              >  
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M 4.836 16.011 L 12 20 L 19.2 16 L 19.2 8 L 12 4 L 4.8 8 L 4.836 16.011 Z M 12 2 L 3 7 L 3 17 L 12 22 L 21 17 L 21 7 L 12 2 Z" fill="currentColor"></path>
+              </svg>
+              <svg width="7.93" height="7.09" viewBox="-1 0 9 9" xmlns="http://www.w3.org/2000/svg" class="absolute h-5 w-5 text-latte items-center pl-1 mt-0.5 top-3 right-3"><g id="svgGroup" stroke-linecap="round" fill-rule="evenodd" font-size="9pt"><path d="M 1.4 7.09 L 0 7.09 L 2.95 0 L 3.05 0 L 6.01 7.09 L 4.65 7.09 L 4.26 6.08 L 1.77 6.08 L 1.4 7.09 Z M 7.93 7.09 L 6.65 7.09 L 6.65 0.12 L 7.93 0.12 L 7.93 7.09 Z M 2.99 2.65 L 2.83 3.21 L 2.13 5.11 L 3.89 5.11 L 3.16 3.21 L 2.99 2.65 Z" vector-effect="non-scaling-stroke" fill="currentColor"/></g></svg>
             </div>
           </div>
-          <% } %>
-          <!-- End of recipe template -->
+          <p class="pt-8 text-2xl text-latte font-bold">
+            Ingredients:
+          </p>
+          <div class="pt-2 flex">
+            <textarea readonly class="block px-4 py-3 w-full h-48 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.ingredients %></textarea>
+          </div>
+          <p class="pt-8 text-2xl text-latte font-bold">
+            Instructions:
+          </p>
+          <div class="pt-2 flex">
+            <textarea readonly class="block px-4 py-3 w-full h-56 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm"><%= recipe.instructions %></textarea>
+          </div>
+          <p class="pt-8 text-2xl pb-2 text-latte font-bold">
+            Allergies:
+          </p>
+          <input readonly value="<%= recipe.allergies %>" class="block px-4 py-3 w-full h-16 font-bold transition-all rounded-md placeholder-latte text-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          </input>
+          <p class="pt-8 text-2xl text-latte font-bold">
+            Nutritions:
+          </p>
+          <div class="grid grid-cols-6 pt-4 gap-4 pb-4 items-center">
+            <p class="text-latte font-bold">Energy (kcal):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.energy %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p class="text-latte font-bold">Fatty acids (g):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.fattyAcids %>" placeholder="0" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p class="text-latte font-bold">Sodium (mg):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.sodium %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p class="text-latte font-bold">Sugar (g):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.sugar %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+            <p class="text-latte font-bold">Protein (g):</p>
+            <input readonly type="text" value="<%= recipe.nutritions.protein %>" class="px-4 py-3 font-bold transition-all rounded-md text-latte placeholder-latte bg-espresso border border-latte hover:border-pistachio hover:text-pistachio hover:placeholder-pistachio focus:border-pistachio focus:text-pistachio focus:placeholder-pistachio focus:ring-0 outline-none focus:outline-none text-sm">
+          </div>
         </div>
+        <% } %>
+        <!-- End of recipe template -->
       </div>
     </div>
   </div>
+</div>
