@@ -7,7 +7,7 @@ const { User } = require("./user");
 class News {
   constructor(details, id) {
     if (details) {
-      offloadFields(["id", "userId", "title", "description"], this, details);
+      offloadFields(["id", "userId", "title", "description", "appreciatedUsers", "appreciatedCount"], this, details);
     } else this.id = id;
   }
 
@@ -18,6 +18,8 @@ class News {
         userId: this.userId,
         title: this.title,
         description: this.description,
+        appreciatedUsers: [],
+        appreciatedCount: 0
       });
       this.id = details.id;
       //respond to unit test
@@ -36,6 +38,23 @@ class News {
       return true;
     }
     return false;
+  }
+
+  async appreciate(userID) {
+    if(!this.appreciatedUsers) this.appreciatedUsers = [];
+    if (!this.appreciatedUsers.includes(userID)) {
+      this.appreciatedUsers.push(userID);
+      this.appreciatedCount++;
+      try {
+        let details = await schemas.News.findOne({ _id: this.id });
+        if (details)
+          await details.updateOne({ appreciatedUsers: this.appreciatedUsers, appreciatedCount: this.appreciatedCount }).catch(console.error);
+        return true;
+      } catch (error) /* istanbul ignore next */ {
+        console.log(error);
+        return false;
+      }
+    }
   }
 
   //get all the categories from db

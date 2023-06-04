@@ -6,7 +6,9 @@ module.exports = (schemas) => {
       _id: Schema.Types.ObjectId,
       userId: String,
       title: String,
-      description: String
+      description: String,
+      appreciatedUsers: [String],
+      appreciatedCount: Number
     });
 
 //[Registers in database]
