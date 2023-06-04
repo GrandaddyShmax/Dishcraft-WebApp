@@ -71,6 +71,15 @@ describe(testLabel + " URLs:", function () {
           setTimeout(() => done(), 1000);
         });
     });
+    it("Uploaded recipes page", () => {
+      request(app)
+        .get("/uploadedRecipes")
+        .expect(200) //confirmation
+        .end(function (err, response) {
+          assert.equal(response.header["content-type"], "text/plain; charset=utf-8");
+          setTimeout(() => done(), 1000);
+        });
+    });
   });
 
   describe("Checking Expert Cook pages exist...", function () {
