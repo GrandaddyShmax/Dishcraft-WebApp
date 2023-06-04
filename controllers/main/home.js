@@ -4,10 +4,12 @@ const router = express.Router();
 //[Classes]
 const { Recipe } = require("../../models/recipe");
 const { Category, defCategories } = require("../../models/category");
+const { Junior } = require("../../models/user");
 //[Aid]
-const { checkPerms, offloadFields } = require("../../utils");
+const { checkPerms, offloadFields, navbarApply } = require("../../utils");
 const { sorts } = require("../../jsons/views.json");
 var temp = require("../../jsons/views.json").defSearch;
+
 temp.categories = defCategories;
 const defSearch = Object.freeze(temp);
 var filters;
@@ -16,6 +18,7 @@ router.get("/home", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const session = req.session;
   session.clearAiFlag = true;
+  const {navbarError, navbarText} = navbarApply(session);
   if (!session.search) session.search = defSearch;
   session.recipes = await Recipe.fetchRecipes(session.search);
   session.recipe = null;
@@ -25,6 +28,7 @@ router.get("/home", async (req, res) => {
       allergy: await Category.fetchCategories("allergy", true),
       diet: await Category.fetchCategories("diet", true),
     };
+  
 
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
@@ -34,6 +38,8 @@ router.get("/home", async (req, res) => {
     sorts: sorts,
     filters: filters,
     user: session.user,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 
@@ -99,6 +105,24 @@ router.post("/updateCategories", async (req, res) => {
   const checkbox = req.body.categories;
   categories[checkbox] = !categories[checkbox];
   return res.redirect("/home");
+});
+
+router.post("/changeUsername", async (req, res) => {
+  if (!checkPerms(req, res)) return;
+  const session = req.session;
+  const buttonPress = req.body.submit;
+  if (buttonPress == "change") {
+    const user = new Junior(null, session.user.id);
+    user.fetchUser();
+    const { success, error } = await user.updateName(req.body.newName);
+    if (success) session.user = user;
+    else {
+      session.navbarError = error;
+      session.navbarText = req.body.newName;
+      return res.redirect(req.get("referer"));
+    }
+  }
+  return res.redirect(req.get("referer"));
 });
 
 //[External access]

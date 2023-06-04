@@ -12,7 +12,7 @@ const { handleAssistant } = require("../../API/ai");
 //disable AI *in database* to avoid accidental exceeding request limits during testing
 const msg = "A.I. is currently disabled!";
 //[Aid]
-const { checkPerms, offloadFields, handleIngAdding, resetCategories } = require("../../utils");
+const { checkPerms, offloadFields, handleIngAdding, resetCategories, navbarApply } = require("../../utils");
 const { defNutritions, defIngs, units } = require("../../jsons/views.json");
 const prompt = require("../../jsons/prompt.json");
 
@@ -20,6 +20,7 @@ const prompt = require("../../jsons/prompt.json");
 router.get("/assistant", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const sess = req.session;
+  const {navbarError, navbarText} = navbarApply(sess);
   const access = await schemas.AIAccess.findOne({});
 
   //premium plus cleanup service
@@ -73,6 +74,8 @@ router.get("/assistant", async (req, res) => {
     allergies: sess.allergies || "",
     recipeTrue: sess.recipeTrue || false,
     alert: sess.alert || "",
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 

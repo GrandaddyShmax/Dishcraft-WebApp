@@ -6,11 +6,12 @@ const { Category } = require("../../models/category");
 //[API]
 const { checkIgredientAPI } = require("../../API/ingred");
 //[Aid]
-const { checkPerms } = require("../../utils");
+const { checkPerms, navbarApply } = require("../../utils");
 
 router.get("/admin/managecategories", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const session = req.session;
+  const {navbarError, navbarText} = navbarApply(session);
   const categories = await Category.fetchAllCategories();
   delete session.currIngred;
   delete session.indexIngred;
@@ -28,6 +29,8 @@ router.get("/admin/managecategories", async (req, res) => {
     categoryIndex: session.categoryIndex || 0,
     errorIngred: error,
     hideSearch: true,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 

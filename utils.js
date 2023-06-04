@@ -186,6 +186,13 @@ function printAllRoutes(app, url, silent) {
   console.log(table.toString());
 }
 
+function navbarApply(session) {
+  let navbarError = "", navbarText = "";
+  if (session.navbarError) {navbarError = session.navbarError; session.navbarError = "";}
+  if (session.navbarText) {navbarText = session.navbarText; session.navbarText = "";}
+  return {navbarError: navbarError, navbarText: navbarText};
+}
+
 //[External access]
 module.exports = {
   until,
@@ -197,4 +204,5 @@ module.exports = {
   handleIngAdding,
   resetCategories,
   printAllRoutes,
+  navbarApply
 };

@@ -4,11 +4,12 @@ const router = express.Router();
 //[Classes]
 const { User, Junior, Expert } = require("../../models/user");
 //[Aid]
-const { checkPerms } = require("../../utils");
+const { checkPerms, navbarApply } = require("../../utils");
 
 router.get("/admin/manageusers", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
+  const {navbarError, navbarText} = navbarApply(sess);
   const users = await User.fetchAllUsers();
   delete sess.currIngred;
   delete sess.indexIngred;
@@ -21,6 +22,8 @@ router.get("/admin/manageusers", async (req, res) => {
     message: sess.message || null,
     user: sess.user || null,
     hideSearch: true,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 

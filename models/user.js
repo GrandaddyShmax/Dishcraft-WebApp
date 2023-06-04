@@ -185,6 +185,24 @@ class Junior extends User {
     let accounts = await schemas.User.find({ role: roles.junior });
     return accounts || [];
   }
+  /*[ Handling data ]*/
+  //update user name
+  async updateName(newName) {
+    try {
+      let details = await schemas.User.findOne({ userName: newName });
+      if (details) {
+        return {success: false, error: "This username is already taken"};
+      }
+      else {
+        let account = await schemas.User.findOne({ _id: this.id });
+        await account.updateOne({ userName: newName }).catch(console.error);
+        this.userName = newName;
+        if (account) return {success: true, error: ""};
+      }
+    } catch /* istanbul ignore next */ {
+      return {success: false, error: "Failed to update user"};
+    }
+  }
 }
 
 /*[ Handle Expert class database ]*/

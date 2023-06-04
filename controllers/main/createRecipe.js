@@ -8,13 +8,14 @@ const { uploadImage } = require("../../index");
 const { Ingredient } = require("../../models/ingredient");
 const { Recipe } = require("../../models/recipe");
 //[Aid]
-const { checkPerms, offloadFields, handleIngAdding, resetCategories } = require("../../utils");
+const { checkPerms, offloadFields, handleIngAdding, resetCategories, navbarApply } = require("../../utils");
 const { defIngs, units } = require("../../jsons/views.json");
 
 //get
 router.get("/createRecipe", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const sess = req.session;
+  const {navbarError, navbarText} = navbarApply(sess);
   sess.clearAiFlag = true;
   let error = "";
   if (sess.errorIngred != "") {
@@ -51,6 +52,8 @@ router.get("/createRecipe", async (req, res) => {
     user: sess.user || null,
     recipe: sess.recipe,
     errorIngred: error,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 

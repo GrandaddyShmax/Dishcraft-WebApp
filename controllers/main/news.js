@@ -16,6 +16,8 @@ router.get("/news", async (req, res) => {
     user: session.user || null,
     allNews: allNews,
     hideSearch: true,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 

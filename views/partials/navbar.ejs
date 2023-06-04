@@ -141,6 +141,7 @@
               </div>
             <% } %>
             <div class="py-1" role="none">
+              <a href="/uploadedRecipes" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">My Recipes</a>
               <button id="changeUsername" class="text-latte text-left w-full block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold">
                 Change Username
               </button>
@@ -153,7 +154,7 @@
   </div>
 </header>
 
-<div id="changeUsernameModalBG" class="hidden relative z-10">
+<form action="/changeUsername" method="post" id="changeUsernameModalBG" class="hidden relative z-10">
   <div class="fixed inset-0 bg-espresso bg-opacity-50 backdrop-blur-sm transition-opacity"></div>
   <div class="fixed inset-0 z-10 overflow-y-auto">
     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -167,30 +168,32 @@
               </div>
 
               <div class="transition-all w-full mt-8 group border scale-95 border-latte hover:border-pistachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md px-4 py-2 focus-within:ring-0">
-                <input name="suggestionName" id="suggestionName" type="text" required class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 placeholder:text-coffee sm:text-lg" placeholder="Gustavo..."></input>
+                <input value="<%= navbarText %>" name="newName" id="newName" type="text" required class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 placeholder:text-coffee sm:text-lg" placeholder="Gustavo..."></input>
               </div>
 
+              <% if (locals.navbarError && !navbarError == "") { %>
               <div class="flex gap-1 mt-1.5 ml-4"> <!-- error -->
                 <svg class="block transition-all w-7 h-7 text-red-500 group-hover:text-latte" xmlns="http://www.w3.org/2000/svg" viewBox="2 2 22 18" fill="currentColor">
                   <path opacity="1.000000" stroke="none" d="M8.46457 14.1213C8.07404 14.5118 8.07404 15.145 8.46457 15.5355C8.85509 15.926 9.48825 15.926 9.87878 15.5355L15.5356 9.87862C15.9262 9.4881 15.9262 8.85493 15.5356 8.46441C15.1451 8.07388 14.5119 8.07388 14.1214 8.46441L8.46457 14.1213Z" style="fill-rule: evenodd;"></path>
                   <path opacity="1.000000" stroke="none" d="M6.34315 17.6569C9.46734 20.781 14.5327 20.781 17.6569 17.6569C20.781 14.5327 20.781 9.46734 17.6569 6.34315C14.5327 3.21895 9.46734 3.21895 6.34315 6.34315C3.21895 9.46734 3.21895 14.5327 6.34315 17.6569ZM16.2426 16.2426C13.8995 18.5858 10.1005 18.5858 7.75736 16.2426C5.41421 13.8995 5.41421 10.1005 7.75736 7.75736C10.1005 5.41421 13.8995 5.41421 16.2426 7.75736C18.5858 10.1005 18.5858 13.8995 16.2426 16.2426Z" style="fill-rule: evenodd;"></path>
                 </svg>
-                <h1 class="text-red-500 text-lg">This name is already taken
+                <h1 class="text-red-500 text-lg"> <%= navbarError %>
                 </h1>
               </div>
+              <% } %>
             </div>
           </div>
         </div>
         <div class="bg-espresso px-4 py-4 gap-2 sm:flex sm:flex-row-reverse sm:px-6">
-          <button type="submit" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Change 
+          <button id="change" name="submit" value="change" type="submit" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Change 
           </button>
-          <button type="submit" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-red-500 hover:text-latte hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Cancel 
+          <button id="cancel" value="cancel" type="button" class="w-full rounded-md border-none transition-all scale-95 hover:scale-100 bg-coffee mt-3 py-4 px-6 text-base font-bold text-latte drop-shadow-lg hover:drop-shadow-xl hover:bg-red-500 hover:text-latte hover:text-lg focus:outline-none focus:ring-0 sm:w-auto active:scale-90">Cancel 
           </button>
         </div>
       </div>
     </div>
   </div>
-</div>
+</form>
 
 <script>
   const button = document.querySelector('#menu-dropdown-button');
@@ -214,10 +217,15 @@
   });
 
   const changeUsername = document.querySelector('#changeUsername');
+  const cancel = document.querySelector('#cancel');
   const modalbg = document.querySelector('#changeUsernameModalBG');
   const modal = document.querySelector('#changeUsernameModal');
-  changeUsername.addEventListener('click', () => 
-  {
+  window.onload = function() {
+    if ("<%=navbarError%>" != "") popUp()
+  };
+  cancel.addEventListener('click', popUp);
+  changeUsername.addEventListener('click', popUp);
+  function popUp() {
     box.classList.add('hidden');
     if (modalbg.classList.contains('hidden')) 
     {
@@ -226,8 +234,9 @@
     else 
     {
       modalbg.classList.add('hidden');
+      document.getElementById('newName').value = "";
     }
-  });
+  };
   document.addEventListener('click', (event) => {
     if (!modal.contains(event.target) && !changeUsername.contains(event.target)) 
     {

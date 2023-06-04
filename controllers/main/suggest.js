@@ -4,16 +4,19 @@ const router = express.Router();
 //[Classes]
 const { Suggestion } = require("../../models/suggestion");
 //[Aid]
-const { checkPerms } = require("../../utils");
+const { checkPerms, navbarApply } = require("../../utils");
 
 router.get("/suggest", async (req, res) => {
   if (!checkPerms(req, res, 2)) return;
   var session = req.session;
+  const {navbarError, navbarText} = navbarApply(session);
   res.render("template", {
     pageTitle: "Dishcraft - Suggest Ingredient",
     page: "suggest",
     user: session.user || null,
     hideSearch: true,
+    navbarError: navbarError,
+    navbarText: navbarText
   });
 });
 
