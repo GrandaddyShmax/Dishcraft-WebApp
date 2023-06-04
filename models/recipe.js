@@ -141,7 +141,7 @@ class Recipe {
   }
 
   //get all/filtered recipes from db
-  static async fetchRecipes(search, bookmarks, aiBook) {
+  static async fetchRecipes(search, bookmarks, userID, ai) {
     const currDate = new Date(Date.now());
     var term,
       filter,
@@ -155,11 +155,10 @@ class Recipe {
     let recipes = [];
     let recipesArr;
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
-    else if (aiBook) recipesArr = await schemas.Recipe.find({ userID: aiBook, aiMade: true });
+    else if (userID) recipesArr = await schemas.Recipe.find({ userID: userID, aiMade: ai });
     else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
-      /*jshint -W018 */
-      if (!aiBook && !recipe.display) continue;
+      if (!ai && !userID && !recipe.display) continue;
       const user = new Junior(null, recipe.userID);
       await user.fetchUser();
       //search term:
@@ -184,7 +183,7 @@ class Recipe {
         null,
         recipe
       );
-      if (aiBook) {
+      if (userID) {
         tempRecipe.ingredients = Recipe.parseIngredients(recipe.ingredients);
         tempRecipe.allergies = await Category.findCategory(recipe.ingredients, "allergy", true);
       }
@@ -475,7 +474,13 @@ class Recipe {
       let details = await schemas.Recipe.findOne({ _id: this.id });
       if (details)
         await details
-          .updateOne({ display: true, categories: this.categories, recipeImages: this.recipeImages, color:this.color, hideRating: this.hideRating })
+          .updateOne({
+            display: true,
+            categories: this.categories,
+            recipeImages: this.recipeImages,
+            color: this.color,
+            hideRating: this.hideRating,
+          })
           .catch(console.error);
       return true;
     } catch (error) {
