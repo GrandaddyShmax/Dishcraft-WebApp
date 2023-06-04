@@ -155,8 +155,10 @@ class Recipe {
     let recipes = [];
     let recipesArr;
     if (bookmarks) recipesArr = await schemas.Recipe.find({ _id: bookmarks });
-    else if (userID) recipesArr = await schemas.Recipe.find({ userID: userID, aiMade: ai });
-    else recipesArr = await schemas.Recipe.find({});
+    else if (userID) {
+      if (ai) recipesArr = await schemas.Recipe.find({ userID: userID, aiMade: ai });
+      else recipesArr = await schemas.Recipe.find({ userID: userID, display: true });
+    } else recipesArr = await schemas.Recipe.find({});
     for (const recipe of recipesArr) {
       if (!ai && !userID && !recipe.display) continue;
       const user = new Junior(null, recipe.userID);

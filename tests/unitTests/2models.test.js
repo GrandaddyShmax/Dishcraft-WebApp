@@ -130,7 +130,9 @@ describe(testLabel + " Model functions:", function () {
     it("fetchRecipes - get all recipes", async () => {
       items = await Recipe.fetchRecipes(null, [testRecipeID]);
       assert(Array.isArray(items));
-      items = await Recipe.fetchRecipes(null, null, testUserID);
+      items = await Recipe.fetchRecipes(null, null, testUserID, true);
+      assert(Array.isArray(items));
+      items = await Recipe.fetchRecipes(null, null, testUserID, false);
       assert(Array.isArray(items));
       let search = {
         term: "",
