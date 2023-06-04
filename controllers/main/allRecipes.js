@@ -26,14 +26,25 @@ router.get("/uploadedRecipes", async (req, res) => {
 router.post("/uploadedRecipes", async (req, res) => {
   if (!checkPerms(req, res)) return;
   var session = req.session;
-  const smt = req.body.submit;
+
+  const [buttonPress, smt] = req.body.submit.split("&");
   const recipe = new Recipe(null, smt);
-  //find recipe
-  let successful = await recipe.fetchRecipe(session.user.id);
+
+  if (buttonPress == "open") {
+    //open the recipe for viewing
+    let successful = await recipe.fetchRecipe(session.user.id);
   if (successful) {
     session.recipe = recipe;
     session.returnPage = "/uploadedRecipes";
     return res.redirect("/recipe");
+  }
+
+  }
+  else if (buttonPress == "delete") {
+    //delete the recipe
+    const result = await recipe.delRecipe();
+  if (!result) console.log("delete error");
+
   }
   return res.redirect(req.get("referer"));
 });
