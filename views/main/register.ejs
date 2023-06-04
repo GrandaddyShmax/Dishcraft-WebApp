@@ -18,6 +18,10 @@
         </p>
       </div>
       <div class="mt-6 gap-1 grid">
+        <div class="flex mt-4 ml-4">
+          <h1 class="text-latte text-base">User name must contain at least 3 characters
+          </h1>
+        </div>
         <div class="transition-all group border scale-95 border-latte hover:border-pistachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md px-4 py-2 drop-shadow-lg hover:drop-shadow-xl focus-within:ring-0">
           <input name="userName" id="userName" type="text" required class="transition-colors block group-focus-within:placeholder-espresso group-focus-within:text-espresso group-focus-within:bg-pistachio focus:group-focus-within:placeholder-pistachio w-full font-bold border-none focus:outline-none py-2.5 text-pistachio group-hover:text-espresso bg-espresso group-hover:bg-pistachio placeholder-latte group-hover:placeholder-espresso focus:ring-0 leading-tight group-hover:focus:placeholder-opacity-0 focus:placeholder-opacity-0 sm:text-lg" placeholder="Username" value=<%= temp.username %>></input>
         </div>
@@ -45,6 +49,10 @@
           </div>
         <%}%>
         <!-- input type="hidden" name="remember" value="true" / -->
+        <div class="flex mt-4 ml-4">
+          <h1 class="text-latte text-base">Password must contain at least 6 characters
+          </h1>
+        </div>
         <div class="divide-y mt-3 divide-latte hover:divide-espresso focus-within:divide-espresso transition-all -space-y-px group border scale-95 border-latte hover:border-psitachio focus-within:bg-pistachio focus-within:border-pistachio focus-within:drop-shadow-xl hover:bg-pistachio rounded-md drop-shadow-lg hover:drop-shadow-xl focus-within:ring-0">
           <div>
             <label for="password" class="sr-only">Password</label>

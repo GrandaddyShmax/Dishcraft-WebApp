@@ -10,7 +10,7 @@ const saltRounds = 10;
 const nutAvgVals = {
   energy: { min: 1500, max: 3600 }, //kcal
   fattyAcids: { min: 16, max: 22 }, //g
-  sodium: { min: 1450, max: 2300 },  //mg
+  sodium: { min: 1450, max: 2300 }, //mg
   sugar: { min: 25, max: 50 },      //g
   protein: { min: 30, max: 70 },    //g
 };
