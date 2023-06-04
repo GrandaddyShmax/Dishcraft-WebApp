@@ -4,11 +4,12 @@ const router = express.Router();
 //[Classes]
 const { News } = require("../../models/news");
 //[Aid]
-const { checkPerms } = require("../../utils");
+const { checkPerms, navbarApply } = require("../../utils");
 
 router.get("/news", async (req, res) => {
   if (!checkPerms(req, res)) return;
   var session = req.session;
+  const {navbarError, navbarText} = navbarApply(session);
   const allNews = await News.fetchAllNews();
   res.render("template", {
     pageTitle: "Dishcraft - News & Updates",
