@@ -68,8 +68,8 @@
               </div>
             </div>
             <div class="py-1" role="none">
-              <button name="submit" value="filterReset" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
-              <button name="submit" value="filterApply" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
+              <button id="filterReset" onclick="load();" name="submit" value="filterReset" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
+              <button id="filterApply" onclick="load();" name="submit" value="filterApply" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
             </div>
           </form>
         </div>
@@ -234,9 +234,7 @@
               <div class="grid grid-cols-4 gap-4 items-center">
                 <p class="text-latte text-sm col-span-1">Sort By:</p>
                 <select required name="category" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
-                  <%if (!locals.search || !search.sort) {%>
-                    <option hidden value="">Choose one...</option>
-                    <%} for (const opt of sorts.opts) {%>
+                    <% for (const opt of sorts.opts) {%>
                       <% if (locals.search && search.sort && search.sort.category==opt.value) {%>
                       <option selected value="<%=opt.value%>"><%= opt.name %></option>
                       <%} else {%>
@@ -246,9 +244,7 @@
                   </select>  
                 <p class="text-latte text-sm col-span-1">Sort Order:</p>
                 <select required name="dir" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
-                  <%if (!locals.search || !search.sort) {%>
-                    <option hidden value="">Choose one...</option>
-                  <%} for (const dir of sorts.dir) {%>
+                  <% for (const dir of sorts.dir) {%>
                     <%if (locals.search && search.sort && search.sort.dir==dir.value) {%>
                     <option selected value="<%=dir.value%>"><%= dir.name %></option>
                     <%} else {%>
@@ -259,8 +255,8 @@
               </div>
             </div>
             <div class="py-1" role="none">
-              <button name="submit" value="sortReset" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
-              <button name="submit" value="sortApply" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
+              <button id="sortReset" onclick="load();" name="submit" value="sortReset" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Reset</button>
+              <button id="sortApply" onclick="load();" name="submit" value="sortApply" class="text-latte font-bold block px-4 py-2 w-full text-left text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold active:scale-95">Apply</button>
             </div>
           </form>
         </div>
@@ -374,6 +370,8 @@
 </div>
 
 <script>
+  const sortReset = document.querySelector('#sortReset');
+  const sortApply = document.querySelector('#sortApply');
   const sortButton = document.querySelector('#sort-button');
   const sortBox = document.querySelector('#sort-menu');
   sortButton.addEventListener('click', () => 
@@ -388,11 +386,13 @@
     }
   });
   document.addEventListener('click', (event) => {
-    if (!sortBox.contains(event.target) && !sortButton.contains(event.target)) 
+    if (!sortBox.contains(event.target) && !sortButton.contains(event.target) || (sortBox.contains(event.target) && (sortReset.contains(event.target) || sortApply.contains(event.target)))) 
     {
       sortBox.classList.add('hidden');
     }
   });
+  const filterReset = document.querySelector('#filterReset');
+  const filterApply = document.querySelector('#filterApply');
   const filterButton = document.querySelector('#filter-button');
   const filterBox = document.querySelector('#filter-menu');
   filterButton.addEventListener('click', () => 
@@ -407,7 +407,7 @@
     }
   });
   document.addEventListener('click', (event) => {
-    if (!filterBox.contains(event.target) && !filterButton.contains(event.target)) 
+    if (!filterBox.contains(event.target) && !filterButton.contains(event.target) || (filterBox.contains(event.target) && (filterReset.contains(event.target) || filterApply.contains(event.target)))) 
     {
       filterBox.classList.add('hidden');
     }
@@ -418,5 +418,6 @@
     const view = document.getElementById("categorView");
     view.value = name;
     document.getElementById("categorForm").submit();
+    load();
   };
 </script>

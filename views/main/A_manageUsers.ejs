@@ -6,19 +6,19 @@
           <button class="text-espresso text-lg font-bold pr-8 pl-10 py-2 bg-coffee transition-all rounded-l-full hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl cursor-default">Manage Users
           </button>
           <a href="/admin/managerecipes">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
             </button>
           </a>
           <a href="/admin/managecategories">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
               </button>
           </a>
           <a href="/admin/viewsuggestions">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">View Suggestions
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">View Suggestions
             </button>
           </a>
           <a href="/admin/manageingredients">
-            <button class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Ingredients
+            <button onclick="load();" class="text-latte text-lg font-bold pr-10 pl-8 py-2 bg-espresso transition-all rounded-r-full border border-latte hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Ingredients
             </button>
           </a>
         </div>
@@ -123,14 +123,12 @@
   //save scroll position on click
   function rememberScroll(){ 
     window.onbeforeunload = function (e) {
-    localStorage.setItem("scrollpos", window.scrollY);}
+      localStorage.setItem("scrollpos", window.scrollY);
+      load();
+    }
   }
   //default - no scroll memory
   window.onbeforeunload = function (e) {
     localStorage.removeItem("scrollpos");
   };
-
-  function Generate() {
-    document.getElementById("loading").classList.remove("hidden");
-  }
 </script>

@@ -4,19 +4,19 @@
       <div class="w-full h-full flex justify-center items-center">
         <div class="group flex bg-espresso rounded-full drop-shadow-lg">
           <a href="/admin/manageusers">
-            <button class="text-latte text-lg font-bold pr-8 pl-10 py-2 bg-espresso transition-all rounded-l-full border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Users
+            <button onclick="load();" class="text-latte text-lg font-bold pr-8 pl-10 py-2 bg-espresso transition-all rounded-l-full border border-latte hover:bg-pistachio hover:pr-12 hover:pl-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Users
             </button>
           </a>
           <a href="/admin/managerecipes">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Recipes
               </button>
           </a>
           <a href="/admin/managecategories">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">Manage Categories
               </button>
           </a>
           <a href="/admin/viewsuggestions">
-            <button class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">View Suggestions
+            <button onclick="load();" class="text-latte text-lg font-bold px-8 py-2 bg-espresso transition-all border border-latte hover:bg-pistachio hover:px-12 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl active:scale-90">View Suggestions
             </button>
           </a>
           <button class="text-espresso text-lg font-bold pr-10 pl-8 py-2 bg-coffee transition-all rounded-r-full hover:bg-pistachio hover:pl-12 hover:pr-14 hover:text-espresso hover:border-pistachio hover:drop-shadow-xl cursor-default">Manage Ingredients
@@ -31,11 +31,11 @@
             <div class="w-full h-full flex flex-col p-4 gap-4">
               <!-- Insert Flights here -->
               <% if (indexIngred == -1) { %>
-              <button id="add" type="submit" name="submit" value="<%=`ingred&`+(-1)%>" class="h-24 border w-full text-espresso text-xl px-2 py-1 border-latte rounded-md transition-all bg-latte hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+              <button id="add" onclick="load();" type="submit" name="submit" value="<%=`ingred&`+(-1)%>" class="h-24 border w-full text-espresso text-xl px-2 py-1 border-latte rounded-md transition-all bg-latte hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                 <p>Add Ingredient</p>
               </button>
               <% } else { %>
-              <button id="add" type="submit" name="submit" value="<%=`ingred&`+(-1)%>" class="h-24 border w-full text-latte text-xl px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+              <button id="add" onclick="load();" type="submit" name="submit" value="<%=`ingred&`+(-1)%>" class="h-24 border w-full text-latte text-xl px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                 <p>Add Ingredient</p>
               </button>
               <%
@@ -44,11 +44,11 @@
               for (const ingredient of ingredients) 
               { 
                 if (index == indexIngred) {%>
-                <button type="submit" name="submit" value="<%=`ingred&`+index%>" class="h-24 pl-6 border w-full text-left text-espresso text-base px-2 py-1 border-latte rounded-md transition-all bg-latte hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+                <button type="submit" onclick="load();" name="submit" value="<%=`ingred&`+index%>" class="h-24 pl-6 border w-full text-left text-espresso text-base px-2 py-1 border-latte rounded-md transition-all bg-latte hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                   <p><%= ingredient.name %></p>
                 </button>
                 <% } else { %>
-                <button type="submit" name="submit" value="<%=`ingred&`+index%>" class="h-24 pl-6 border w-full text-left text-latte text-base px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
+                <button type="submit" onclick="load();" name="submit" value="<%=`ingred&`+index%>" class="h-24 pl-6 border w-full text-left text-latte text-base px-2 py-1 border-latte rounded-md transition-all bg-espresso hover:bg-pistachio hover:border-none hover:text-espresso drop-shadow-lg hover:drop-shadow-xl hover:font-bold active:scale-95">
                   <p><%= ingredient.name %></p>
                 </button>
               <% 
@@ -83,9 +83,9 @@
                 <% if(error !== "") { %>
                 <p class="col-span-2 text-red-500 text-center font-bold"><%= error %></p>
                 <% } %>
-                <button id="apply" type="submit" name="submit" value="<%=`apply&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Apply
+                <button id="apply" onclick="load();" type="submit" name="submit" value="<%=`apply&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Apply
                 </button>
-                <button id="remove" type="submit" name="submit" value="<%=`remove&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
+                <button id="remove" onclick="load();" type="submit" name="submit" value="<%=`remove&`+indexIngred%>" class="bg-espresso mx-2 rounded-full font-bold text-latte uppercase py-2 transition-all hover:drop-shadow-xl hover:bg-pistachio hover:text-espresso hover:scale-105 active:scale-90">Remove
                 </button>
               </div>
             </div>
