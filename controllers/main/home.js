@@ -108,7 +108,7 @@ router.post("/updateCategories", async (req, res) => {
 });
 
 router.post("/changeUsername", async (req, res) => {
-  if (!checkPerms(req, res, 3)) return;
+  if (!checkPerms(req, res, 2)) return;
   const session = req.session;
   const buttonPress = req.body.submit;
   if (buttonPress == "change") {
