@@ -18,9 +18,11 @@
   ],
   "defSearch": { "term": "", "sort": null, "filter": null, "filterRange": "all" },
   "sorts": {
-    "opts": [
+    "optExpert": [
       { "name": "New", "value": "new" },
-      { "name": "Top", "value": "top" },
+      { "name": "Top", "value": "top" }
+    ],
+    "opts": [
       { "name": "Energy", "value": "energy" },
       { "name": "Faty Acids", "value": "fattyAcids" },
       { "name": "Sodium", "value": "sodium" },

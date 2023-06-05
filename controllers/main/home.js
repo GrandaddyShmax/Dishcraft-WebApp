@@ -17,6 +17,9 @@ var filters;
 router.get("/home", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const session = req.session;
+  let newSorts = {dir: [...sorts.dir]};
+  if (session.user.role > 1) newSorts.opts = [...sorts.optExpert, ...sorts.opts];
+  else newSorts.opts = [...sorts.opts];
   session.clearAiFlag = true;
   const { navbarError, navbarText } = navbarApply(session);
   if (!session.search) session.search = defSearch;
@@ -34,7 +37,7 @@ router.get("/home", async (req, res) => {
     page: "home",
     recipes: session.recipes,
     search: session.search,
-    sorts: sorts,
+    sorts: newSorts,
     filters: filters,
     user: session.user,
     navbarError: navbarError,
