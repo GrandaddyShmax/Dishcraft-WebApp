@@ -43,7 +43,6 @@ router.post("/news", async (req, res) => {
     if (!success) return res.redirect(req.get("referer"));
   } else if (buttonPress == "appreciate") {
     news = new News(allNews[index]);
-    console.log(news);
     success = await news.appreciate(session.user.id);
     if (!success) return res.redirect(req.get("referer"));
   }

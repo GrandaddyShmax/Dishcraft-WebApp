@@ -17,7 +17,7 @@ var filters;
 router.get("/home", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const session = req.session;
-  let newSorts = {dir: [...sorts.dir]};
+  let newSorts = { dir: [...sorts.dir] };
   if (session.user.role > 1) newSorts.opts = [...sorts.optExpert, ...sorts.opts];
   else newSorts.opts = [...sorts.opts];
   session.clearAiFlag = true;

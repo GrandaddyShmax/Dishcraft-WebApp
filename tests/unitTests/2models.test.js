@@ -244,11 +244,11 @@ describe(testLabel + " Model functions:", function () {
     it("fetchIngredient - get ingredient by name", async () => {
       testIng = await Ingredient.fetchIngredient("orange+");
       assert.equal(testIng, null);
-      testIng = await Ingredient.fetchIngredient("Orange+");
+      testIng = await Ingredient.fetchIngredient("Soul");
       assert(testIng);
     });
     it("checkIngredient - check if ingredient is in or API", async () => {
-      let result = await Ingredient.checkIngredient("Orange+");
+      let result = await Ingredient.checkIngredient("Soul");
       assert.equal(result, true);
       result = await Ingredient.checkIngredient("orange+");
       assert.equal(result, true);
@@ -263,7 +263,7 @@ describe(testLabel + " Model functions:", function () {
     });
 
     it("checkIngredientDB - check ingredient is in DB", async () => {
-      let result = await Ingredient.checkIngredientDB("Orange+");
+      let result = await Ingredient.checkIngredientDB("Soul");
       assert.equal(result, true);
       result = await Ingredient.checkIngredientDB("orange+");
       assert.equal(result, false);
