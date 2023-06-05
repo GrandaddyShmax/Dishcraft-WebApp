@@ -17,18 +17,20 @@
             class="hidden absolute z-10 mt-2 origin-top-left divide-y divide-coffee rounded-md bg-espresso drop-shadow-lg hover:drop-shadow-xl border border-latte hover:border-none"
             id="filter-menu"
           >
-            <div class="p-4">
-              <div class="grid grid-cols-4 gap-4 items-center">
-                <p class="text-latte text-sm col-span-1">Time Range: </p>
-                <select id="filterRange" name="filterRange" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
-                  <option value="today">Today</option>
-                  <option value="week">Week</option>
-                  <option value="month">Month</option>
-                  <option value="year">Year</option>
-                  <option value="all">All Time</option>
-                </select>
+            <% if (locals.user && user.role > 1) { %>
+              <div class="p-4">
+                <div class="grid grid-cols-4 gap-4 items-center">
+                  <p class="text-latte text-sm col-span-1">Time Range: </p>
+                  <select id="filterRange" name="filterRange" class="col-span-3 px-4 py-3 w-full font-bold text-latte transition-all drop-shadow-lg hover:drop-shadow-xl rounded-md border border-latte bg-espresso focus:ring-0 text-sm hover:text-pistachio focus:text-pistachio hover:border-pistachio focus:border-pistachio">
+                    <option value="today">Today</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                    <option value="all">All Time</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            <% } %>
             <!--Allergies-->
             <div class="p-4" role="none">
               <div class="grid grid-cols-6 gap-2 items-center">

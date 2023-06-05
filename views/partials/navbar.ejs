@@ -138,13 +138,13 @@
                 <a href="/bookmarks" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-0">Bookmarks</a>
                 <a href="/recipebook" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">AI Recipe Book</a>
                 <a href="/suggest" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">Suggest Ingredient</a>
+                <button id="changeUsername" class="text-latte text-left w-full block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold">
+                  Change Username
+                </button>
               </div>
             <% } %>
             <div class="py-1" role="none">
               <a href="/uploadedRecipes" data-header-target="userAuthLink" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-1">My Recipes</a>
-              <button id="changeUsername" class="text-latte text-left w-full block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold">
-                Change Username
-              </button>
               <a href="/logOut" class="text-latte block px-4 py-2 text-sm transition-all hover:bg-pistachio hover:drop-shadow-lg hover:text-espresso hover:text-lg hover:font-bold" role="menuitem" tabindex="-1" id="menu-item-2">Log Out</a>
             </div>
           </div>
@@ -194,6 +194,24 @@
     </div>
   </div>
 </form>
+
+<div id="iconBoxBG" class="hidden relative z-10">
+  <div class="fixed inset-0 bg-espresso bg-opacity-50 backdrop-blur-sm transition-opacity"></div>
+  <div class="fixed inset-0 z-10 overflow-y-auto">
+    <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <div id="iconBox" class="relative transform overflow-hidden rounded-lg bg-espresso text-left shadow-xl transition-all border border-latte">
+        <div class="bg-espresso w-32 h-32 p-6 flex items-end justify-between">
+          <div class="rounded-full transition-all bg-latte h-5 w-5 animate-load1">
+          </div>
+          <div class="rounded-full transition-all bg-latte h-5 w-5 animate-load2">
+          </div>
+          <div class="rounded-full transition-all bg-latte h-5 w-5 animate-load3">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
   const button = document.querySelector('#menu-dropdown-button');
