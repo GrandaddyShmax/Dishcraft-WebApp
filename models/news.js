@@ -1,8 +1,9 @@
 //[Import]
 const mongoose = require("mongoose");
 const { schemas } = require("../schemas/paths");
-const { capitalize, offloadFields } = require("../utils");
+const { offloadFields } = require("../utils");
 const { User } = require("./user");
+const { testUserID } = require("../jsons/tests.json");
 
 class News {
   constructor(details, id) {
@@ -42,6 +43,7 @@ class News {
 
   async appreciate(userID) {
     if (!this.appreciatedUsers) this.appreciatedUsers = [];
+    const testCount = this.appreciatedCount, testUsers = [...this.appreciatedUsers];
     if (!this.appreciatedUsers.includes(userID)) {
       this.appreciatedUsers.push(userID);
       this.appreciatedCount++;
@@ -51,12 +53,16 @@ class News {
           await details
             .updateOne({ appreciatedUsers: this.appreciatedUsers, appreciatedCount: this.appreciatedCount })
             .catch(console.error);
+        if (userID == testUserID) {
+          if (details) await details.updateOne({ appreciatedUsers: testUsers, appreciatedCount: testCount }).catch(console.error);
+        }
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);
         return false;
       }
     }
+    return false;
   }
 
   //get all the categories from db

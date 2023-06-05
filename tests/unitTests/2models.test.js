@@ -76,6 +76,7 @@ describe(testLabel + " Model functions:", function () {
       //correct login
       testUser = new User({ userName: "No User", password: "123456" });
       response = await testUser.verify();
+      testUser = new User(response.user);
       assert.equal(response.successful, true);
     });
 
@@ -112,6 +113,17 @@ describe(testLabel + " Model functions:", function () {
     it("checkWarnings - check nutritional warnings", () => {
       let warnings = testExpert.checkWarnings();
       assert.notEqual(warnings, undefined);
+    });
+    it("updateName - update the name of the expert user", async () => {
+      testExpert.fetchUser();
+      let expertName = testExpert.userName;
+      let expertNewName = "tempo";
+      let result = await testExpert.updateName(expertName);
+      assert.notEqual(result.success, true);
+      result = await testExpert.updateName(expertNewName);
+      assert.equal(result.success, true);
+      result = await testExpert.updateName(expertName);
+      assert.equal(result.success, true);
     });
   });
   describe(" Checking recipe.js...", function () {
@@ -297,6 +309,11 @@ describe(testLabel + " Model functions:", function () {
     it("fetchAllNews - get all news", async () => {
       items = await News.fetchAllNews();
       assert(Array.isArray(items));
+    });
+    it("appreciate - appreciate the news!!", async () => {
+      let mockNews = new News(items[0]);
+      let result = await mockNews.appreciate(testUserID);
+      assert.equal(result, true);
     });
   });
   after(() => console.log("  " + testLabel + " Done model tests."));

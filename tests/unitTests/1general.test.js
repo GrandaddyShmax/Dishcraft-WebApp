@@ -9,6 +9,7 @@ const {
   printAllRoutes,
   smartInclude,
   resetCategories,
+  navbarApply
 } = require("../../utils");
 const { schemas } = require("../../schemas/paths");
 let { app, db } = require("../../index.js");
@@ -116,6 +117,12 @@ describe(testLabel + " General:", function () {
     it("printAllRoutes - list all registered routes", () => {
       let result = printAllRoutes(app, "", true);
       assert.equal(result, true);
+    });
+    it("navbarApply - apply navbar values to session", () => {
+      let session = {navbarError: "testError", navbarText: "testText"};
+      let result = navbarApply(session);
+      assert.equal(result.navbarError, "testError");
+      assert.equal(result.navbarText, "testText");
     });
   });
   describe("Checking database...", function () {
