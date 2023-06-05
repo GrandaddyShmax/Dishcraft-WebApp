@@ -11,7 +11,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/recipe", async (req, res) => {
   if (!checkPerms(req, res)) return;
   var session = req.session;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   let isMarked = false,
     isBadgeButton = false,
     isReported = session.recipe.report.includes(session.user.id);
@@ -29,7 +29,7 @@ router.get("/recipe", async (req, res) => {
     isBadgeButton: isBadgeButton,
     isReported: isReported,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

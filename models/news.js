@@ -19,7 +19,7 @@ class News {
         title: this.title,
         description: this.description,
         appreciatedUsers: [],
-        appreciatedCount: 0
+        appreciatedCount: 0,
       });
       this.id = details.id;
       //respond to unit test
@@ -41,14 +41,16 @@ class News {
   }
 
   async appreciate(userID) {
-    if(!this.appreciatedUsers) this.appreciatedUsers = [];
+    if (!this.appreciatedUsers) this.appreciatedUsers = [];
     if (!this.appreciatedUsers.includes(userID)) {
       this.appreciatedUsers.push(userID);
       this.appreciatedCount++;
       try {
         let details = await schemas.News.findOne({ _id: this.id });
         if (details)
-          await details.updateOne({ appreciatedUsers: this.appreciatedUsers, appreciatedCount: this.appreciatedCount }).catch(console.error);
+          await details
+            .updateOne({ appreciatedUsers: this.appreciatedUsers, appreciatedCount: this.appreciatedCount })
+            .catch(console.error);
         return true;
       } catch (error) /* istanbul ignore next */ {
         console.log(error);

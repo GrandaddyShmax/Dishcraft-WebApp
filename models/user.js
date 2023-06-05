@@ -191,16 +191,15 @@ class Junior extends User {
     try {
       let details = await schemas.User.findOne({ userName: newName });
       if (details) {
-        return {success: false, error: "This username is already taken"};
-      }
-      else {
+        return { success: false, error: "This username is already taken" };
+      } else {
         let account = await schemas.User.findOne({ _id: this.id });
         await account.updateOne({ userName: newName }).catch(console.error);
         this.userName = newName;
-        if (account) return {success: true, error: ""};
+        if (account) return { success: true, error: "" };
       }
     } catch /* istanbul ignore next */ {
-      return {success: false, error: "Failed to update user"};
+      return { success: false, error: "Failed to update user" };
     }
   }
 }

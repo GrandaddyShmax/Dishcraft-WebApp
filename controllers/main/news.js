@@ -9,7 +9,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/news", async (req, res) => {
   if (!checkPerms(req, res)) return;
   var session = req.session;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   const allNews = await News.fetchAllNews();
   res.render("template", {
     pageTitle: "Dishcraft - News & Updates",
@@ -18,12 +18,12 @@ router.get("/news", async (req, res) => {
     allNews: allNews,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 
 router.post("/news", async (req, res) => {
-  if (!checkPerms(req, res, 2)) return;
+  if (!checkPerms(req, res)) return;
   var session = req.session;
   const newsData = req.body;
   newsData.userId = session.user.id;
@@ -32,15 +32,18 @@ router.post("/news", async (req, res) => {
   var news;
 
   if (buttonPress == "add") {
+    if (!checkPerms(req, res, 3)) return;
     news = new News(newsData);
     const { success, msg } = await news.addNews();
     if (!success) return res.redirect(req.get("referer"));
   } else if (buttonPress == "delete") {
+    if (!checkPerms(req, res, 3)) return;
     news = new News(allNews[index]);
     success = await news.deleteNews();
     if (!success) return res.redirect(req.get("referer"));
   } else if (buttonPress == "appreciate") {
     news = new News(allNews[index]);
+    console.log(news);
     success = await news.appreciate(session.user.id);
     if (!success) return res.redirect(req.get("referer"));
   }

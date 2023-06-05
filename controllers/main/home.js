@@ -18,7 +18,7 @@ router.get("/home", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const session = req.session;
   session.clearAiFlag = true;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   if (!session.search) session.search = defSearch;
   session.recipes = await Recipe.fetchRecipes(session.search);
   session.recipe = null;
@@ -28,7 +28,6 @@ router.get("/home", async (req, res) => {
       allergy: await Category.fetchCategories("allergy", true),
       diet: await Category.fetchCategories("diet", true),
     };
-  
 
   res.render("template", {
     pageTitle: "Dishcraft - Homepage",
@@ -39,7 +38,7 @@ router.get("/home", async (req, res) => {
     filters: filters,
     user: session.user,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 
@@ -62,6 +61,7 @@ router.post("/home", async (req, res) => {
   }
   return res.redirect(req.get("referer"));
 });
+
 //look up recipe by name, author, or ingredient
 router.post("/search", async (req, res) => {
   if (!checkPerms(req, res)) return;
@@ -108,7 +108,7 @@ router.post("/updateCategories", async (req, res) => {
 });
 
 router.post("/changeUsername", async (req, res) => {
-  if (!checkPerms(req, res)) return;
+  if (!checkPerms(req, res, 3)) return;
   const session = req.session;
   const buttonPress = req.body.submit;
   if (buttonPress == "change") {

@@ -86,7 +86,8 @@ class Ingredient {
       sodium += ingredient.sodium * calcByUnitAndAmount;
       sugar += ingredient.sugar * calcByUnitAndAmount;
       protein += ingredient.protein * calcByUnitAndAmount;
-    } return {
+    }
+    return {
       energy: energy.toFixed(2),
       fattyAcids: fattyAcids.toFixed(2),
       sodium: sodium.toFixed(2),

@@ -11,7 +11,7 @@ router.get("/bookmarks", async (req, res) => {
   var session = req.session;
   const recipes = await Recipe.fetchRecipes(null, session.user.bookmarks);
   session.recipe = null;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   res.render("template", {
     pageTitle: "Dishcraft - Bookmarks",
     page: "bookmarks",
@@ -19,7 +19,7 @@ router.get("/bookmarks", async (req, res) => {
     user: session.user,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

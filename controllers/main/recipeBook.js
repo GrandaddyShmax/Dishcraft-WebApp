@@ -7,9 +7,9 @@ const { Recipe } = require("../../models/recipe");
 const { checkPerms, navbarApply } = require("../../utils");
 
 router.get("/recipebook", async (req, res) => {
-  if (!checkPerms(req, res)) return;
+  if (!checkPerms(req, res, 2)) return;
   var session = req.session;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   const recipes = await Recipe.fetchRecipes(null, null, session.user.id, true);
   session.recipe = null;
   res.render("template", {
@@ -19,7 +19,7 @@ router.get("/recipebook", async (req, res) => {
     user: session.user,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

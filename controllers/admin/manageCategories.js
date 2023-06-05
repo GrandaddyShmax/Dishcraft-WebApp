@@ -11,7 +11,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/admin/managecategories", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const session = req.session;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   const categories = await Category.fetchAllCategories();
   delete session.currIngred;
   delete session.indexIngred;
@@ -30,7 +30,7 @@ router.get("/admin/managecategories", async (req, res) => {
     errorIngred: error,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

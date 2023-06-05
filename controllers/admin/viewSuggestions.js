@@ -9,7 +9,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/admin/viewsuggestions", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
-  const {navbarError, navbarText} = navbarApply(sess);
+  const { navbarError, navbarText } = navbarApply(sess);
   const suggestions = await Suggestion.fetchAllSuggestions();
   delete sess.currIngred;
   delete sess.indexIngred;
@@ -22,7 +22,7 @@ router.get("/admin/viewsuggestions", async (req, res) => {
     suggestions: suggestions,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

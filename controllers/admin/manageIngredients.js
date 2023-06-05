@@ -9,7 +9,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/admin/manageingredients", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const sess = req.session;
-  const {navbarError, navbarText} = navbarApply(sess);
+  const { navbarError, navbarText } = navbarApply(sess);
   const ingredients = await Ingredient.fetchAllIngredients();
   delete sess.categoryIndex;
   delete sess.errorIngred;
@@ -39,7 +39,7 @@ router.get("/admin/manageingredients", async (req, res) => {
     error: error,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

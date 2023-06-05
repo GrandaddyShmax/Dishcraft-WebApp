@@ -10,7 +10,7 @@ const { checkPerms, navbarApply } = require("../../utils");
 router.get("/admin/managerecipes", async (req, res) => {
   if (!checkPerms(req, res, 3)) return;
   const session = req.session;
-  const {navbarError, navbarText} = navbarApply(session);
+  const { navbarError, navbarText } = navbarApply(session);
   const recipes = await Recipe.fetchRecipes(session.filter || null, session.sort || null);
   delete session.currIngred;
   delete session.indexIngred;
@@ -23,7 +23,7 @@ router.get("/admin/managerecipes", async (req, res) => {
     user: session.user || null,
     hideSearch: true,
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

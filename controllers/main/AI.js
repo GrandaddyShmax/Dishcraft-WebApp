@@ -20,7 +20,7 @@ const prompt = require("../../jsons/prompt.json");
 router.get("/assistant", async (req, res) => {
   if (!checkPerms(req, res)) return;
   const sess = req.session;
-  const {navbarError, navbarText} = navbarApply(sess);
+  const { navbarError, navbarText } = navbarApply(sess);
   const access = await schemas.AIAccess.findOne({});
 
   //premium plus cleanup service
@@ -75,7 +75,7 @@ router.get("/assistant", async (req, res) => {
     recipeTrue: sess.recipeTrue || false,
     alert: sess.alert || "",
     navbarError: navbarError,
-    navbarText: navbarText
+    navbarText: navbarText,
   });
 });
 

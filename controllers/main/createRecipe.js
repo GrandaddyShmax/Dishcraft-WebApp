@@ -102,11 +102,13 @@ router.post("/createRecipe", async (req, res) => {
   }
   return res.redirect(req.get("referer"));
 });
+
 //upload image based on input name
 router.post("/uploadImage1", uploadImage.single("image1"), async (req, res) => handleImage(req, res, 1));
 router.post("/uploadImage2", uploadImage.single("image2"), async (req, res) => handleImage(req, res, 2));
 router.post("/uploadImage3", uploadImage.single("image3"), async (req, res) => handleImage(req, res, 3));
 function handleImage(req, res, index) {
+  if (!checkPerms(req, res)) return;
   var sess = req.session;
   if (!sess.recipe) sess.recipe = {};
   if (sess.recipe.create) {
