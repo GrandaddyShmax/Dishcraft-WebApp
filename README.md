@@ -15,7 +15,7 @@ APP_KEYS=<Edamam app keys>
 APP_ID2=<Edamam app 2 ID>
 APP_KEYS2=<Edamam app 2 keys>
 
-API_KEY_LOCAL=<Pawan.Krd key for running locally>
+API_KEY_LOCAL=<OpenAI key for running locally>
 ```
 Optional:
 ```
